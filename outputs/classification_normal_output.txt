@@ -1,0 +1,7 @@
+=== MODEL RESPONSE ===
+
+Label: Education  
+Reason: The text describes online learning platforms used in schools and universities, focusing on educational tools and teacher analytics.
+
+Model: openai/gpt-oss-20b:free
+Latency: 8.63 seconds

@@ -1,0 +1,10 @@
+=== MODEL RESPONSE ===
+
+- AI enhances efficiency and decision‑making across multiple sectors.  
+- In healthcare, AI analyzes medical images to detect diseases earlier.  
+- Educational platforms use AI to deliver personalized learning experiences.  
+- Businesses employ AI to automate tasks, power chatbots for customer service, and analyze data for trend insights.  
+- Responsible deployment demands privacy protection and fairness and transparency in AI systems.
+
+Model: openai/gpt-oss-20b:free
+Latency: 11.09 seconds

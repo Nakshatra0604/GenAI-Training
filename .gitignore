@@ -8,8 +8,4 @@
 __pycache__/
 *.pyc
 
-# VS Code settings
-.vscode/
 
-# Generated outputs
-outputs/

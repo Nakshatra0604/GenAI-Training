@@ -1,0 +1,9 @@
+=== MODEL RESPONSE ===
+
+Name: John Anderson
+Email: john.anderson@technova.com
+Phone Number: +1-555-123-4567
+Organization: TechNova Solutions
+
+Model: openai/gpt-oss-20b:free
+Latency: 13.46 seconds
