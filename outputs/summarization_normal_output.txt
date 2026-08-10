@@ -7,4 +7,8 @@
 - Responsible deployment demands privacy protection and fairness and transparency in AI systems.
 
 Model: openai/gpt-oss-20b:free
-Latency: 11.09 seconds
+Latency: 21.97 seconds
+Validation: 1 validation error for SummarizationOutput
+summary_points
+  List should have at least 5 items after validation, not 0 [type=too_short, input_value=[], input_type=list]
+    For further information visit https://errors.pydantic.dev/2.13/v/too_short

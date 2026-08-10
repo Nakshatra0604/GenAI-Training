@@ -1,0 +1,134 @@
+[
+  {
+    "case_id": "SUM_001",
+    "task": "summarization",
+    "input_type": "representative",
+    "input": "Artificial intelligence is used in healthcare, education, and business. Healthcare systems use AI to analyze medical images and detect diseases earlier. Educational platforms use AI to provide personalized learning experiences. Businesses use AI to automate tasks, support customers through chatbots, and analyze data for trends.",
+    "expected_structure": {
+      "summary_points": "list with exactly 5 items"
+    },
+    "expected_values": {}
+  },
+  {
+    "case_id": "SUM_002",
+    "task": "summarization",
+    "input_type": "long",
+    "input": "Artificial intelligence has become an important technology across many industries. In healthcare, AI can analyze medical images and support earlier disease detection. Healthcare organizations can also use AI to process large amounts of medical information. In education, AI-powered platforms can provide personalized learning experiences based on the needs of individual students. Businesses use AI to automate repetitive tasks, provide customer support through chatbots, and analyze large datasets to identify useful trends. At the same time, responsible AI deployment requires organizations to consider privacy, fairness, transparency, and the responsible handling of data. These considerations are important when AI systems are introduced into real-world environments.",
+    "expected_structure": {
+      "summary_points": "list with exactly 5 items"
+    },
+    "expected_values": {}
+  },
+  {
+    "case_id": "SUM_003",
+    "task": "summarization",
+    "input_type": "ambiguous",
+    "input": "AI is changing many things. It can help people and organizations in different ways, but its effects depend on how it is used. Some applications may be useful while others may create concerns.",
+    "expected_structure": {
+      "summary_points": "list with exactly 5 items"
+    },
+    "expected_values": {}
+  },
+  {
+    "case_id": "EXT_001",
+    "task": "extraction",
+    "input_type": "representative",
+    "input": "Name: Arun Kumar\nEmail: [arun.kumar@gmail.com](mailto:arun.kumar@gmail.com)\nPhone Number: 9876543210\nOrganization: ABC Technologies",
+    "expected_structure": {
+      "name": "string",
+      "email": "string",
+      "phone_number": "string",
+      "organization": "string"
+    },
+    "expected_values": {
+    "name": "Arun Kumar",
+    "email": "arun.kumar@gmail.com",
+    "phone_number": "9876543210",
+    "organization": "ABC Technologies"
+    }
+  },
+  {
+    "case_id": "EXT_002",
+    "task": "extraction",
+    "input_type": "representative",
+    "input": "Priya Sharma works at XYZ Solutions. Her email is priya.sharma@xyz.com and her phone number is 9876543210.",
+    "expected_structure": {
+        "name": "string",
+        "email": "string or Not Available",
+        "phone_number": "string or Not Available",
+        "organization": "string or Not Available"
+    },
+    "expected_values": {
+        "name": "Priya Sharma",
+        "email": "priya.sharma@xyz.com",
+        "phone_number": "9876543210",
+        "organization": "XYZ Solutions"
+    }
+},
+  {
+    "case_id": "EXT_003",
+    "task": "extraction",
+    "input_type": "empty",
+    "input": "",
+    "expected_structure": {
+      "name": "string",
+      "email": "string",
+      "phone_number": "string",
+      "organization": "string"
+    },
+    "expected_values": {}
+  },
+  {
+    "case_id": "CLS_001",
+    "task": "classification",
+    "input_type": "representative",
+    "input": "The company developed a cloud-based software platform that helps organizations automate their business workflows and manage digital operations.",
+    "expected_structure": {
+      "label": "one of Technology, Healthcare, Finance, Education",
+      "reason": "string"
+    },
+    "expected_values": {
+      "label": "Technology"
+    }
+  },
+  {
+    "case_id": "CLS_002",
+    "task": "classification",
+    "input_type": "representative",
+    "input": "Doctors use artificial intelligence to analyze medical images and support the early detection of diseases in patients.",
+    "expected_structure": {
+      "label": "one of Technology, Healthcare, Finance, Education",
+      "reason": "string"
+    },
+    "expected_values": {
+      "label": "Healthcare"
+    }
+  },
+  {
+    "case_id": "CLS_003",
+    "task": "classification",
+    "input_type": "representative",
+    "input": "An online learning platform provides students with digital courses, virtual classrooms, teacher-led lessons, assignments, and progress tracking to support remote education.",
+    "expected_structure": {
+        "label": "one of Technology, Healthcare, Finance, Education",
+        "reason": "string"
+    },
+    "expected_values": {
+        "label": "Education"
+    }
+},
+{
+    "case_id": "CLS_004",
+    "task": "classification",
+    "input_type": "malformed",
+    "input": "cloud-based learning management system rollout for corporate staff... teacher-led onboarding modules, student progress dashboards, certification tracking, AI-powered tutoring chatbot, classroom analytics software... credit union staff complete mandatory e-learning on underwriting and loan officer compliance... wealth advisors and portfolio managers attend a digital classroom series on policy premium calculations and claims underwriting for retirement accounts",
+    "expected_structure": {
+        "label": "one of Technology, Healthcare, Finance, Education",
+        "reason": "string"
+    },
+    "expected_values": {
+        "label": "Finance"
+    }
+}
+
+]

@@ -18,13 +18,15 @@ Classify the given text into exactly one of the allowed labels.
 - Choose only one label.
 - Do not create new labels.
 - Provide a one-sentence reason for your choice.
-- Base your classification only on the supplied source text.
+- Base your classification on the primary domain the text is about as a whole, not on individual keywords.
 
 ## Source Text
 
---------------------
+---
+
 {text}
---------------------
+
+---
 
 ## Output Format
 

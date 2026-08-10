@@ -21,9 +21,11 @@ Extract the required fields from the source text.
 
 ## Source Text
 
---------------------
+---
+
 {text}
---------------------
+
+---
 
 ## Output Format
 

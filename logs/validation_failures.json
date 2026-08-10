@@ -1,0 +1,16 @@
+[
+    {
+        "timestamp": "2026-08-07T12:27:33.155191",
+        "failure_type": "validation_error",
+        "task": "summarization",
+        "reason": "Test validation failure",
+        "raw_output": "This is a deliberately invalid test response."
+    },
+    {
+        "timestamp": "2026-08-07T12:33:29.026872",
+        "failure_type": "validation_error",
+        "task": "summarization",
+        "reason": "1 validation error for SummarizationOutput\nsummary_points\n  List should have at least 5 items after validation, not 0 [type=too_short, input_value=[], input_type=list]\n    For further information visit https://errors.pydantic.dev/2.13/v/too_short",
+        "raw_output": "- AI enhances efficiency and decision\u2011making across multiple sectors.  \n- In healthcare, AI analyzes medical images to detect diseases earlier.  \n- Educational platforms use AI to deliver personalized learning experiences.  \n- Businesses employ AI to automate tasks, power chatbots for customer service, and analyze data for trend insights.  \n- Responsible deployment demands privacy protection and fairness and transparency in AI systems."
+    }
+]

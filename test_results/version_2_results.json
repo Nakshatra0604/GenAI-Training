@@ -1,0 +1,112 @@
+[
+    {
+        "case_id": "SUM_001",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 22.46566653251648,
+        "model_response": "- AI helps healthcare systems analyze medical images for early disease detection.  \n- Educational platforms use AI to deliver personalized learning experiences.  \n- Businesses employ AI to automate routine tasks.  \n- AI-powered chatbots support customer interactions in business settings.  \n- AI-driven data analysis identifies trends for business decision\u2011making.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "NOT_EVALUATED",
+        "accuracy_reason": "No expected values provided."
+    },
+    {
+        "case_id": "SUM_002",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 12.874200344085693,
+        "model_response": "- AI is a pivotal technology across multiple industries.  \n- In healthcare, it analyzes medical images, supports early disease detection, and processes large volumes of medical data.  \n- In education, AI-powered platforms deliver personalized learning experiences tailored to individual student needs.  \n- Businesses employ AI to automate repetitive tasks, power customer\u2011support chatbots, and analyze big data for trend identification.  \n- Responsible AI deployment requires careful consideration of privacy, fairness, transparency, and proper data handling in real\u2011world applications.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "NOT_EVALUATED",
+        "accuracy_reason": "No expected values provided."
+    },
+    {
+        "case_id": "SUM_003",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 15.347688674926758,
+        "model_response": "- AI is transforming many aspects of society.  \n- It can benefit individuals and organizations in various ways.  \n- The overall impact depends on how AI is applied.  \n- Some applications deliver clear advantages.  \n- Other applications raise potential concerns.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "NOT_EVALUATED",
+        "accuracy_reason": "No expected values provided."
+    },
+    {
+        "case_id": "EXT_001",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 6.91420578956604,
+        "model_response": "Name: Arun Kumar\nEmail: arun.kumar@gmail.com\nPhone Number: 9876543210\nOrganization: ABC Technologies",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    },
+    {
+        "case_id": "EXT_002",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 10.680328845977783,
+        "model_response": "Name: Priya Sharma\nEmail: priya.sharma@xyz.com\nPhone Number: 9876543210\nOrganization: XYZ Solutions",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    },
+    {
+        "case_id": "EXT_003",
+        "prompt_version": "v2",
+        "model_version": null,
+        "latency": null,
+        "model_response": null,
+        "validation_result": "FAIL",
+        "failure_reason": "Input text is empty.",
+        "task_accuracy": "NOT_EVALUATED",
+        "accuracy_reason": "Input validation failed."
+    },
+    {
+        "case_id": "CLS_001",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 8.169423818588257,
+        "model_response": "Label: Technology  \nReason: The text describes a cloud-based software platform for automating business workflows, which is a technology-focused solution.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    },
+    {
+        "case_id": "CLS_002",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 11.335658073425293,
+        "model_response": "Label: Healthcare  \nReason: The text describes doctors using AI to analyze medical images for early disease detection, which is a medical (healthcare) application.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    },
+    {
+        "case_id": "CLS_003",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 10.202738285064697,
+        "model_response": "Label: Education  \nReason: The text describes an online learning platform that offers digital courses and virtual classrooms to support remote education, which is directly related to the education domain.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    },
+    {
+        "case_id": "CLS_004",
+        "prompt_version": "v2",
+        "model_version": "openai/gpt-oss-20b:free",
+        "latency": 18.12329077720642,
+        "model_response": "Label: Finance  \nReason: The passage centers on training and compliance programs for credit union staff, wealth advisors, and portfolio managers\u2014professionals whose primary domain is finance.",
+        "validation_result": "PASS",
+        "failure_reason": null,
+        "task_accuracy": "PASS",
+        "accuracy_reason": null
+    }
+]
