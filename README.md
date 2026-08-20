@@ -1,190 +1,335 @@
-# GenAI Training - Day 3: LLM Wrapper Application (Prompt Playground)
+# GenAI Document Processing and Semantic Search
 
-# Objective
+## Overview
 
-Build a Python-based LLM Wrapper Application that acts as a Prompt Playground for interacting with Large Language Models (LLMs). The application performs Summarization, Information Extraction, and Text Classification using reusable prompt templates, sample inputs, and the OpenRouter API.
+This project implements a document preprocessing and semantic retrieval
+pipeline. It prepares approved documents, sanitizes sensitive values,
+cleans and chunks the documents, generates vector embeddings, stores them
+in a persistent ChromaDB index, and retrieves relevant document chunks for
+user questions.
 
----
-
-# Technologies Used
-
-- Python 3.11
-- OpenRouter API
-- OpenAI Python SDK
-- Python Dotenv
-- Markdown
-- Git - Version Control
+The project currently covers the Day 5 document preprocessing and Day 6
+vector indexing and semantic search activities. Day 7 work will continue
+in the same project folder.
 
 ---
 
-# Tasks Completed
+## Project Structure
 
-## 1. Prompt Templates
-
-Created reusable prompt templates in Markdown for:
-
-- Summarization
-- Information Extraction
-- Text Classification
-
----
-
-## 2. Sample Inputs
-
-Created sample input files for testing different scenarios.
-
-Examples include:
-
-- Normal
-- Long
-- Ambiguous
-- Incomplete
-
----
-
-## 3. LLM Integration
-
-- Connected the application to the OpenRouter API.
-- Loaded the API key and model from the `.env` file.
-- Sent prompts to the configured LLM.
-- Received the generated response from the model.
-
----
-
-## 4. LLM Wrapper Application
-
-Implemented an LLM Wrapper Application that:
-
-- Accepts the task from the user.
-- Accepts the sample type from the user.
-- Loads the corresponding prompt template.
-- Loads the corresponding sample text.
-- Builds the final prompt.
-- Sends the prompt to the configured LLM.
-- Receives the generated response.
-- Displays the response in the terminal.
-- Saves the response to the `outputs` folder.
-
----
-
-## 5. Modular Project Structure
-
-Separated the application into independent modules.
-
-### `playground.py`
-
-Responsible for:
-
-- User interaction
-- Loading prompt templates
-- Loading sample text
-- Building the final prompt
-- Calling the LLM wrapper
-- Displaying the response
-- Saving the output
-
-### `model_client.py`
-
-Responsible for:
-
-- Loading environment variables
-- Creating the OpenRouter client
-- Communicating with the LLM
-- Sending prompts
-- Returning the generated response
-
----
-
-## 6. Environment Configuration
-
-- Stored sensitive configuration values in the `.env` file.
-- Added a `.env.example` file for project setup.
-- Excluded sensitive files using `.gitignore`.
-
----
-
-## 7. Project Documentation
-
-- Added `requirements.txt` for dependency management.
-- Created `README.md`.
-- Documented the project structure and setup process.
-
----
-
-# Project Structure
-
-
-GenAI_Prompt_Playground/
+GenAI_Day-5/
 │
-├── prompts_templates/
-│   ├── summarization_prompt.md
-│   ├── extraction_prompt.md
-│   └── classification_prompt.md
+├── cleaned_documents/          # Cleaned document files
+├── documents/                  # Sanitized document files
+├── raw_documents/              # Original source documents
+├── vector_store/               # Persistent ChromaDB vector index
 │
-├── sample_texts/
-│   ├── summarization/
-│   ├── extraction/
-│   └── classification/
+├── sanitize_documents.py       # Sanitizes sensitive document values
+├── clean_documents.py          # Normalizes and cleans document text
+├── chunk_documents.py          # Splits cleaned documents into chunks
+├── chunk_quality_review.py     # Performs chunk quality checks
+├── chunk_quality_review.md     # Chunk quality review output
+├── chunks.jsonl                # Normalized chunk dataset
 │
-├── outputs/
+├── generate_embeddings.py      # Generates and reuses embeddings
+├── create_vector.py            # Creates the ChromaDB vector index
+├── embeddings.jsonl            # Chunk embeddings and metadata
 │
-├── model_client.py
-├── playground.py
-├── requirements.txt
-├── .env.example
-├── .gitignore
-└── README.md
-
-
----
-
-# Environment Variables
-
-Create a `.env` file in the project root.
-
-
-OPENROUTER_API_KEY=your_openrouter_api_key
-OPENROUTER_MODEL=openai/gpt-oss-20b:free
-
+├── semantic_search.py          # Reusable semantic search function
+├── filter_demo.py              # Metadata-filtered search demonstration
+├── retrieval_test_set.json     # 10-question retrieval test set
+├── test_retrival.py            # Retrieval test runner
+├── retrieval_results.json      # Detailed retrieval test results
+│
+├── requirements.txt            # Python dependencies
+├── .env                        # API and model configuration
+└── README.md                   # Project documentation
 
 ---
 
-# Requirements
+# Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
 
-Install the required dependencies:
+## Practical Goal
 
-- pip install -r requirements.txt
+Create a reliable preprocessing pipeline that converts approved documents
+into traceable chunks with complete retrieval metadata.
 
+## Implementation
+
+### 1. Collect and Sanitize Documents
+
+sanitize_documents.py - reads Markdown documents from raw_documents/,
+redacts configured sensitive values, and writes the sanitized documents to
+`documents/` while preserving the original folder structure.
+
+### 2. Load and Clean Text
+
+`clean_documents.py` reads the sanitized Markdown documents, normalizes
+line endings and whitespace, removes excessive blank lines, removes empty
+Markdown sections, and preserves meaningful headings.
+
+The cleaned documents are stored in `cleaned_documents/`.
+
+### 3. Configurable Chunking
+
+`chunk_documents.py` splits cleaned documents into chunks while preserving
+Markdown heading-based sections.
+
+The chunking configuration is:
+
+- Chunk size: `1000`
+- Chunk overlap: `150`
+
+The resulting chunks are stored in `chunks.jsonl`.
+
+### 4. Attach Metadata
+
+Each chunk contains metadata including:
+
+- chunk_id
+- document_id
+- title
+- source_path
+- updated_at
+- chunk_index
+- category
+
+### 5. Chunk Quality Review
+
+chunk_quality_review.py inspects representative short, long, and
+structured documents and checks for:
+
+- Empty chunks
+- Heading/content split issues
+- Excessive overlap
+
+The review is written to:
+
+chunk_quality_review.md
+
+
+The review also records the chunk-indexing issue that was identified and
+corrected so that chunk indexes continue sequentially across a document.
+
+## Day 05 Required Deliverables
+
+- Preprocessing scripts for sanitizing, cleaning, and chunking documents
+- Normalized chunk dataset in JSONL format
+- Metadata attached to every chunk
+- Chunk-quality review file with representative examples
+
+## Day 05 Completion Gate
+
+-  Documents are processed through the preprocessing pipeline.
+-  Chunks contain source-traceable metadata.
+-  Empty chunks are checked during quality review.
+-  Chunk size and overlap are configurable in chunk_documents.py.
 
 ---
 
-# Running the Project
+# Day 06 — Build Vector Indexing and Semantic Search
 
-Run the application using:
+## Practical Goal
 
-- python playground.py
+Store document embeddings and retrieve the most relevant chunks with
+retrieval distance and metadata.
+
+## Implementation
+
+### 1. Generate Embeddings
+
+`generate_embeddings.py` reads `chunks.jsonl` and generates embeddings in
+batches of 20 chunks.
+
+The script records the configured embedding model and uses a SHA-256
+content hash to identify unchanged chunks and reuse existing embeddings
+when possible.
+
+The resulting records are stored in:
+
+```text
+embeddings.jsonl
+```
+
+### 2. Create the Vector Index
+
+`create_vector.py` loads the generated embeddings and stores them in a
+persistent ChromaDB collection named:
+
+```text
+document_chunks
+```
+
+The persistent index is stored in:
+
+```text
+vector_store/
+```
+
+### 3. Implement Top-K Search
+
+`semantic_search.py` provides the reusable `search_chunks()` function.
+
+The retrieval flow is:
+
+```text
+Question
+   ↓
+Question Embedding
+   ↓
+ChromaDB Vector Search
+   ↓
+Top-K Chunks
+   ↓
+Chunk Text + Distance + Metadata
+```
+
+The function supports:
+
+- Configurable `top_k`
+- Optional `category` metadata filtering
+- Optional `max_distance` threshold
+
+Returned search information includes:
+
+- `chunk_text`
+- `distance`
+- `document_id`
+- `title`
+- `source_path`
+
+### 4. Metadata Filtering
+
+`filter_demo.py` demonstrates metadata-filtered retrieval using:
+
+category="engineering"
+
+The search is therefore restricted to chunks whose metadata category is
+`engineering`.
+
+### 5. Retrieval Test Set
+
+`retrieval_test_set.json` contains 10 manually selected questions with
+their expected source document IDs.
+
+`test_retrival.py` runs the questions through `search_chunks()` using
+`top_k=3` and checks whether the expected document appears in the top three
+results.
+
+The detailed results are saved to:
+
+retrieval_results.json
 
 
-The application will:
+## Day 06 Required Deliverables
 
-1. Select an NLP task.
-2. Select a sample input.
-3. Load the corresponding prompt template.
-4. Build the final prompt.
-5. Send the prompt to the configured LLM.
-6. Display the generated response.
-7. Save the response in the `outputs` folder.
+- Populated vector index for the Day 5 chunks
+- Reusable semantic search function
+- 10-question retrieval dataset with expected documents
+- Retrieval result report containing retrieved distances and metadata
+
+## Day 06 Completion Gate
+
+-  Semantic search returns the expected document within the top three
+   results for the tested questions.
+-  Search results contain source metadata required for later retrieval
+   and citation workflows.
+-  Index creation and retrieval commands are documented below.
+- A metadata-filtered search is demonstrated using filter_demo.py.
+
+## Day 06 Retrieval Result
+
+The retrieval test produced:
+
+```text
+10/10 expected documents found in the top 3 results
+Top-3 hit rate: 100%
+```
+
+### Successful Retrieval Examples
+
+**Example 1**
+
+Question:
+
+What should be considered during the planning stage before implementation begins?
+
+
+Expected document:
+
+DOC-016
+
+
+The expected document was retrieved in the top three results.
+
+**Example 2**
+
+Question:
+
+What is the process for requesting software that is not available in the standard IT catalog?
+
+
+Expected document:
+
+DOC-009
+
+The expected document was retrieved as the first result.
+
+### Weak Retrieval Example
+
+Question:
+
+What should an employee do if their account is suspected to be compromised?
+
+Expected document:
+
+DOC-007
+
+
+The expected document was retrieved in the top three results, but appeared
+at rank three. This is a weaker retrieval result that can be improved during
+advanced RAG work.
 
 ---
 
-# Current Status
+# How to Run
 
-- LLM Wrapper Application completed.
-- Prompt templates implemented using Markdown.
-- Sample input datasets created.
-- OpenRouter API integrated.
-- Modular project structure implemented.
-- Environment variables configured.
-- Output generation completed.
-- Requirements file updated.
-- Project documentation completed.
+Activate the project virtual environment before running the scripts.
+
+### Generate Embeddings
+
+python generate_embeddings.py
+
+### Create the ChromaDB Vector Index
+
+python create_vector.py
+
+### Demonstrate Metadata Filtering
+
+python filter_demo.py
+
+### Run the Retrieval Test Set
+
+python test_retrival.py
+
+The detailed retrieval report is generated as:
+
+retrieval_results.json
+
+---
+
+## Current Status
+
+### Day 05
+
+Document sanitization, cleaning, configurable chunking, metadata
+attachment, and chunk-quality review have been implemented.
+
+### Day 06
+
+Embedding generation, persistent ChromaDB indexing, top-K semantic search,
+metadata filtering, retrieval testing, and retrieval result reporting have
+been implemented.
+
+### Day 07
+
+To be continued in the same project folder.

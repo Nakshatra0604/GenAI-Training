@@ -1,0 +1,282 @@
+[
+  {
+    "question": "What should be considered during the planning stage before implementation begins?",
+    "expected_document_id": "DOC-016",
+    "results": [
+      {
+        "chunk_text": "## 2. Planning\n\nFeatures begin as a written proposal describing the problem, the proposed\napproach, and rough scope. Proposals for anything larger than a small\nchange are reviewed in a weekly planning meeting where the team decides\nwhether to proceed, and if so, roughly how it fits into the current\nquarter's priorities.\n\nA proposal should explain the problem being addressed rather than focusing\nonly on the requested implementation. Where possible, the proposal should\nidentify the expected users, business outcome, dependencies, and constraints.\nThis helps the team distinguish between a genuine product requirement and a\ntechnical solution that may need further discussion.\n\nPlanning should also consider whether the proposed work affects existing\nservices, APIs, databases, integrations, security controls, or operational\nprocedures. A feature that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation",
+        "distance": 1.2289541959762573,
+        "document_id": "DOC-016",
+        "title": "DOC-016_software_development_lifecycle",
+        "source_path": "engineering\\DOC-016_software_development_lifecycle.md"
+      },
+      {
+        "chunk_text": "that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation begins, the team should have enough information to\nunderstand what success looks like. The level of detail required depends on\nthe size of the work. A small maintenance change may only require a concise\nticket, while a larger feature may require acceptance criteria, technical\ninvestigation, estimates, and a design document.\n\nDependencies should be identified early. If another team, service, vendor,\nor infrastructure component is required, the owner and expected timing\nshould be recorded. Teams should avoid beginning implementation when a\ncritical dependency is unresolved unless the dependency can be safely\nmocked or isolated.",
+        "distance": 1.3280212879180908,
+        "document_id": "DOC-016",
+        "title": "DOC-016_software_development_lifecycle",
+        "source_path": "engineering\\DOC-016_software_development_lifecycle.md"
+      },
+      {
+        "chunk_text": "## 3. Design\n\nFor non-trivial features, an engineer writes a short design document\ncovering the technical approach, key trade-offs, and any impact on other\nteams' systems. Design documents are reviewed asynchronously by at least\none senior engineer before implementation begins.\n\nThe design should explain the major components involved and how information\nmoves between them. It should identify important interfaces, data\nstructures, external dependencies, and expected failure conditions. The\npurpose is not to document every line of code but to make significant\ntechnical decisions visible before implementation becomes expensive to\nchange.\n\nWhen multiple approaches are possible, the design should explain why the\nselected approach is preferred. Factors may include simplicity,\nmaintainability, performance, reliability, compatibility with existing\nsystems, and operational cost.\n\nDatabase changes should be considered during design rather than discovered\nduring deployment. Engineers should ident",
+        "distance": 1.4405354261398315,
+        "document_id": "DOC-016",
+        "title": "DOC-016_software_development_lifecycle",
+        "source_path": "engineering\\DOC-016_software_development_lifecycle.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What is the recommended approach for handling errors in code?",
+    "expected_document_id": "DOC-017",
+    "results": [
+      {
+        "chunk_text": "## Error Handling\n\nErrors should be handled at the layer that has enough context to decide\nwhat to do about them. Swallowing an error silently is discouraged;\nat minimum, an error should be logged with enough context to diagnose the\nissue later.",
+        "distance": 1.0028774738311768,
+        "document_id": "DOC-017",
+        "title": "DOC-017_coding_standards",
+        "source_path": "engineering\\DOC-017_coding_standards.md"
+      },
+      {
+        "chunk_text": "## 5. Code Review\n\nEvery change requires at least one approval before merging. Reviewers are\nexpected to check for correctness, readability, and test coverage, and to\nleave specific, actionable feedback rather than vague comments. Authors\nshould respond to every comment, even if only to explain why a suggestion\nwas not taken.\n\nReviewers should consider the behavior of the change rather than focusing\nonly on formatting. Important questions include whether the implementation\nmatches the intended requirement, whether errors are handled appropriately,\nand whether the change introduces unexpected side effects.\n\nReviewers should also consider maintainability. Code that works correctly\nbut is unnecessarily difficult to understand can increase future\nmaintenance cost. Clear naming, reasonable function boundaries, and\nconsistent project conventions should be preferred.\n\nFor changes affecting security, data handling, infrastructure, or shared\nservices, additional review may be appropriate. The r",
+        "distance": 1.373283863067627,
+        "document_id": "DOC-016",
+        "title": "DOC-016_software_development_lifecycle",
+        "source_path": "engineering\\DOC-016_software_development_lifecycle.md"
+      },
+      {
+        "chunk_text": "## Error Responses\n\nError responses include a machine-readable error code, a human-readable\nmessage, and, where relevant, the specific field that caused a validation\nerror. Error codes are documented and stable; the wording of the\nhuman-readable message may change without being considered a breaking\nchange.",
+        "distance": 1.4264901876449585,
+        "document_id": "DOC-019",
+        "title": "DOC-019_api_design_guidelines",
+        "source_path": "engineering\\DOC-019_api_design_guidelines.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What approval is required for purchase requests above five thousand dollars?",
+    "expected_document_id": "DOC-028",
+    "results": [
+      {
+        "chunk_text": "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+        "distance": 0.5191530585289001,
+        "document_id": "DOC-028",
+        "title": "DOC-028_procurement_procedure",
+        "source_path": "finance\\DOC-028_procurement_procedure.md"
+      },
+      {
+        "chunk_text": "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+        "distance": 0.7798399925231934,
+        "document_id": "DOC-028",
+        "title": "DOC-028_procurement_procedure",
+        "source_path": "finance\\DOC-028_procurement_procedure.md"
+      },
+      {
+        "chunk_text": "# Software Installation Request Process\n\nEmployees who need software not available in the standard IT catalog can\nsubmit a request through the IT ticketing system. Requests should include\nthe software name, business justification, and whether the tool will\nhandle any company or customer data.\n\nRequests are reviewed within three business days. Tools that handle\nsensitive data require an additional security review, which can take up to\ntwo weeks depending on the vendor's responsiveness to security\nquestionnaires. Free trials of unapproved software should not be installed\nwithout submitting a request first, even for evaluation purposes.\n\nOnce approved, IT installs the software remotely for managed devices or\nprovides installation instructions for cases where remote installation is\nnot possible. Approved software is added to the internal catalog so future\nrequests for the same tool by other employees can be fast-tracked.",
+        "distance": 1.4840742349624634,
+        "document_id": "DOC-009",
+        "title": "DOC-009_software_installation_request_process",
+        "source_path": "it\\DOC-009_software_installation_request_process.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What mandatory training must new hires complete by the end of their first week?",
+    "expected_document_id": "DOC-001",
+    "results": [
+      {
+        "chunk_text": "## Week One\n\nThe first day begins with a welcome session led by People Operations,\nfollowed by a laptop setup session with IT. Managers are expected to\nschedule a one-on-one within the first three days to review team goals and\nintroduce the new hire to immediate teammates. Mandatory training modules\n(security awareness, code of conduct, and workplace safety) must be\ncompleted by the end of week one.",
+        "distance": 0.8109187483787537,
+        "document_id": "DOC-001",
+        "title": "DOC-001_employee_onboarding_guide",
+        "source_path": "hr\\DOC-001_employee_onboarding_guide.md"
+      },
+      {
+        "chunk_text": "## Welcome to NexaCore Solutions\n\nThis guide walks new hires through their first two weeks at NexaCore Solutions.\nIt covers account setup, required training, and who to contact for common\nquestions during the first month.",
+        "distance": 1.0659310817718506,
+        "document_id": "DOC-001",
+        "title": "DOC-001_employee_onboarding_guide",
+        "source_path": "hr\\DOC-001_employee_onboarding_guide.md"
+      },
+      {
+        "chunk_text": "## 9. Annual Acknowledgment\n\nAll employees are required to review and acknowledge this Code of Conduct\nannually through the HR portal. New hires acknowledge it as part of the\nonboarding process during their first week.",
+        "distance": 1.1111594438552856,
+        "document_id": "DOC-004",
+        "title": "DOC-004_code_of_conduct",
+        "source_path": "hr\\DOC-004_code_of_conduct.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What is the process for requesting software that is not available in the standard IT catalog?",
+    "expected_document_id": "DOC-009",
+    "results": [
+      {
+        "chunk_text": "# Software Installation Request Process\n\nEmployees who need software not available in the standard IT catalog can\nsubmit a request through the IT ticketing system. Requests should include\nthe software name, business justification, and whether the tool will\nhandle any company or customer data.\n\nRequests are reviewed within three business days. Tools that handle\nsensitive data require an additional security review, which can take up to\ntwo weeks depending on the vendor's responsiveness to security\nquestionnaires. Free trials of unapproved software should not be installed\nwithout submitting a request first, even for evaluation purposes.\n\nOnce approved, IT installs the software remotely for managed devices or\nprovides installation instructions for cases where remote installation is\nnot possible. Approved software is added to the internal catalog so future\nrequests for the same tool by other employees can be fast-tracked.",
+        "distance": 0.7911216020584106,
+        "document_id": "DOC-009",
+        "title": "DOC-009_software_installation_request_process",
+        "source_path": "it\\DOC-009_software_installation_request_process.md"
+      },
+      {
+        "chunk_text": "## Software Installation\n\nOnly software approved through the IT software catalog may be installed on\ncompany devices without a request. Installation of unapproved software,\nincluding browser extensions with broad data access, requires a request\nthrough the IT ticketing system and a brief security review.",
+        "distance": 0.8359401822090149,
+        "document_id": "DOC-006",
+        "title": "DOC-006_acceptable_use_policy",
+        "source_path": "it\\DOC-006_acceptable_use_policy.md"
+      },
+      {
+        "chunk_text": "#it-help chat channel, or by phone for urgent issues affecting an entire\nteam or floor. Non-urgent requests should always go through the ticketing\nportal so they can be tracked and prioritized correctly.",
+        "distance": 1.3970962762832642,
+        "document_id": "DOC-010",
+        "title": "DOC-010_it_support_and_ticketing_guide",
+        "source_path": "it\\DOC-010_it_support_and_ticketing_guide.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What steps does an on-call engineer take to declare an incident?",
+    "expected_document_id": "DOC-024",
+    "results": [
+      {
+        "chunk_text": "## 3. Declaring an Incident\n\nAn on-call engineer declares an incident by posting in the incident channel\nand creating an incident record, which assigns an incident commander\nresponsible for coordinating the response. Declaring early, even before the\nfull scope is known, is preferred over waiting for certainty.",
+        "distance": 0.5706865191459656,
+        "document_id": "DOC-024",
+        "title": "DOC-024_incident_management_runbook",
+        "source_path": "operations\\DOC-024_incident_management_runbook.md"
+      },
+      {
+        "chunk_text": "## 2. Detecting an Incident\n\nMost incidents are detected automatically through monitoring alerts, though\nsome are first reported by customers through support. Any employee who\nnotices unusual behavior, such as a service being unreachable, should\nreport it in the #ops-incidents channel even if they are unsure whether it\nqualifies as an incident.",
+        "distance": 1.1725389957427979,
+        "document_id": "DOC-024",
+        "title": "DOC-024_incident_management_runbook",
+        "source_path": "operations\\DOC-024_incident_management_runbook.md"
+      },
+      {
+        "chunk_text": "## 4. Roles During an Incident\n\n- Incident commander: coordinates response, makes final decisions, manages communication\n- Technical lead: directs the technical investigation and fix\n- Communications lead: updates the status page and internal stakeholders\n\nNot every incident requires all three roles; smaller incidents may be\nhandled by a single engineer acting in all capacities.",
+        "distance": 1.2094662189483643,
+        "document_id": "DOC-024",
+        "title": "DOC-024_incident_management_runbook",
+        "source_path": "operations\\DOC-024_incident_management_runbook.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "How is customer feedback triaged after it is received?",
+    "expected_document_id": "DOC-023",
+    "results": [
+      {
+        "chunk_text": "# Customer Feedback Handling\n\nCustomer feedback arrives through several channels: in-app feedback forms,\nsupport tickets, sales conversations, and direct outreach from the product\nteam. All feedback is logged in the shared feedback tracker regardless of\nsource, so patterns can be identified across channels rather than staying\nsiloed within one team.",
+        "distance": 0.9502902030944824,
+        "document_id": "DOC-023",
+        "title": "DOC-023_customer_feedback_handling",
+        "source_path": "product\\DOC-023_customer_feedback_handling.md"
+      },
+      {
+        "chunk_text": "## Triage\n\nProduct managers triage new feedback weekly, tagging it by product area\nand rough theme. Feedback that reveals a bug rather than a feature request\nis redirected to engineering through the normal bug reporting process\ninstead of being tracked as a feature request.",
+        "distance": 0.9623610377311707,
+        "document_id": "DOC-023",
+        "title": "DOC-023_customer_feedback_handling",
+        "source_path": "product\\DOC-023_customer_feedback_handling.md"
+      },
+      {
+        "chunk_text": "## Closing the Loop\n\nWhen feedback leads to a shipped feature, customers who originally\nrequested it are notified where practically possible, since this is one of\nthe strongest signals customers get that their input is taken seriously.\nFeedback that will not be actioned is also closed out with a brief\nexplanation rather than left open indefinitely.",
+        "distance": 1.002624273300171,
+        "document_id": "DOC-023",
+        "title": "DOC-023_customer_feedback_handling",
+        "source_path": "product\\DOC-023_customer_feedback_handling.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What is required before an employee can receive elevated access to production or financial systems?",
+    "expected_document_id": "DOC-014",
+    "results": [
+      {
+        "chunk_text": "## Elevated Access\n\nElevated access, such as production system access or financial system\naccess, requires a documented business justification and is time-limited\nwhere practical. Elevated access is reviewed every quarter, and access that\nis no longer needed is removed rather than left in place by default.",
+        "distance": 0.8806563019752502,
+        "document_id": "DOC-014",
+        "title": "DOC-014_access_control_policy",
+        "source_path": "security\\DOC-014_access_control_policy.md"
+      },
+      {
+        "chunk_text": "# Access Control Policy\n\nAccess to NexaCore Solutions systems is granted based on role and business\nneed, following the principle of least privilege described in the\nInformation Security Policy. New access is requested through the access\nrequest portal and requires approval from the employee's manager and the\nrelevant system owner.",
+        "distance": 1.257277011871338,
+        "document_id": "DOC-014",
+        "title": "DOC-014_access_control_policy",
+        "source_path": "security\\DOC-014_access_control_policy.md"
+      },
+      {
+        "chunk_text": "## 7. Third-Party and Vendor Access\n\nVendors requiring access to company systems must sign a data processing\nagreement before access is granted. Vendor access is reviewed alongside\nemployee access during the quarterly access review and is removed promptly\nwhen a vendor engagement ends.",
+        "distance": 1.2829996347427368,
+        "document_id": "DOC-011",
+        "title": "DOC-011_information_security_policy",
+        "source_path": "security\\DOC-011_information_security_policy.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "What should an employee do if their account is suspected to be compromised?",
+    "expected_document_id": "DOC-007",
+    "results": [
+      {
+        "chunk_text": "dditional support\nrather than discipline.\n\nAny suspected real security issue, including a suspicious email, an\nunexpected password reset request, or a lost device, should be reported to\nIT Security immediately rather than investigated independently by the\nemployee.",
+        "distance": 1.0762319564819336,
+        "document_id": "DOC-015",
+        "title": "DOC-015_security_awareness_training_guide",
+        "source_path": "security\\DOC-015_security_awareness_training_guide.md"
+      },
+      {
+        "chunk_text": "## 3. Reporting an Incident\n\nAny employee who suspects a security incident should report it immediately\nto IT Security through the incident hotline or the #security-incident\nchannel, rather than attempting to resolve it themselves. Early reporting,\neven of something that turns out to be a false alarm, is always preferred\nover delayed reporting.",
+        "distance": 1.114342451095581,
+        "document_id": "DOC-012",
+        "title": "DOC-012_incident_response_procedure",
+        "source_path": "security\\DOC-012_incident_response_procedure.md"
+      },
+      {
+        "chunk_text": "# Password and Authentication Guidelines\n\nAll NexaCore Solutions accounts require multi-factor authentication in\naddition to a password. Passwords must be at least twelve characters and\nshould not reuse a password from a personal account or a previous company\npassword.\n\nThe company password manager is the recommended way to generate and store\ncredentials for internal tools. Passwords should never be written down on\npaper, stored in an unencrypted document, or shared over chat or email,\neven with a manager or IT support.\n\nIf an account is suspected of being compromised, employees should change\nthe password immediately and report the incident to IT Security through\nthe helpdesk, marking the ticket as urgent. IT Security may temporarily\nlock an account while an investigation is in progress.\n\nAuthentication tokens for automated systems and integrations should be\nrotated every ninety days and stored in the approved secrets management\ntool rather than in code or configuration files.",
+        "distance": 1.1373518705368042,
+        "document_id": "DOC-007",
+        "title": "DOC-007_password_and_authentication_guidelines",
+        "source_path": "it\\DOC-007_password_and_authentication_guidelines.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  },
+  {
+    "question": "How far in advance should planned leave requests be submitted?",
+    "expected_document_id": "DOC-002",
+    "results": [
+      {
+        "chunk_text": "# Leave and Time Off Policy\n\nNexaCore Solutions provides employees with paid time off, sick leave, and\npublic holidays. Full-time employees accrue fifteen days of paid time off\nper year during their first three years, increasing to twenty days after\nthree years of continuous employment.\n\nLeave requests should be submitted through the internal HR portal at least\nfive business days in advance for planned absences. Sick leave does not\nrequire advance notice, but employees should notify their manager as early\nas reasonably possible on the day of absence.\n\nUnused paid time off may be carried over up to a maximum of five days into\nthe following calendar year. Carried-over days must be used within the\nfirst quarter or they are forfeited. Employees on approved parental leave\ncontinue to accrue time off during the leave period in accordance with\nlocal employment regulations.\n\nManagers approve or deny leave requests within two business days. Denials\nmust include a reason, typically related to te",
+        "distance": 1.2581043243408203,
+        "document_id": "DOC-002",
+        "title": "DOC-002_leave_and_time_off_policy",
+        "source_path": "hr\\DOC-002_leave_and_time_off_policy.md"
+      },
+      {
+        "chunk_text": "ocal employment regulations.\n\nManagers approve or deny leave requests within two business days. Denials\nmust include a reason, typically related to team coverage during a\ncritical project period, and should offer an alternative date where\npossible.",
+        "distance": 1.3654358386993408,
+        "document_id": "DOC-002",
+        "title": "DOC-002_leave_and_time_off_policy",
+        "source_path": "hr\\DOC-002_leave_and_time_off_policy.md"
+      },
+      {
+        "chunk_text": "## 2. Planning\n\nFeatures begin as a written proposal describing the problem, the proposed\napproach, and rough scope. Proposals for anything larger than a small\nchange are reviewed in a weekly planning meeting where the team decides\nwhether to proceed, and if so, roughly how it fits into the current\nquarter's priorities.\n\nA proposal should explain the problem being addressed rather than focusing\nonly on the requested implementation. Where possible, the proposal should\nidentify the expected users, business outcome, dependencies, and constraints.\nThis helps the team distinguish between a genuine product requirement and a\ntechnical solution that may need further discussion.\n\nPlanning should also consider whether the proposed work affects existing\nservices, APIs, databases, integrations, security controls, or operational\nprocedures. A feature that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation",
+        "distance": 1.5609428882598877,
+        "document_id": "DOC-016",
+        "title": "DOC-016_software_development_lifecycle",
+        "source_path": "engineering\\DOC-016_software_development_lifecycle.md"
+      }
+    ],
+    "expected_document_found_in_top_3": true
+  }
+]

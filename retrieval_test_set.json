@@ -1,0 +1,42 @@
+[
+  {
+    "question": "What should be considered during the planning stage before implementation begins?",
+    "expected_document_id": "DOC-016"
+  },
+  {
+    "question": "What is the recommended approach for handling errors in code?",
+    "expected_document_id": "DOC-017"
+  },
+  {
+    "question": "What approval is required for purchase requests above five thousand dollars?",
+    "expected_document_id": "DOC-028"
+  },
+  {
+    "question": "What mandatory training must new hires complete by the end of their first week?",
+    "expected_document_id": "DOC-001"
+  },
+  {
+    "question": "What is the process for requesting software that is not available in the standard IT catalog?",
+    "expected_document_id": "DOC-009"
+  },
+  {
+    "question": "What steps does an on-call engineer take to declare an incident?",
+    "expected_document_id": "DOC-024"
+  },
+  {
+    "question": "How is customer feedback triaged after it is received?",
+    "expected_document_id": "DOC-023"
+  },
+  {
+    "question": "What is required before an employee can receive elevated access to production or financial systems?",
+    "expected_document_id": "DOC-014"
+  },
+  {
+    "question": "What should an employee do if their account is suspected to be compromised?",
+    "expected_document_id": "DOC-007"
+  },
+  {
+    "question": "How far in advance should planned leave requests be submitted?",
+    "expected_document_id": "DOC-002"
+  }
+]
