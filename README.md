@@ -2,47 +2,52 @@
 
 ## Overview
 
-This project implements a document preprocessing and semantic retrieval
-pipeline. It prepares approved documents, sanitizes sensitive values,
-cleans and chunks the documents, generates vector embeddings, stores them
-in a persistent ChromaDB index, and retrieves relevant document chunks for
-user questions.
+This project implements a document preprocessing, semantic search, and
+baseline RAG retrieval pipeline.
 
-The project currently covers the Day 5 document preprocessing and Day 6
-vector indexing and semantic search activities. Day 7 work will continue
-in the same project folder.
+The pipeline prepares approved documents, sanitizes sensitive values,
+cleans and chunks the documents, generates vector embeddings, stores them
+in a persistent ChromaDB index, retrieves relevant document chunks for
+user questions, and prepares retrieved evidence as context for generation.
+
+The project currently covers Day 5, Day 6, and Day 7 activities.
 
 ---
 
 ## Project Structure
 
-GenAI_Day-5/
+GenAI-Training/
 │
 ├── cleaned_documents/          # Cleaned document files
 ├── documents/                  # Sanitized document files
-├── raw_documents/              # Original source documents
-├── vector_store/               # Persistent ChromaDB vector index
+├── raw_documents/             # Original source documents
+├── vector_store/              # Persistent ChromaDB vector index
 │
-├── sanitize_documents.py       # Sanitizes sensitive document values
-├── clean_documents.py          # Normalizes and cleans document text
-├── chunk_documents.py          # Splits cleaned documents into chunks
-├── chunk_quality_review.py     # Performs chunk quality checks
-├── chunk_quality_review.md     # Chunk quality review output
-├── chunks.jsonl                # Normalized chunk dataset
+├── sanitize_documents.py      # Sanitizes sensitive document values
+├── clean_documents.py        # Loads and cleans document text
+├── chunk_documents.py        # Splits cleaned documents into chunks
+├── chunk_quality_review.py   # Performs chunk quality checks
+├── chunk_quality_review.md   # Chunk quality review output
+├── chunks.jsonl              # Normalized chunk dataset
 │
-├── generate_embeddings.py      # Generates and reuses embeddings
-├── create_vector.py            # Creates the ChromaDB vector index
-├── embeddings.jsonl            # Chunk embeddings and metadata
+├── generate_embeddings.py    # Generates and reuses embeddings
+├── create_vector_index.py    # Creates the ChromaDB vector index
+├── embeddings.jsonl          # Chunk embeddings and metadata
 │
-├── semantic_search.py          # Reusable semantic search function
-├── filter_demo.py              # Metadata-filtered search demonstration
-├── retrieval_test_set.json     # 10-question retrieval test set
-├── test_retrival.py            # Retrieval test runner
-├── retrieval_results.json      # Detailed retrieval test results
+├── semantic_search.py        # Reusable semantic search function
+├── filter_demo.py            # Metadata-filtered search demonstration
+├── retrieval_test_set.json   # 10-question retrieval test set
+├── test_retrieval.py         # Retrieval test runner
+├── retrieval_results.json    # Detailed retrieval test results
 │
-├── requirements.txt            # Python dependencies
-├── .env                        # API and model configuration
-└── README.md                   # Project documentation
+├── ingest.py                 # Complete document ingestion pipeline
+├── retrieve.py               # Retrieval pipeline
+├── generate.py               # Retrieval context preparation
+├── test_pipeline.py          # Day 7 integration tests
+│
+├── requirements.txt          # Python dependencies
+├── .env                      # API and model configuration
+└── README.md                 # Project documentation
 
 ---
 
@@ -57,7 +62,7 @@ into traceable chunks with complete retrieval metadata.
 
 ### 1. Collect and Sanitize Documents
 
-sanitize_documents.py - reads Markdown documents from raw_documents/,
+`sanitize_documents.py` reads Markdown documents from `raw_documents/`,
 redacts configured sensitive values, and writes the sanitized documents to
 `documents/` while preserving the original folder structure.
 
@@ -85,17 +90,17 @@ The resulting chunks are stored in `chunks.jsonl`.
 
 Each chunk contains metadata including:
 
-- chunk_id
-- document_id
-- title
-- source_path
-- updated_at
-- chunk_index
-- category
+- `chunk_id`
+- `document_id`
+- `title`
+- `source_path`
+- `updated_at`
+- `chunk_index`
+- `category`
 
 ### 5. Chunk Quality Review
 
-chunk_quality_review.py inspects representative short, long, and
+`chunk_quality_review.py` inspects representative short, long, and
 structured documents and checks for:
 
 - Empty chunks
@@ -104,8 +109,7 @@ structured documents and checks for:
 
 The review is written to:
 
-chunk_quality_review.md
-
+`chunk_quality_review.md`
 
 The review also records the chunk-indexing issue that was identified and
 corrected so that chunk indexes continue sequentially across a document.
@@ -119,10 +123,10 @@ corrected so that chunk indexes continue sequentially across a document.
 
 ## Day 05 Completion Gate
 
--  Documents are processed through the preprocessing pipeline.
--  Chunks contain source-traceable metadata.
--  Empty chunks are checked during quality review.
--  Chunk size and overlap are configurable in chunk_documents.py.
+- Documents are processed through the preprocessing pipeline.
+- Chunks contain source-traceable metadata.
+- Empty chunks are checked during quality review.
+- Chunk size and overlap are configurable in `chunk_documents.py`.
 
 ---
 
@@ -146,24 +150,18 @@ when possible.
 
 The resulting records are stored in:
 
-```text
-embeddings.jsonl
-```
+`embeddings.jsonl`
 
 ### 2. Create the Vector Index
 
-`create_vector.py` loads the generated embeddings and stores them in a
+`create_vector_index.py` loads the generated embeddings and stores them in a
 persistent ChromaDB collection named:
 
-```text
-document_chunks
-```
+`document_chunks`
 
 The persistent index is stored in:
 
-```text
-vector_store/
-```
+`vector_store/`
 
 ### 3. Implement Top-K Search
 
@@ -201,7 +199,7 @@ Returned search information includes:
 
 `filter_demo.py` demonstrates metadata-filtered retrieval using:
 
-category="engineering"
+`category="engineering"`
 
 The search is therefore restricted to chunks whose metadata category is
 `engineering`.
@@ -211,14 +209,13 @@ The search is therefore restricted to chunks whose metadata category is
 `retrieval_test_set.json` contains 10 manually selected questions with
 their expected source document IDs.
 
-`test_retrival.py` runs the questions through `search_chunks()` using
+`test_retrieval.py` runs the questions through `search_chunks()` using
 `top_k=3` and checks whether the expected document appears in the top three
 results.
 
 The detailed results are saved to:
 
-retrieval_results.json
-
+`retrieval_results.json`
 
 ## Day 06 Required Deliverables
 
@@ -229,12 +226,12 @@ retrieval_results.json
 
 ## Day 06 Completion Gate
 
--  Semantic search returns the expected document within the top three
-   results for the tested questions.
--  Search results contain source metadata required for later retrieval
-   and citation workflows.
--  Index creation and retrieval commands are documented below.
-- A metadata-filtered search is demonstrated using filter_demo.py.
+- Semantic search returns the expected document within the top three
+  results for the tested questions.
+- Search results contain source metadata required for later retrieval
+  and citation workflows.
+- Index creation and retrieval commands are documented below.
+- A metadata-filtered search is demonstrated using `filter_demo.py`.
 
 ## Day 06 Retrieval Result
 
@@ -253,11 +250,9 @@ Question:
 
 What should be considered during the planning stage before implementation begins?
 
-
 Expected document:
 
-DOC-016
-
+`DOC-016`
 
 The expected document was retrieved in the top three results.
 
@@ -267,10 +262,9 @@ Question:
 
 What is the process for requesting software that is not available in the standard IT catalog?
 
-
 Expected document:
 
-DOC-009
+`DOC-009`
 
 The expected document was retrieved as the first result.
 
@@ -282,12 +276,367 @@ What should an employee do if their account is suspected to be compromised?
 
 Expected document:
 
-DOC-007
-
+`DOC-007`
 
 The expected document was retrieved in the top three results, but appeared
 at rank three. This is a weaker retrieval result that can be improved during
 advanced RAG work.
+
+---
+
+# Day 07 — Implement Baseline RAG Ingestion and Retrieval
+
+## Practical Goal
+
+Connect document loading, cleaning, chunking, embedding generation, vector
+indexing, semantic retrieval, and context preparation into one simple and
+understandable RAG pipeline.
+
+## Implementation
+
+### 1. Separate RAG Modules
+
+Day 7 introduces separate modules for the main RAG stages:
+
+- `ingest.py` — connects the document ingestion stages into one pipeline
+- `retrieve.py` — provides the retrieval entry point
+- `generate.py` — prepares retrieved evidence as context for generation
+- `test_pipeline.py` — performs pipeline-level integration checks
+
+Each stage remains independently callable so that individual stages can be
+tested and failures can be diagnosed without using a large orchestration
+framework.
+
+### 2. Build the Ingestion Flow
+
+`ingest.py` provides the `ingest_documents()` function and connects the
+existing document-processing modules into one ingestion pipeline.
+
+The ingestion flow is:
+
+```text
+Sanitized Documents
+        ↓
+Load and Clean
+        ↓
+Create Chunks
+        ↓
+Generate Embeddings
+        ↓
+Create Vector Index
+```
+
+The complete ingestion pipeline can be executed using:
+
+```bash
+python ingest.py
+```
+
+During verification, the pipeline successfully processed 30 Markdown
+documents, created 172 chunks, reused the existing embeddings for unchanged
+chunks, and maintained 172 records in the ChromaDB vector index.
+
+Re-ingestion behavior is handled using the SHA-256 content hash implemented
+in `generate_embeddings.py`. When a chunk has not changed, its existing
+embedding can be reused instead of generating a new embedding.
+
+### 3. Build the Retrieval Flow
+
+`retrieve.py` provides the `retrieve()` function and uses the reusable
+`search_chunks()` function from `semantic_search.py`.
+
+The retrieval flow is:
+
+```text
+User Question
+      ↓
+Query Embedding
+      ↓
+ChromaDB Vector Search
+      ↓
+Top-K Results
+      ↓
+Retrieved Chunks + Distance + Metadata
+```
+
+The default retrieval configuration is:
+
+- `top_k = 3`
+- `category = None`
+- `max_distance = None`
+
+The retrieval command is:
+
+```bash
+python retrieve.py
+```
+
+The command accepts a question and displays the retrieved evidence along
+with:
+
+- Document ID
+- Title
+- Source path
+- Retrieval distance
+- Chunk text
+
+For example, the known question:
+
+```text
+What is the process for requesting software that is not available
+in the standard IT catalog?
+```
+
+retrieved `DOC-009` as the first result within the configured Top-K results.
+
+The retrieval stage continues to use the reusable semantic search
+implementation from Day 6 rather than duplicating the vector-search logic.
+
+### 4. Prepare Context for Generation
+
+`generate.py` provides the `prepare_context()` function.
+
+This stage does not generate the final natural-language answer. It prepares
+the evidence returned by the retrieval stage so that it can be passed to a
+future generation step.
+
+The context preparation performs three operations:
+
+- Removes duplicate retrieved chunks
+- Adds stable source labels
+- Limits the final context to the selected evidence
+
+The context preparation flow is:
+
+```text
+Retrieved Evidence
+       ↓
+Remove Duplicate Chunks
+       ↓
+Add Stable Source Labels
+       ↓
+Limit Selected Evidence
+       ↓
+Final Context
+```
+
+Each retrieved chunk is given a stable source label containing the document
+ID and source path.
+
+Example:
+
+```text
+[Source: DOC-009:it\DOC-009_software_installation_request_process.md]
+```
+
+The context preparation command is:
+
+```bash
+python generate.py
+```
+
+The resulting output contains the selected retrieved evidence in a
+consistent and traceable format.
+
+Day 7 prepares the context for generation; it does not yet generate the
+final natural-language answer.
+
+### 5. Pipeline-Level Checks
+
+`test_pipeline.py` contains integration checks for the Day 7 pipeline.
+
+The main integration test verifies the following flow:
+
+```text
+Ingestion
+    ↓
+Retrieval
+    ↓
+Context Preparation
+```
+
+The test uses a known question and verifies that:
+
+- Documents can be ingested successfully.
+- Retrieval returns relevant evidence.
+- The expected document (`DOC-009`) is retrieved.
+- Final context is successfully prepared.
+- Stable source labels are present in the final context.
+
+A second test verifies failed-document handling. A document-processing
+failure is simulated and recorded, while processing continues for the
+remaining documents.
+
+The pipeline checks can be executed using:
+
+```bash
+python test_pipeline.py
+```
+
+The completed verification produced:
+
+```text
+Ingest → Retrieve → Context integration test passed.
+Failed-document handling test passed.
+All Day 7 pipeline checks passed.
+```
+
+---
+
+## Day 07 Required Deliverables
+
+### Separate Ingestion and Retrieval Modules
+
+Implemented using:
+
+- `ingest.py`
+- `retrieve.py`
+
+Context preparation is separated into:
+
+- `generate.py`
+
+### One Command for Ingestion
+
+The complete ingestion pipeline can be executed using:
+
+```bash
+python ingest.py
+```
+
+### One Command for Retrieval Context
+
+A question can be entered through:
+
+```bash
+python generate.py
+```
+
+The command retrieves the relevant evidence and prepares the final
+source-labelled context.
+
+### Integration Tests
+
+Pipeline-level integration tests are implemented in:
+
+```text
+test_pipeline.py
+```
+
+They verify ingest-then-retrieve behavior, context preparation, and
+failed-document handling.
+
+---
+
+## Day 07 Completion Gate
+
+### Basic Flow Visible in Code
+
+The complete basic flow is implemented using small, independently callable
+Python modules rather than a large orchestration framework.
+
+```text
+Ingestion
+   ↓
+Retrieval
+   ↓
+Context Preparation
+```
+
+### Controlled Re-ingestion
+
+Re-ingestion uses the existing SHA-256 content hash to identify unchanged
+chunks and reuse their embeddings.
+
+Repeated ingestion maintains the expected 172 embedding records instead of
+creating uncontrolled duplicate embedding records for unchanged chunks.
+
+### Stable Source Labels
+
+Retrieved context includes stable source labels based on the document ID
+and source path.
+
+Example:
+
+```text
+[Source: DOC-009:it\DOC-009_software_installation_request_process.md]
+```
+
+This keeps the prepared context traceable to its source document.
+
+### Integration Tests
+
+The Day 7 pipeline-level checks completed successfully:
+
+```text
+Ingest → Retrieve → Context integration test passed.
+Failed-document handling test passed.
+All Day 7 pipeline checks passed.
+```
+
+---
+
+## Day 07 End-of-Day Evidence
+
+A complete document-to-retrieval flow was verified using the IT software
+installation request document (`DOC-009`).
+
+The document was processed through the existing preprocessing and ingestion
+pipeline:
+
+```text
+Raw Document
+      ↓
+Sanitization
+      ↓
+Cleaning
+      ↓
+Chunking
+      ↓
+Embedding Generation
+      ↓
+ChromaDB Vector Index
+```
+
+A known question was then submitted to the retrieval pipeline:
+
+```text
+What is the process for requesting software that is not available
+in the standard IT catalog?
+```
+
+The retrieval stage returned `DOC-009` as the first result among the Top-3
+results.
+
+The retrieved evidence was then passed to `generate.py`, where it was
+prepared as generation-ready context using a stable source label:
+
+```text
+[Source: DOC-009:it\DOC-009_software_installation_request_process.md]
+```
+
+The Day 7 integration tests confirmed successful ingestion, retrieval,
+context preparation, stable source labelling, and failed-document handling.
+
+---
+
+## Day 07 Verification Summary
+
+| Area | Status |
+|---|---|
+| Separate ingestion module | Completed |
+| Separate retrieval module | Completed |
+| Context preparation module | Completed |
+| Complete ingestion command | Verified |
+| Top-K retrieval | Verified |
+| Stable source labels | Verified |
+| Duplicate context removal | Verified |
+| Context limiting | Verified |
+| Re-ingestion handling | Verified |
+| Ingest → Retrieve integration | Passed |
+| Failed-document handling | Passed |
+
+**Day 07 implementation and pipeline-level verification completed successfully.**
 
 ---
 
@@ -297,23 +646,55 @@ Activate the project virtual environment before running the scripts.
 
 ### Generate Embeddings
 
+```bash
 python generate_embeddings.py
+```
 
 ### Create the ChromaDB Vector Index
 
-python create_vector.py
+```bash
+python create_vector_index.py
+```
 
 ### Demonstrate Metadata Filtering
 
+```bash
 python filter_demo.py
+```
 
-### Run the Retrieval Test Set
+### Run the Day 6 Retrieval Test Set
 
-python test_retrival.py
+```bash
+python test_retrieval.py
+```
 
 The detailed retrieval report is generated as:
 
-retrieval_results.json
+`retrieval_results.json`
+
+### Run the Day 7 Ingestion Pipeline
+
+```bash
+python ingest.py
+```
+
+### Run the Day 7 Retrieval Flow
+
+```bash
+python retrieve.py
+```
+
+### Prepare Retrieval Context
+
+```bash
+python generate.py
+```
+
+### Run Day 7 Pipeline Integration Tests
+
+```bash
+python test_pipeline.py
+```
 
 ---
 
@@ -332,4 +713,6 @@ been implemented.
 
 ### Day 07
 
-To be continued in the same project folder.
+Baseline RAG ingestion, retrieval, context preparation, re-ingestion
+handling, and pipeline-level integration tests have been implemented and
+verified successfully.
