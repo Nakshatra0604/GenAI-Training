@@ -1,0 +1,62 @@
+{
+  "day": 9,
+  "task": "Controlled Retrieval Experiment Matrix",
+  "baseline_config_file": "baseline_config.yaml",
+
+  "experiments": [
+    {
+      "experiment_id": "EXP-001",
+      "case_id": "DQ-001",
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "primary_variable": "query_rewrite",
+      "baseline_value": "What should an employee do if their account is suspected to be compromised?",
+      "experiment_value": "What steps should an employee take immediately after an account compromise is suspected, including password changes and reporting?",
+      "reason": "The expected document DOC-007 was ranked third while broader security-related documents ranked above it. A more specific query may help retrieve the document about compromised accounts more precisely.",
+      "expected_outcome": "DOC-007 should move to a higher rank, ideally rank 1."
+    },
+
+    {
+      "experiment_id": "EXP-002",
+      "case_id": "DQ-002",
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "primary_variable": "top_k",
+      "baseline_value": 3,
+      "experiment_value": 5,
+      "reason": "DOC-016 was already ranked first and all three retrieved chunks came from the expected document. Increasing top-k tests whether additional relevant planning context can be retrieved.",
+      "expected_outcome": "Additional relevant chunks may be retrieved while DOC-016 remains the top-ranked document."
+    },
+
+    {
+      "experiment_id": "EXP-003",
+      "case_id": "DQ-005",
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "primary_variable": "top_k",
+      "baseline_value": 3,
+      "experiment_value": 2,
+      "reason": "DOC-014 was ranked first and the first two chunks were relevant, while the third result was a less-specific access-related document. Reducing top-k tests whether the less-specific result can be removed while keeping the relevant DOC-014 evidence.",
+      "expected_outcome": "The retrieved results should contain the relevant DOC-014 chunks without the less-specific third result."
+    },
+
+    {
+      "experiment_id": "EXP-004",
+      "case_id": "DQ-004",
+      "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+      "primary_variable": "top_k",
+      "baseline_value": 3,
+      "experiment_value": 5,
+      "reason": "The retrieved evidence supported the software-request process but did not explicitly identify the approval owner. Increasing top-k tests whether additional relevant context contains the missing approval information.",
+      "expected_outcome": "An additional relevant chunk may provide information about the approval owner while retaining the existing DOC-009 evidence."
+    },
+
+    {
+      "experiment_id": "EXP-005",
+      "case_id": "DQ-003",
+      "question": "What is the recommended approach for handling errors in code?",
+      "primary_variable": "query_rewrite",
+      "baseline_value": "What is the recommended approach for handling errors in code?",
+      "experiment_value": "How should developers handle errors in application code, including logging and deciding where the error should be handled?",
+      "reason": "DOC-017 was correctly ranked first, but other documents related to errors were also retrieved. A more specific developer-focused query may reduce less-specific semantic matches.",
+      "expected_outcome": "DOC-017 should remain rank 1 while less-specific error-related documents are less likely to appear in the top results."
+    }
+  ]
+}

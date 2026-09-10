@@ -1,0 +1,41 @@
+{
+  "day": 9,
+  "task": "Retrieval Failure Analysis",
+  "cases": [
+    {
+      "case_id": "DQ-001",
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "failure_category": "wrong_ranking",
+      "likely_cause": "vocabulary_mismatch",
+      "reason": "The expected document DOC-007 was retrieved at rank 3, while broader security-related documents were ranked above it. The retrieved evidence shows semantic overlap with the query, but DOC-007 contains the most specific answer."
+    },
+    {
+      "case_id": "DQ-002",
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "failure_category": "low_confidence_candidate",
+      "likely_cause": "possible_weak_semantic_match",
+      "reason": "DOC-016 was ranked first and all three retrieved chunks came from the expected document. The chunks are relevant, so there is no confirmed retrieval failure. The relatively high distances make this a candidate for further investigation."
+    },
+    {
+      "case_id": "DQ-003",
+      "question": "What is the recommended approach for handling errors in code?",
+      "failure_category": "potential_noisy_context",
+      "likely_cause": "broad_query",
+      "reason": "DOC-017 was correctly ranked first and directly answers the question. DOC-016 and DOC-019 are related to errors but address code review and API error responses respectively, so they are less specific."
+    },
+    {
+      "case_id": "DQ-004",
+      "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+      "failure_category": "incomplete_context",
+      "likely_cause": "insufficient_retrieved_context",
+      "reason": "The retrieved evidence supported the software-request process but did not explicitly identify the approval owner. Detailed retrieval ranking data for this modified Day 8 question was not saved, so a more specific retrieval cause cannot be established."
+    },
+    {
+      "case_id": "DQ-005",
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "failure_category": "potential_noisy_context",
+      "likely_cause": "broad_semantic_overlap",
+      "reason": "DOC-014 was ranked first and the first two chunks are directly relevant. DOC-011 is related to access and security but concerns vendor access, making it less specific to the question."
+    }
+  ]
+}

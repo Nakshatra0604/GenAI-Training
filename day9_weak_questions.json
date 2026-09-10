@@ -1,0 +1,114 @@
+{
+  "day": 9,
+  "purpose": "Fixed set of five weak retrieval and QA cases for Day 9 failure analysis and controlled experiments.",
+  "weak_questions": [
+    {
+      "case_id": "DQ-001",
+      "source_day": 6,
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "expected_document_id": "DOC-007",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-015",
+          "distance": 1.0762319564819336
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-012",
+          "distance": 1.114342451095581
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-007",
+          "distance": 1.1373518705368042
+        }
+      ],
+      "observed_issue": "Expected document DOC-007 was retrieved but ranked third behind two other security-related documents.",
+      "failure_category": "wrong_ranking"
+    },
+    {
+      "case_id": "DQ-002",
+      "source_day": 6,
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "expected_document_id": "DOC-016",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-016",
+          "distance": 1.2289541959762573
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-016",
+          "distance": 1.3280212879180908
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-016",
+          "distance": 1.4405354261398315
+        }
+      ],
+      "observed_issue": "Expected document DOC-016 was ranked first and all retrieved results came from the expected document, but the retrieval distances were relatively high.",
+      "failure_category": "low_confidence_candidate"
+    },
+    {
+      "case_id": "DQ-003",
+      "source_day": 6,
+      "question": "What is the recommended approach for handling errors in code?",
+      "expected_document_id": "DOC-017",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-017",
+          "distance": 1.0028774738311768
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-016",
+          "distance": 1.373283863067627
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-019",
+          "distance": 1.4264901876449585
+        }
+      ],
+      "observed_issue": "Expected document DOC-017 was ranked first, but other documents also appeared in the top-3 retrieval window.",
+      "failure_category": "potential_noisy_context"
+    },
+    {
+      "case_id": "DQ-004",
+      "source_day": 8,
+      "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+      "expected_document_id": "DOC-009",
+      "observed_issue": "Retrieved evidence supported the software-request process but did not explicitly provide the approval owner. The system answered the supported portion without inventing an approval owner.",
+      "failure_category": "incomplete_context"
+    },
+    {
+      "case_id": "DQ-005",
+      "source_day": 6,
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "expected_document_id": "DOC-014",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-014",
+          "distance": 0.8806563019752502
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-014",
+          "distance": 1.257277011871338
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-011",
+          "distance": 1.282999634736328
+        }
+      ],
+      "observed_issue": "Expected document DOC-014 was ranked first and contains the relevant requirement, but the retrieval is weaker than the strongest baseline cases and includes another security-policy document in the top-3 results.",
+      "failure_category": "borderline_retrieval_quality"
+    }
+  ]
+}

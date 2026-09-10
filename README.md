@@ -8,47 +8,72 @@ baseline RAG retrieval pipeline.
 The pipeline prepares approved documents, sanitizes sensitive values,
 cleans and chunks the documents, generates vector embeddings, stores them
 in a persistent ChromaDB index, retrieves relevant document chunks for
-user questions, and prepares retrieved evidence as context for generation.
+user questions, and prepares the retrieved evidence as context for
+generation.
 
 The project currently covers Day 5, Day 6, and Day 7 activities.
 
 ---
 
-## Project Structure
+# Project Structure
 
-GenAI-Training/
+```text
+GenAI_Day-5/
 │
-├── cleaned_documents/          # Cleaned document files
-├── documents/                  # Sanitized document files
-├── raw_documents/             # Original source documents
-├── vector_store/              # Persistent ChromaDB vector index
+├── raw_documents/                         # Original source documents
+├── documents/                             # Sanitized document files
+├── cleaned_documents/                     # Cleaned document files
+├── vector_store/                          # Persistent ChromaDB vector index
 │
-├── sanitize_documents.py      # Sanitizes sensitive document values
-├── clean_documents.py        # Loads and cleans document text
-├── chunk_documents.py        # Splits cleaned documents into chunks
-├── chunk_quality_review.py   # Performs chunk quality checks
-├── chunk_quality_review.md   # Chunk quality review output
-├── chunks.jsonl              # Normalized chunk dataset
+├── sanitize_documents.py                  # Sanitizes sensitive document values
+├── clean_documents.py                     # Loads and cleans document text
+├── chunk_documents.py                     # Splits cleaned documents into chunks
+├── chunk_quality_review.py                # Performs chunk quality checks
+├── chunk_quality_review.md                # Chunk quality review output
+├── chunks.jsonl                           # Normalized chunk dataset
 │
-├── generate_embeddings.py    # Generates and reuses embeddings
-├── create_vector_index.py    # Creates the ChromaDB vector index
-├── embeddings.jsonl          # Chunk embeddings and metadata
+├── generate_embeddings.py                 # Generates and reuses embeddings
+├── create_vector_index.py                 # Creates the ChromaDB vector index
+├── embeddings.jsonl                       # Chunk embeddings and metadata
 │
-├── semantic_search.py        # Reusable semantic search function
-├── filter_demo.py            # Metadata-filtered search demonstration
-├── retrieval_test_set.json   # 10-question retrieval test set
-├── test_retrieval.py         # Retrieval test runner
-├── retrieval_results.json    # Detailed retrieval test results
+├── semantic_search.py                     # Reusable semantic search function
+├── filter_demo.py                         # Metadata-filtered search demonstration
+├── retrieval_test_set.json                # Retrieval test questions
+├── test_retrieval.py                      # Day 6 retrieval test runner
+├── retrieval_results.json                 # Retrieval test results
 │
-├── ingest.py                 # Complete document ingestion pipeline
-├── retrieve.py               # Retrieval pipeline
-├── generate.py               # Retrieval context preparation
-├── test_pipeline.py          # Day 7 integration tests
+├── ingest.py                              # Complete document ingestion pipeline
+├── retrieve.py                            # Retrieval pipeline
+├── generate.py                            # Grounded answer generation pipeline
+├── grounded_prompt.py                     # Grounded answer prompt
+├── answer_model.py                        # Validated answer response model
+├── citation_validator.py                  # Validates answer citations
+├── test_pipeline.py                       # Day 7 integration tests
 │
-├── requirements.txt          # Python dependencies
-├── .env                      # API and model configuration
-└── README.md                 # Project documentation
-
+├── baseline_config.yaml                   # Frozen Day 9 baseline configuration
+├── day9_weak_questions.json                # Five weak retrieval cases
+├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
+├── day9_experiment_matrix.json            # Controlled Day 9 experiment plan
+├── day9_baseline_metrics.py               # Day 9 baseline metric runner
+├── day9_baseline_metrics.json             # Day 9 baseline metric results
+│
+├── day10_experiments.py                   # Executes planned Day 10 experiments
+├── day10_experiment_results.json          # Day 10 experiment results
+├── query_rewriter.py                      # Reusable query rewriting component
+├── day10_query_rewrite_experiment.py      # Query rewriting experiment
+├── day10_query_rewrite_results.json       # Query rewriting results
+├── reranker.py                            # Cross-encoder reranking component
+├── day10_reranking_experiment.py          # Cross-encoder reranking experiment
+├── day10_reranking_results.json           # Reranking results
+├── day10_regression_test.py               # Full retrieval regression test
+├── day10_regression_results.json          # Regression test results
+├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
+├── day10_final_config.yaml                # Selected Day 10 configuration
+│
+├── requirements.txt                       # Python dependencies
+├── .env                                   # API and model configuration
+├── .env.example                           # Example environment configuration
+└── README.md                              # Project documentation
 ---
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
@@ -62,7 +87,7 @@ into traceable chunks with complete retrieval metadata.
 
 ### 1. Collect and Sanitize Documents
 
-`sanitize_documents.py` reads Markdown documents from `raw_documents/`,
+sanitize_documents.py - reads Markdown documents from raw_documents/,
 redacts configured sensitive values, and writes the sanitized documents to
 `documents/` while preserving the original folder structure.
 
@@ -90,17 +115,17 @@ The resulting chunks are stored in `chunks.jsonl`.
 
 Each chunk contains metadata including:
 
-- `chunk_id`
-- `document_id`
-- `title`
-- `source_path`
-- `updated_at`
-- `chunk_index`
-- `category`
+- chunk_id
+- document_id
+- title
+- source_path
+- updated_at
+- chunk_index
+- category
 
 ### 5. Chunk Quality Review
 
-`chunk_quality_review.py` inspects representative short, long, and
+chunk_quality_review.py inspects representative short, long, and
 structured documents and checks for:
 
 - Empty chunks
@@ -109,7 +134,8 @@ structured documents and checks for:
 
 The review is written to:
 
-`chunk_quality_review.md`
+chunk_quality_review.md
+
 
 The review also records the chunk-indexing issue that was identified and
 corrected so that chunk indexes continue sequentially across a document.
@@ -123,10 +149,10 @@ corrected so that chunk indexes continue sequentially across a document.
 
 ## Day 05 Completion Gate
 
-- Documents are processed through the preprocessing pipeline.
-- Chunks contain source-traceable metadata.
-- Empty chunks are checked during quality review.
-- Chunk size and overlap are configurable in `chunk_documents.py`.
+-  Documents are processed through the preprocessing pipeline.
+-  Chunks contain source-traceable metadata.
+-  Empty chunks are checked during quality review.
+-  Chunk size and overlap are configurable in chunk_documents.py.
 
 ---
 
@@ -150,18 +176,24 @@ when possible.
 
 The resulting records are stored in:
 
-`embeddings.jsonl`
+```text
+embeddings.jsonl
+```
 
 ### 2. Create the Vector Index
 
-`create_vector_index.py` loads the generated embeddings and stores them in a
+`create_vector.py` loads the generated embeddings and stores them in a
 persistent ChromaDB collection named:
 
-`document_chunks`
+```text
+document_chunks
+```
 
 The persistent index is stored in:
 
-`vector_store/`
+```text
+vector_store/
+```
 
 ### 3. Implement Top-K Search
 
@@ -199,7 +231,7 @@ Returned search information includes:
 
 `filter_demo.py` demonstrates metadata-filtered retrieval using:
 
-`category="engineering"`
+category="engineering"
 
 The search is therefore restricted to chunks whose metadata category is
 `engineering`.
@@ -209,13 +241,14 @@ The search is therefore restricted to chunks whose metadata category is
 `retrieval_test_set.json` contains 10 manually selected questions with
 their expected source document IDs.
 
-`test_retrieval.py` runs the questions through `search_chunks()` using
+`test_retrival.py` runs the questions through `search_chunks()` using
 `top_k=3` and checks whether the expected document appears in the top three
 results.
 
 The detailed results are saved to:
 
-`retrieval_results.json`
+retrieval_results.json
+
 
 ## Day 06 Required Deliverables
 
@@ -226,12 +259,12 @@ The detailed results are saved to:
 
 ## Day 06 Completion Gate
 
-- Semantic search returns the expected document within the top three
-  results for the tested questions.
-- Search results contain source metadata required for later retrieval
-  and citation workflows.
-- Index creation and retrieval commands are documented below.
-- A metadata-filtered search is demonstrated using `filter_demo.py`.
+-  Semantic search returns the expected document within the top three
+   results for the tested questions.
+-  Search results contain source metadata required for later retrieval
+   and citation workflows.
+-  Index creation and retrieval commands are documented below.
+- A metadata-filtered search is demonstrated using filter_demo.py.
 
 ## Day 06 Retrieval Result
 
@@ -250,9 +283,11 @@ Question:
 
 What should be considered during the planning stage before implementation begins?
 
+
 Expected document:
 
-`DOC-016`
+DOC-016
+
 
 The expected document was retrieved in the top three results.
 
@@ -262,9 +297,10 @@ Question:
 
 What is the process for requesting software that is not available in the standard IT catalog?
 
+
 Expected document:
 
-`DOC-009`
+DOC-009
 
 The expected document was retrieved as the first result.
 
@@ -276,7 +312,8 @@ What should an employee do if their account is suspected to be compromised?
 
 Expected document:
 
-`DOC-007`
+DOC-007
+
 
 The expected document was retrieved in the top three results, but appeared
 at rank three. This is a weaker retrieval result that can be improved during
@@ -284,7 +321,46 @@ advanced RAG work.
 
 ---
 
-# Day 07 — Implement Baseline RAG Ingestion and Retrieval
+# How to Run
+
+Activate the project virtual environment before running the scripts.
+
+### Generate Embeddings
+
+python generate_embeddings.py
+
+### Create the ChromaDB Vector Index
+
+python create_vector.py
+
+### Demonstrate Metadata Filtering
+
+python filter_demo.py
+
+### Run the Retrieval Test Set
+
+python test_retrival.py
+
+The detailed retrieval report is generated as:
+
+retrieval_results.json
+
+---
+
+## Current Status
+
+### Day 05
+
+Document sanitization, cleaning, configurable chunking, metadata
+attachment, and chunk-quality review have been implemented.
+
+### Day 06
+
+Embedding generation, persistent ChromaDB indexing, top-K semantic search,
+metadata filtering, retrieval testing, and retrieval result reporting have
+been implemented.
+
+### Day 07 — Implement Baseline RAG Ingestion and Retrieval
 
 ## Practical Goal
 
@@ -371,14 +447,8 @@ The retrieval command is:
 python retrieve.py
 ```
 
-The command accepts a question and displays the retrieved evidence along
-with:
-
-- Document ID
-- Title
-- Source path
-- Retrieval distance
-- Chunk text
+The retrieved evidence contains the document ID, title, source path,
+retrieval distance, and chunk text.
 
 For example, the known question:
 
@@ -435,11 +505,8 @@ The context preparation command is:
 python generate.py
 ```
 
-The resulting output contains the selected retrieved evidence in a
-consistent and traceable format.
-
-Day 7 prepares the context for generation; it does not yet generate the
-final natural-language answer.
+The resulting output contains only the selected retrieved evidence in a
+consistent, traceable format.
 
 ### 5. Pipeline-Level Checks
 
@@ -523,8 +590,7 @@ Pipeline-level integration tests are implemented in:
 test_pipeline.py
 ```
 
-They verify ingest-then-retrieve behavior, context preparation, and
-failed-document handling.
+They verify ingest-then-retrieve behavior and failed-document handling.
 
 ---
 
@@ -548,8 +614,8 @@ Context Preparation
 Re-ingestion uses the existing SHA-256 content hash to identify unchanged
 chunks and reuse their embeddings.
 
-Repeated ingestion maintains the expected 172 embedding records instead of
-creating uncontrolled duplicate embedding records for unchanged chunks.
+The vector index contains 172 records after repeated ingestion, without
+uncontrolled growth from duplicate unchanged chunks.
 
 ### Stable Source Labels
 
@@ -620,99 +686,364 @@ context preparation, stable source labelling, and failed-document handling.
 
 ---
 
-## Day 07 Verification Summary
-
-| Area | Status |
-|---|---|
-| Separate ingestion module | Completed |
-| Separate retrieval module | Completed |
-| Context preparation module | Completed |
-| Complete ingestion command | Verified |
-| Top-K retrieval | Verified |
-| Stable source labels | Verified |
-| Duplicate context removal | Verified |
-| Context limiting | Verified |
-| Re-ingestion handling | Verified |
-| Ingest → Retrieve integration | Passed |
-| Failed-document handling | Passed |
-
 **Day 07 implementation and pipeline-level verification completed successfully.**
+
+# Day 08 — Add Grounded Generation, Citations, and Abstention
+
+## Practical Goal
+
+Generate answers only from retrieved evidence and return valid citations or a useful abstention response.
+
+Day 8 extends the Day 7 retrieval pipeline into a grounded question-answering pipeline. The generation layer now uses only the retrieved evidence, validates citations against the supplied source chunks, and abstains when sufficient evidence is not available.
 
 ---
 
-# How to Run
+## Implementation
 
-Activate the project virtual environment before running the scripts.
+### 1. Grounded Answer Prompt
 
-### Generate Embeddings
+A grounded answer prompt was implemented in `grounded_prompt.py`.
 
-```bash
-python generate_embeddings.py
+The prompt instructs the generation model to:
+
+- Use only the provided context.
+- Avoid outside knowledge and unsupported assumptions.
+- Answer only the portion of a question supported by the retrieved evidence.
+- Clearly identify information that is not available in the provided context.
+- Cite factual claims using the document IDs supplied with the retrieved chunks.
+- Never invent document IDs or citations.
+- Abstain when the available evidence is insufficient.
+
+The expected citation format is:
+
+```text
+[DOC-009]
 ```
 
-### Create the ChromaDB Vector Index
+This ensures that generated answers remain traceable to the retrieved evidence.
 
-```bash
-python create_vector_index.py
+---
+
+### 2. Validated Answer Response Model
+
+A structured Pydantic response model was implemented in `answer_model.py`.
+
+The response contains:
+
+| Field | Description |
+|---|---|
+| `answer` | Grounded answer generated from the retrieved evidence |
+| `sources` | Source documents referenced by the answer |
+| `chunks` | Evidence chunks used for generation |
+| `scores` | Retrieval distance scores for the selected chunks |
+| `status` | Indicates `answered` or `insufficient_evidence` |
+
+This ensures that the final response follows a consistent and validated structure.
+
+Partially answerable questions are handled using the `answered` status while explicitly identifying the unsupported portion of the question in the answer. A separate `partially_answered` status is not required by the Day 8 specification.
+
+---
+
+### 3. Citation Validation
+
+Citation validation was implemented in `citation_validator.py`.
+
+The validator compares citations generated by the model against the source labels supplied in the generation context.
+
+The validation process ensures that:
+
+- At least one citation is present for an answered response.
+- Every cited document ID exists in the supplied context.
+- Invalid or fabricated document references are rejected.
+- Valid citations are mapped back to their complete source references.
+
+This prevents the generation model from citing documents that were not actually retrieved and provided as evidence.
+
+---
+
+### 4. Evidence Threshold
+
+An evidence threshold was introduced before generation.
+
+The current retrieval distance threshold is:
+
+```text
+max_distance = 0.8
 ```
 
-### Demonstrate Metadata Filtering
+Only retrieved chunks that satisfy the configured threshold are considered suitable evidence for generation.
 
-```bash
-python filter_demo.py
+The generation pipeline therefore follows:
+
+```text
+Retrieved Results
+        ↓
+Evidence Threshold
+        ↓
+Selected Evidence
+        ↓
+Grounded Context
+        ↓
+LLM Generation
 ```
 
-### Run the Day 6 Retrieval Test Set
+Duplicate chunks are removed before the final context is supplied to the model.
 
-```bash
-python test_retrieval.py
+---
+
+### 5. Abstention
+
+An abstention mechanism was added to `generate.py`.
+
+If no retrieved evidence passes the configured threshold, the system does not generate an unsupported answer.
+
+Instead, it returns:
+
+```text
+Insufficient evidence to answer the question from the provided documents.
 ```
 
-The detailed retrieval report is generated as:
+with the response status:
 
-`retrieval_results.json`
-
-### Run the Day 7 Ingestion Pipeline
-
-```bash
-python ingest.py
+```text
+insufficient_evidence
 ```
 
-### Run the Day 7 Retrieval Flow
+The sources, chunks, and scores are returned as empty lists for an abstained response.
 
-```bash
-python retrieve.py
+This provides a safe fallback for questions that cannot be answered from the available documents.
+
+---
+
+### 6. Grounded Generation Pipeline
+
+The Day 8 generation pipeline combines retrieval, evidence selection, grounded generation, citation validation, and response validation.
+
+The resulting flow is:
+
+```text
+User Question
+      ↓
+Retrieve Evidence
+      ↓
+Apply Evidence Threshold
+      ↓
+Select Relevant Chunks
+      ↓
+Build Grounded Context
+      ↓
+Generate Answer
+      ↓
+Validate Citations
+      ↓
+Validate Response
+      ↓
+Return Grounded Answer
+      │
+      └── Insufficient/Invalid Evidence
+                    ↓
+                Abstention
 ```
 
-### Prepare Retrieval Context
+The existing retrieval components are reused rather than creating a separate retrieval implementation.
+
+---
+
+# Day 8 Testing
+
+Three scenarios were tested to verify grounded generation and abstention behavior.
+
+## Test 1 — Answerable Question
+
+### Question
+
+> What is the process for requesting software that is not available in the standard IT catalog?
+
+### Result
+
+The system successfully retrieved the relevant software installation request document and generated an answer based on the retrieved evidence.
+
+The response included a valid citation:
+
+```text
+[DOC-009]
+```
+
+The citation was successfully mapped to:
+
+```text
+DOC-009:it\DOC-009_software_installation_request_process.md
+```
+
+The final response status was:
+
+```text
+answered
+```
+
+### Outcome
+
+**PASS**
+
+The answer was grounded in the retrieved evidence and contained a valid source reference.
+
+---
+
+## Test 2 — Partially Answerable Question
+
+### Question
+
+> What is the process for requesting software that is not in the IT catalog, and who is responsible for approving the request?
+
+### Result
+
+The retrieved evidence supported the software request process, including:
+
+- Submitting the request through the IT ticketing system.
+- Providing the software name.
+- Providing business justification.
+- Providing relevant data-handling information.
+- Review of the request within the specified processing period.
+- Additional security review for requests involving sensitive data.
+- Installation or further instructions after approval.
+
+However, the retrieved evidence did not explicitly identify who is responsible for approving the request.
+
+The system therefore answered the supported portion and explicitly stated that the approval responsibility was not specified in the provided context.
+
+### Outcome
+
+**PASS**
+
+The system avoided making an unsupported assumption about the approval owner.
+
+---
+
+## Test 3 — Unanswerable Question
+
+### Question
+
+> What is the company's policy for international business travel?
+
+### Result
+
+The available evidence did not provide sufficient information to answer the question.
+
+The system correctly returned:
+
+```text
+Insufficient evidence to answer the question from the provided documents.
+```
+
+with:
+
+```text
+status = insufficient_evidence
+```
+
+No unsupported answer or fabricated citation was generated.
+
+### Outcome
+
+**PASS**
+
+The system safely abstained when sufficient evidence was unavailable.
+
+---
+
+# Required Deliverables
+
+| Deliverable | Status |
+|---|---|
+| Grounded answer prompt | Completed |
+| Validated answer response schema | Completed |
+| Citation mapping and validation | Completed |
+| Evidence threshold and filtering | Completed |
+| Abstention behavior | Completed |
+| Answerable test case | Completed |
+| Partially answerable test case | Completed |
+| Unanswerable test case | Completed |
+| Example cited answer | Completed |
+| Example abstention response | Completed |
+
+---
+
+# Completion Gate
+
+| Requirement | Result |
+|---|---|
+| Every answered response has at least one valid source | PASS |
+| No citation refers to evidence outside the supplied context | PASS |
+| Unsupported questions produce a clear abstention | PASS |
+| Partially supported questions do not trigger unsupported assumptions | PASS |
+| Evidence threshold is applied before generation | PASS |
+| Final responses follow the validated response schema | PASS |
+| Pipeline is reproducible with one command | PASS |
+
+---
+
+# End-of-Day Evidence
+
+### Cited Answer
+
+An answerable software-request question successfully produced a grounded answer with a valid `[DOC-009]` citation mapped to the retrieved source document.
+
+### Unsupported Question
+
+An unsupported international business travel question was safely declined with:
+
+```text
+Insufficient evidence to answer the question from the provided documents.
+```
+
+This confirms that the system can distinguish between supported evidence and insufficient evidence instead of guessing.
+
+---
+
+# Day 8 Final Outcome
+
+Day 8 successfully extends the retrieval pipeline into a grounded RAG question-answering system.
+
+The system now:
+
+- Generates answers from retrieved evidence only.
+- Applies an evidence threshold before generation.
+- Provides traceable source citations.
+- Validates citations against the supplied evidence.
+- Returns structured Pydantic responses.
+- Handles partially supported questions without unsupported assumptions.
+- Abstains when the available evidence is insufficient.
+
+The final Day 8 pipeline is therefore:
+
+**Retrieve → Filter Evidence → Generate Grounded Answer → Validate Citations → Validate Response → Answer or Abstain**
+
+The pipeline can be reproduced using:
 
 ```bash
 python generate.py
 ```
 
-### Run Day 7 Pipeline Integration Tests
+---
 
-```bash
-python test_pipeline.py
-```
+# Day 09 — Diagnose Retrieval Failures and Define Controlled Experiments
+
+## Practical Goal
+
+Use the weakest baseline retrieval questions to identify retrieval problems and design measurable, controlled experiments where only one primary retrieval variable is changed at a time.
+
+Day 9 focuses on understanding why some retrieval cases are weaker than others, freezing the existing retrieval configuration as a baseline, classifying observed retrieval issues, and defining experiments that can be evaluated objectively.
 
 ---
 
-## Current Status
+## Implementation
 
-### Day 05
+### 1. Freeze the Baseline Configuration
 
-Document sanitization, cleaning, configurable chunking, metadata
-attachment, and chunk-quality review have been implemented.
+The current retrieval configuration was frozen before making retrieval improvements so that all Day 10 experiments could be compared against a stable baseline.
 
-### Day 06
+The frozen configuration is stored in:
 
-Embedding generation, persistent ChromaDB indexing, top-K semantic search,
-metadata filtering, retrieval testing, and retrieval result reporting have
-been implemented.
+```text
+baseline_config.yaml
 
-### Day 07
-
-Baseline RAG ingestion, retrieval, context preparation, re-ingestion
-handling, and pipeline-level integration tests have been implemented and
-verified successfully.

@@ -1,0 +1,145 @@
+{
+  "day": 9,
+  "task": "Baseline Retrieval Metrics",
+  "baseline_config_file": "baseline_config.yaml",
+  "test_file": "day9_weak_questions.json",
+  "top_k": 3,
+  "per_question_results": [
+    {
+      "case_id": "DQ-001",
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "expected_document_id": "DOC-007",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-015",
+          "distance": 1.0762317180633545
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-012",
+          "distance": 1.114342212677002
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-007",
+          "distance": 1.137351632118225
+        }
+      ],
+      "expected_document_rank": 3,
+      "hit_at_3": true,
+      "recall_at_3": 1,
+      "reciprocal_rank": 0.3333333333333333
+    },
+    {
+      "case_id": "DQ-002",
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "expected_document_id": "DOC-016",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-016",
+          "distance": 1.2289541959762573
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-016",
+          "distance": 1.3280212879180908
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-016",
+          "distance": 1.4405354261398315
+        }
+      ],
+      "expected_document_rank": 1,
+      "hit_at_3": true,
+      "recall_at_3": 1,
+      "reciprocal_rank": 1.0
+    },
+    {
+      "case_id": "DQ-003",
+      "question": "What is the recommended approach for handling errors in code?",
+      "expected_document_id": "DOC-017",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-017",
+          "distance": 1.0028774738311768
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-016",
+          "distance": 1.3732837438583374
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-019",
+          "distance": 1.426490068435669
+        }
+      ],
+      "expected_document_rank": 1,
+      "hit_at_3": true,
+      "recall_at_3": 1,
+      "reciprocal_rank": 1.0
+    },
+    {
+      "case_id": "DQ-004",
+      "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+      "expected_document_id": "DOC-009",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-006",
+          "distance": 0.7458716630935669
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-009",
+          "distance": 0.749534547328949
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-001",
+          "distance": 1.355964183807373
+        }
+      ],
+      "expected_document_rank": 2,
+      "hit_at_3": true,
+      "recall_at_3": 1,
+      "reciprocal_rank": 0.5
+    },
+    {
+      "case_id": "DQ-005",
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "expected_document_id": "DOC-014",
+      "retrieved_documents": [
+        {
+          "rank": 1,
+          "document_id": "DOC-014",
+          "distance": 0.8806560039520264
+        },
+        {
+          "rank": 2,
+          "document_id": "DOC-014",
+          "distance": 1.2572767734527588
+        },
+        {
+          "rank": 3,
+          "document_id": "DOC-011",
+          "distance": 1.2829995155334473
+        }
+      ],
+      "expected_document_rank": 1,
+      "hit_at_3": true,
+      "recall_at_3": 1,
+      "reciprocal_rank": 1.0
+    }
+  ],
+  "overall_metrics": {
+    "total_questions": 5,
+    "hit_rate": 1.0,
+    "recall_at_3": 1.0,
+    "mrr": 0.7666666666666666
+  }
+}

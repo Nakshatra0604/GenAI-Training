@@ -1,0 +1,45 @@
+# Day 9 - Frozen Baseline Configuration
+#
+# This file records the current retrieval and grounded-generation
+# configuration before any Day 9/Day 10 experiments.
+
+retrieval:
+  embedding_model: "nvidia/NemoTron-3-Embed-1B:free"
+
+  chunking:
+    chunk_size: 1000
+    chunk_overlap: 150
+
+  top_k: 3
+
+  filters:
+    category: null
+
+  max_distance: null
+
+generation_evidence:
+  max_distance: 0.8
+  max_context_chunks: 3
+
+prompt:
+  version: "current_day8"
+  file: "grounded_prompt.py"
+  prompt_name: "GROUNDED_ANSWER_PROMPT"
+
+notes:
+  retrieval_max_distance: >
+    No distance threshold is applied at the retrieval layer
+    by default. The retrieval configuration uses max_distance=null.
+
+  generation_evidence_max_distance: >
+    After retrieval, chunks are eligible for grounded generation
+    only when their distance is less than or equal to 0.8.
+
+  max_context_chunks: >
+    At most 3 accepted evidence chunks are supplied to the
+    grounded generation prompt.
+
+  prompt_version: >
+    current_day8 identifies the grounded answer prompt that was
+    implemented and tested during Day 8. The original project
+    did not contain an explicit prompt version identifier.
