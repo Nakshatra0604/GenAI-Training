@@ -71,10 +71,16 @@ GenAI_Day-5/
 ├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
 ├── day10_final_config.yaml                # Selected Day 10 configuration
 │
-├── requirements.txt                      # Python dependencies
-├── .env                                  # API and model configuration
-├── .env.example                          # Example environment configuration
-└── README.md                             # Project documentation
+├── api/                                   # FastAPI service layer
+│   ├── main.py                            # FastAPI application entry point
+│   ├── routes.py                          # API endpoint definitions
+│   ├── models.py                          # Pydantic request and response models
+│   └── dependencies.py                    # Configuration and dependency readiness checks
+│
+├── requirements.txt                       # Python dependencies
+├── .env                                   # API and model configuration
+├── .env.example                           # Example environment configuration
+└── README.md                              # Project documentation
 ---
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
@@ -1569,3 +1575,630 @@ The selected configuration improved Mean Reciprocal Rank from **0.933 to 1.000**
 The final retrieval configuration and supporting experiment evidence are documented in the Day 10 configuration, experiment result files, regression results, and before-and-after retrieval report.
 
 **Day 10 implementation, retrieval improvement experiments, regression validation, and configuration selection completed successfully.**
+
+# DAY 11 — Build FastAPI Service Contracts and Core Endpoints
+
+## Practical Goal
+
+Expose ingestion and question answering through a maintainable FastAPI service with validated request and response models.
+
+The objective of Day 11 was to expose the existing document ingestion and Retrieval-Augmented Generation (RAG) pipeline through a FastAPI service without duplicating the existing pipeline logic.
+
+The API provides the following core endpoints:
+
+- `GET /health`
+- `POST /ingest`
+- `POST /ask`
+- `GET /documents/{id}`
+
+---
+
+## 1. Create the FastAPI Application
+
+A FastAPI application was created under the `api/` package.
+
+The API structure is:
+
+​```text
+api/
+├── main.py
+├── routes.py
+├── models.py
+└── dependencies.py
+​```
+
+### api/main.py
+
+The application entry point:
+
+- Creates the FastAPI application
+- Defines API metadata
+- Registers the API routes
+- Defines the `/health` endpoint
+- Uses Pydantic response models for API contracts
+
+The application was successfully started using Uvicorn.
+
+​```text
+Uvicorn running on http://127.0.0.1:8000
+Application startup complete.
+​```
+
+### api/routes.py
+
+The route module contains the four required API endpoints.
+
+The route handlers are kept thin by reusing the existing RAG modules.
+
+The ingestion endpoint calls:
+
+​```text
+ingest_documents()
+​```
+
+from the existing ingestion pipeline.
+
+The question-answering endpoint calls:
+
+​```text
+answer_question()
+​```
+
+from the existing cited RAG pipeline.
+
+This avoids duplicating document processing, retrieval, reranking, and answer-generation logic inside the API layer.
+
+### api/dependencies.py
+
+This module provides configuration and dependency readiness checks.
+
+It checks:
+
+- Generation model configuration
+- Vector store availability
+
+Sensitive configuration values such as API keys are not returned by the health endpoint.
+
+---
+
+## 2. Define Pydantic Request and Response Models
+
+The API contracts are defined in `api/models.py`.
+
+### AskRequest
+
+​```python
+class AskRequest(BaseModel):
+    question: str
+    category: str | None = None
+    max_distance: float | None = None
+​```
+
+This model accepts:
+
+- `question` — required question
+- `category` — optional category filter
+- `max_distance` — optional retrieval distance threshold
+
+### IngestRequest
+
+​```python
+class IngestRequest(BaseModel):
+    file_path: str
+​```
+
+This model accepts the document file path to be processed.
+
+### IngestResponse
+
+​```python
+class IngestResponse(BaseModel):
+    document_id: str
+    chunk_count: int
+    status: str
+​```
+
+This response returns:
+
+- Document ID
+- Number of chunks created
+- Processing status
+
+### DocumentResponse
+
+​```python
+class DocumentResponse(BaseModel):
+    document_id: str
+    title: str
+    source_path: str
+    updated_at: float
+    category: str
+    chunk_count: int
+    status: str
+​```
+
+This response returns stored document metadata and processing status.
+
+### HealthResponse
+
+​```python
+class HealthResponse(BaseModel):
+    status: str
+    dependencies: dict[str, str]
+​```
+
+This response returns service status and non-sensitive dependency readiness.
+
+---
+
+## 3. Implement GET /health
+
+### Purpose
+
+The `/health` endpoint checks whether the API service dependencies are ready.
+
+The endpoint checks:
+
+- Generation model readiness
+- Vector store readiness
+
+### Endpoint
+
+​```text
+GET /health
+​```
+
+### Example Response
+
+​```json
+{
+  "status": "healthy",
+  "dependencies": {
+    "generation_model": "ready",
+    "vector_store": "ready"
+  }
+}
+​```
+
+The endpoint does not expose secrets or internal exception details.
+
+---
+
+## 4. Implement POST /ingest
+
+### Purpose
+
+The `/ingest` endpoint accepts a validated document path and invokes the existing ingestion pipeline.
+
+The existing ingestion flow performs:
+
+​```text
+Document
+    ↓
+Cleaning
+    ↓
+Chunking
+    ↓
+Embedding Generation
+    ↓
+Vector Index Creation
+​```
+
+The API route reuses this existing pipeline rather than duplicating the processing logic.
+
+### Endpoint
+
+​```text
+POST /ingest
+​```
+
+### Example Request
+
+​```json
+{
+  "file_path": "documents/engineering/DOC-016_software_development_lifecycle.md"
+}
+​```
+
+### Example Response
+
+​```json
+{
+  "document_id": "DOC-016",
+  "chunk_count": 25,
+  "status": "processed"
+}
+​```
+
+### Error Handling
+
+If the document does not exist:
+
+​```text
+404 Document file not found.
+​```
+
+If the supplied file is not a Markdown document:
+
+​```text
+400 Only Markdown documents are supported.
+​```
+
+---
+
+## 5. Implement POST /ask
+
+### Purpose
+
+The `/ask` endpoint accepts a question and optional retrieval filters and sends the request through the existing cited RAG pipeline.
+
+### Endpoint
+
+​```text
+POST /ask
+​```
+
+### Example Request
+
+​```json
+{
+  "question": "What is the goal of the software development lifecycle?",
+  "category": null,
+  "max_distance": null
+}
+​```
+
+### Example Response
+
+​```json
+{
+  "answer": "...",
+  "sources": [
+    "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+  ],
+  "chunks": [
+    "..."
+  ],
+  "scores": [
+    1.0751402378082275,
+    1.247380018234253,
+    1.5933386087417603
+  ],
+  "status": "answered"
+}
+​```
+
+The response is validated using the existing `AnswerResponse` Pydantic model.
+
+The response contains:
+
+- Generated answer
+- Source references
+- Retrieved chunks
+- Retrieval scores
+- Answer status
+
+---
+
+## 6. Implement GET /documents/{id}
+
+### Purpose
+
+The `/documents/{id}` endpoint returns stored document metadata and processing status.
+
+### Endpoint
+
+​```text
+GET /documents/{id}
+​```
+
+### Example Request
+
+​```text
+GET /documents/DOC-016
+​```
+
+### Example Response
+
+​```json
+{
+  "document_id": "DOC-016",
+  "title": "DOC-016_software_development_lifecycle",
+  "source_path": "engineering\\DOC-016_software_development_lifecycle.md",
+  "updated_at": 1789054023.2216163,
+  "category": "engineering",
+  "chunk_count": 25,
+  "status": "processed"
+}
+​```
+
+### Not Found Handling
+
+If an unknown document ID is requested, the API returns:
+
+​```text
+404 Document not found.
+​```
+
+---
+
+## 7. OpenAPI Documentation
+
+FastAPI automatically generates OpenAPI documentation for the API.
+
+The interactive Swagger UI was successfully loaded at:
+
+​```text
+http://127.0.0.1:8000/docs
+​```
+
+The generated documentation displays the implemented endpoints and their request and response schemas.
+
+The following schemas were verified:
+
+- AskRequest
+- IngestRequest
+- IngestResponse
+- DocumentResponse
+- HealthResponse
+- AnswerResponse
+
+---
+
+## 8. API Examples
+
+The following examples were used during Day 11 API verification.
+
+### Health Check
+
+​```text
+GET /health
+​```
+
+​```json
+{
+  "status": "healthy",
+  "dependencies": {
+    "generation_model": "ready",
+    "vector_store": "ready"
+  }
+}
+​```
+
+### Document Ingestion
+
+​```text
+POST /ingest
+​```
+
+​```json
+{
+  "file_path": "documents/engineering/DOC-016_software_development_lifecycle.md"
+}
+​```
+
+Response:
+
+​```json
+{
+  "document_id": "DOC-016",
+  "chunk_count": 25,
+  "status": "processed"
+}
+​```
+
+### Question Answering
+
+​```text
+POST /ask
+​```
+
+​```json
+{
+  "question": "What is the goal of the software development lifecycle?",
+  "category": null,
+  "max_distance": null
+}
+​```
+
+Response:
+
+​```json
+{
+  "answer": "...",
+  "sources": [
+    "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+  ],
+  "chunks": [
+    "..."
+  ],
+  "scores": [
+    1.0751402378082275,
+    1.247380018234253,
+    1.5933386087417603
+  ],
+  "status": "answered"
+}
+​```
+
+### Document Metadata
+
+​```text
+GET /documents/DOC-016
+​```
+
+Response:
+
+​```json
+{
+  "document_id": "DOC-016",
+  "title": "DOC-016_software_development_lifecycle",
+  "source_path": "engineering\\DOC-016_software_development_lifecycle.md",
+  "updated_at": 1789054023.2216163,
+  "category": "engineering",
+  "chunk_count": 25,
+  "status": "processed"
+}
+​```
+
+---
+
+## 9. Day 11 Verification Evidence
+
+The FastAPI application was started successfully using Uvicorn.
+
+​```text
+Uvicorn running on http://127.0.0.1:8000
+Application startup complete.
+​```
+
+Swagger UI was successfully opened and used for endpoint testing.
+
+### Endpoint Verification
+
+| Endpoint | Test Performed | Result |
+|---|---|---|
+| GET /health | Valid request | 200 OK |
+| POST /ingest | Valid Markdown document | 200 OK |
+| POST /ask | Valid question with grounded answer | 200 OK |
+| GET /documents/DOC-016 | Existing document ID | 200 OK |
+
+### /health Verification
+
+The endpoint returned:
+
+​```json
+{
+  "status": "healthy",
+  "dependencies": {
+    "generation_model": "ready",
+    "vector_store": "ready"
+  }
+}
+​```
+
+This confirms that the required generation model configuration and vector store were ready.
+
+### /ingest Verification
+
+The document:
+
+​```text
+documents/engineering/DOC-016_software_development_lifecycle.md
+​```
+
+was successfully processed.
+
+The API returned:
+
+​```json
+{
+  "document_id": "DOC-016",
+  "chunk_count": 25,
+  "status": "processed"
+}
+​```
+
+### /ask Verification
+
+The following question was successfully processed:
+
+​```text
+What is the goal of the software development lifecycle?
+​```
+
+The endpoint returned:
+
+​```text
+status: answered
+​```
+
+The response included the DOC-016 source reference, retrieved chunks, and retrieval scores.
+
+### /documents/DOC-016 Verification
+
+The document metadata endpoint successfully returned:
+
+- Document ID
+- Title
+- Source path
+- Updated timestamp
+- Category
+- Chunk count
+- Processing status
+
+The document contained:
+
+- 25 chunks
+- `status: processed`
+
+### Invalid Request Validation
+
+Request validation was also tested by sending an `/ask` request without the required question field.
+
+Request:
+
+​```json
+{
+  "category": null,
+  "max_distance": null
+}
+​```
+
+The API correctly rejected the request with:
+
+​```text
+422 Unprocessable Entity
+​```
+
+The validation response identified:
+
+​```text
+question
+Field required
+​```
+
+This confirms that Pydantic/FastAPI validation rejects invalid requests before they reach the RAG pipeline.
+
+---
+
+## 10. Day 11 Completion Gate
+
+| Requirement | Status |
+|---|---|
+| Runnable FastAPI application | Completed |
+| GET /health | Completed |
+| POST /ingest | Completed |
+| POST /ask | Completed |
+| GET /documents/{id} | Completed |
+| Pydantic request models | Completed |
+| Pydantic response models | Completed |
+| OpenAPI documentation loads | Verified |
+| Valid requests return expected response shape | Verified |
+| Invalid requests rejected by validation | Verified |
+| Existing ingestion pipeline reused | Verified |
+| Existing RAG pipeline reused | Verified |
+| Clear not-found response | Implemented |
+| Non-sensitive health response | Implemented |
+
+---
+
+## 11. Day 11 Final Outcome
+
+Day 11 successfully exposed the existing document ingestion and cited RAG question-answering functionality through a maintainable FastAPI service.
+
+The implementation provides:
+
+- Validated API request and response contracts
+- Document ingestion through the existing ingestion pipeline
+- Grounded question answering through the existing RAG pipeline
+- Document metadata retrieval
+- Service and dependency readiness checks
+- OpenAPI/Swagger documentation
+- Request validation and HTTP error handling
+
+The API layer remains separate from the core RAG implementation and reuses the existing pipeline components without duplicating their logic.
+
+**DAY 11 COMPLETED **
+
+All Day 11 implementation, endpoint testing, validation checks, OpenAPI verification, API examples, and completion-gate requirements have been completed successfully.
