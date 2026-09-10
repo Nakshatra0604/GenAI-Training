@@ -1,0 +1,182 @@
+{
+  "day": 10,
+  "task": "Cross-Encoder Reranking",
+  "candidate_top_k": 5,
+  "final_top_k": 3,
+  "cases": [
+    {
+      "case_id": "DQ-001",
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "expected_document_id": "DOC-007",
+      "vector_retrieval": {
+        "candidate_top_k": 5,
+        "selected_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-015",
+            "original_distance": 1.0762313604354858
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "original_distance": 1.1143418550491333
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-007",
+            "original_distance": 1.1373512744903564
+          }
+        ],
+        "expected_document_rank": 3,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-007",
+            "original_distance": 1.1373512744903564,
+            "rerank_score": 5.293471336364746
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "original_distance": 1.1143418550491333,
+            "rerank_score": 0.4004601836204529
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-015",
+            "original_distance": 1.0762313604354858,
+            "rerank_score": 0.17480096220970154
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "case_id": "DQ-003",
+      "question": "What is the recommended approach for handling errors in code?",
+      "expected_document_id": "DOC-017",
+      "vector_retrieval": {
+        "candidate_top_k": 5,
+        "selected_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "original_distance": 1.0028773546218872
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "original_distance": 1.3732835054397583
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "original_distance": 1.4264898300170898
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "original_distance": 1.0028773546218872,
+            "rerank_score": 3.973207473754883
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "original_distance": 1.3732835054397583,
+            "rerank_score": -0.655943751335144
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "original_distance": 1.4264898300170898,
+            "rerank_score": -3.9539146423339844
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "case_id": "DQ-005",
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "expected_document_id": "DOC-014",
+      "vector_retrieval": {
+        "candidate_top_k": 5,
+        "selected_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "original_distance": 0.880656361579895
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-014",
+            "original_distance": 1.257277011871338
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-011",
+            "original_distance": 1.2829997539520264
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "results": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "original_distance": 0.880656361579895,
+            "rerank_score": 5.427203178405762
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-011",
+            "original_distance": 1.2829997539520264,
+            "rerank_score": -1.0186673402786255
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-011",
+            "original_distance": 1.3012542724609375,
+            "rerank_score": -3.436666965484619
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    }
+  ]
+}

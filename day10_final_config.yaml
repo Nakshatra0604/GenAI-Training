@@ -1,0 +1,64 @@
+# Day 10 - Final Retrieval Configuration
+#
+# Selected configuration after controlled retrieval experiments.
+# This configuration is intended to be used by the RAG pipeline going forward.
+
+retrieval:
+  embedding_model: "nvidia/NemoTron-3-Embed-1B:free"
+
+  chunking:
+    chunk_size: 1000
+    chunk_overlap: 150
+
+  vector_search:
+    candidate_top_k: 5
+
+  reranking:
+    enabled: true
+    model: "cross-encoder/ms-marco-MiniLM-L6-v2"
+    final_top_k: 3
+
+  filters:
+    category: null
+
+  max_distance: null
+
+generation_evidence:
+  max_context_chunks: 3
+  rerank_score_threshold: 0.0
+
+prompt:
+  version: "current_day8"
+  file: "grounded_prompt.py"
+  prompt_name: "GROUNDED_ANSWER_PROMPT"
+
+notes:
+  retrieval_flow: >
+    Retrieve the top 5 candidates using vector search,
+    rerank the candidates using the cross-encoder,
+    and select the final top 3 chunks for downstream generation.
+
+  reranking: >
+    Cross-encoder reranking improves the ordering of retrieved
+    candidates while preserving the original vector distance.
+
+  evidence_threshold: >
+    Chunks with rerank scores below 0.0 are not considered
+    sufficient evidence for grounded generation.
+
+  selected_configuration: >
+    The final configuration was selected after comparing
+    query rewriting, top-k changes, and cross-encoder reranking
+    experiments against the frozen Day 9 baseline.
+
+  regression_result: >
+    Full retrieval regression maintained Hit Rate@3 and Recall@3
+    at 1.000 and improved MRR from 0.933 to 1.000.
+
+  latency_tradeoff: >
+    Cross-encoder reranking added approximately 0.173 seconds
+    of average latency in the regression test.
+
+  prompt_version: >
+    current_day8 identifies the grounded answer prompt used
+    as the baseline prompt during Day 10 experiments.

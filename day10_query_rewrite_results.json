@@ -1,0 +1,117 @@
+{
+  "day": 10,
+  "task": "Query Rewriting",
+  "top_k": 3,
+  "cases": [
+    {
+      "case_id": "DQ-001",
+      "expected_document_id": "DOC-007",
+      "baseline": {
+        "question": "What should an employee do if their account is suspected to be compromised?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-015",
+            "distance": 1.0762317180633545
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "distance": 1.114342212677002
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-007",
+            "distance": 1.137351632118225
+          }
+        ],
+        "expected_document_rank": 3,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "query_rewrite": {
+        "original_question": "What should an employee do if their account is suspected to be compromised?",
+        "rewritten_query": "What to do if an employee's account is suspected compromised?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-015",
+            "distance": 1.0769641399383545
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-007",
+            "distance": 1.1506288051605225
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-012",
+            "distance": 1.177718162536621
+          }
+        ],
+        "expected_document_rank": 2,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.5
+      }
+    },
+    {
+      "case_id": "DQ-003",
+      "expected_document_id": "DOC-017",
+      "baseline": {
+        "question": "What is the recommended approach for handling errors in code?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "distance": 1.0028773546218872
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.3732836246490479
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "distance": 1.4264899492263794
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "query_rewrite": {
+        "original_question": "What is the recommended approach for handling errors in code?",
+        "rewritten_query": "error handling best practices in code",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "distance": 1.0339115858078003
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-019",
+            "distance": 1.3647429943084717
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.4195756912231445
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    }
+  ]
+}

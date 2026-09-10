@@ -1,0 +1,624 @@
+{
+  "day": 10,
+  "task": "Regression Testing",
+  "test_set_file": "retrieval_test_set.json",
+  "baseline_configuration": {
+    "retrieval": "vector_search",
+    "top_k": 3
+  },
+  "reranking_configuration": {
+    "retrieval": "vector_search",
+    "candidate_top_k": 5,
+    "final_top_k": 3,
+    "reranker": "cross-encoder"
+  },
+  "aggregate_metrics": {
+    "baseline": {
+      "hit_rate_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 0.9333333333333333
+    },
+    "reranking": {
+      "hit_rate_at_3": 1.0,
+      "recall_at_3": 1.0,
+      "mrr": 1.0
+    }
+  },
+  "latency": {
+    "baseline_average_seconds": 0.2948950500001956,
+    "reranking_average_seconds": 0.4313804100005655,
+    "average_additional_seconds": 0.13648536000036987
+  },
+  "questions": [
+    {
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "expected_document_id": "DOC-016",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.2529212000008556,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-016",
+            "distance": 1.2289541959762573
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.3280212879180908
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.4405354261398315
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.5277035999970394,
+        "additional_latency_seconds": 0.2747823999961838,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-016",
+            "original_distance": 1.2289543151855469,
+            "rerank_score": 4.858053207397461
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "original_distance": 1.3280216455459595,
+            "rerank_score": 4.281149387359619
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "original_distance": 1.440535545349121,
+            "rerank_score": 4.178818225860596
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What is the recommended approach for handling errors in code?",
+      "expected_document_id": "DOC-017",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.41135740000027,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "distance": 1.0028773546218872
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.3732836246490479
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "distance": 1.4264899492263794
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.4861473999990267,
+        "additional_latency_seconds": 0.07478999999875668,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "original_distance": 1.0028773546218872,
+            "rerank_score": 3.973207473754883
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "original_distance": 1.3732835054397583,
+            "rerank_score": -0.655943751335144
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "original_distance": 1.4264898300170898,
+            "rerank_score": -3.9539146423339844
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What approval is required for purchase requests above five thousand dollars?",
+      "expected_document_id": "DOC-028",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.2551969999985886,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-028",
+            "distance": 0.5191531181335449
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-028",
+            "distance": 0.7798401117324829
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-009",
+            "distance": 1.4840744733810425
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.43919370000367053,
+        "additional_latency_seconds": 0.18399670000508195,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-028",
+            "original_distance": 0.5191531181335449,
+            "rerank_score": 9.981441497802734
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-028",
+            "original_distance": 0.7798401117324829,
+            "rerank_score": 6.725430965423584
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-009",
+            "original_distance": 1.4840744733810425,
+            "rerank_score": -9.656572341918945
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What mandatory training must new hires complete by the end of their first week?",
+      "expected_document_id": "DOC-001",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.24153520000254503,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-001",
+            "distance": 0.8109185695648193
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-001",
+            "distance": 1.065930962562561
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-004",
+            "distance": 1.111159324645996
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.3194392000004882,
+        "additional_latency_seconds": 0.07790399999794317,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-001",
+            "original_distance": 0.8109187483787537,
+            "rerank_score": 7.952958583831787
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-004",
+            "original_distance": 1.1111594438552856,
+            "rerank_score": 0.13091957569122314
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-001",
+            "original_distance": 1.0659310817718506,
+            "rerank_score": 0.011920612305402756
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What is the process for requesting software that is not available in the standard IT catalog?",
+      "expected_document_id": "DOC-009",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.2575811999995494,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-009",
+            "distance": 0.7911214828491211
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-006",
+            "distance": 0.8359401226043701
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-010",
+            "distance": 1.3970961570739746
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.46611899999697926,
+        "additional_latency_seconds": 0.20853779999742983,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-009",
+            "original_distance": 0.7911216020584106,
+            "rerank_score": 8.146921157836914
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-006",
+            "original_distance": 0.8359401822090149,
+            "rerank_score": 4.3393964767456055
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-010",
+            "original_distance": 1.3970962762832642,
+            "rerank_score": -8.985725402832031
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What steps does an on-call engineer take to declare an incident?",
+      "expected_document_id": "DOC-024",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.38227740000002086,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-024",
+            "distance": 0.5706868171691895
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-024",
+            "distance": 1.172539472579956
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-024",
+            "distance": 1.2094666957855225
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.3443332000024384,
+        "additional_latency_seconds": -0.03794419999758247,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-024",
+            "original_distance": 0.570686936378479,
+            "rerank_score": 8.041610717773438
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-024",
+            "original_distance": 1.2094669342041016,
+            "rerank_score": -1.7121634483337402
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-021",
+            "original_distance": 1.2936720848083496,
+            "rerank_score": -3.1106910705566406
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "How is customer feedback triaged after it is received?",
+      "expected_document_id": "DOC-023",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.24433090000093216,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-023",
+            "distance": 0.9502900838851929
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-023",
+            "distance": 0.9623609781265259
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-023",
+            "distance": 1.0026241540908813
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.4133914000049117,
+        "additional_latency_seconds": 0.16906050000397954,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-023",
+            "original_distance": 1.0026241540908813,
+            "rerank_score": -1.0850322246551514
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-023",
+            "original_distance": 0.9502900838851929,
+            "rerank_score": -2.1771366596221924
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-023",
+            "original_distance": 0.9623609781265259,
+            "rerank_score": -3.5223047733306885
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What is required before an employee can receive elevated access to production or financial systems?",
+      "expected_document_id": "DOC-014",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.2491827000048943,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "distance": 0.880656361579895
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-014",
+            "distance": 1.257277011871338
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-011",
+            "distance": 1.2829997539520264
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.3922445999996853,
+        "additional_latency_seconds": 0.14306189999479102,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "original_distance": 0.8806562423706055,
+            "rerank_score": 5.427203178405762
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-011",
+            "original_distance": 1.2829995155334473,
+            "rerank_score": -1.0186673402786255
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-011",
+            "original_distance": 1.3012539148330688,
+            "rerank_score": -3.436666965484619
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "What should an employee do if their account is suspected to be compromised?",
+      "expected_document_id": "DOC-007",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.2470610999953351,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-015",
+            "distance": 1.0762314796447754
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "distance": 1.1143419742584229
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-007",
+            "distance": 1.1373515129089355
+          }
+        ],
+        "expected_document_rank": 3,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.5165841000052751,
+        "additional_latency_seconds": 0.26952300000994,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-007",
+            "original_distance": 1.137351632118225,
+            "rerank_score": 5.293471336364746
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "original_distance": 1.114342212677002,
+            "rerank_score": 0.4004601836204529
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-015",
+            "original_distance": 1.0762317180633545,
+            "rerank_score": 0.17480096220970154
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    },
+    {
+      "question": "How far in advance should planned leave requests be submitted?",
+      "expected_document_id": "DOC-002",
+      "baseline": {
+        "top_k": 3,
+        "latency_seconds": 0.4075063999989652,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-002",
+            "distance": 1.2581043243408203
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-002",
+            "distance": 1.3654358386993408
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.5609428882598877
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "reranking": {
+        "candidate_top_k": 5,
+        "final_top_k": 3,
+        "latency_seconds": 0.40864789999614004,
+        "additional_latency_seconds": 0.001141499997174833,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-002",
+            "original_distance": 1.2581045627593994,
+            "rerank_score": 6.326523780822754
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-002",
+            "original_distance": 1.3654361963272095,
+            "rerank_score": 2.747910499572754
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-003",
+            "original_distance": 1.564209222793579,
+            "rerank_score": -3.831953763961792
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      }
+    }
+  ]
+}

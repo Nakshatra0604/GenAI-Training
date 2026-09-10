@@ -1,8 +1,9 @@
 from semantic_search import search_chunks
+from reranker import rerank_chunks
 
 
-# Default retrieval configuration
-
+# Final retrieval configuration
+CANDIDATE_TOP_K = 5
 DEFAULT_TOP_K = 3
 DEFAULT_CATEGORY = None
 DEFAULT_MAX_DISTANCE = None
@@ -15,25 +16,32 @@ def retrieve(
     max_distance: float | None = DEFAULT_MAX_DISTANCE
 ):
     """
-    Day 7 retrieval pipeline.
+    Day 10 retrieval pipeline.
 
-    Accepts a question and returns selected chunks
-    with distance and source metadata.
+    1. Retrieve candidate chunks using vector search.
+    2. Rerank the candidates using the cross-encoder.
+    3. Return the final top-k chunks.
     """
 
-    results = search_chunks(
+    candidate_results = search_chunks(
         question=question,
-        top_k=top_k,
+        top_k=max(CANDIDATE_TOP_K, top_k),
         category=category,
         max_distance=max_distance
     )
 
-    return results
+    reranked_results = rerank_chunks(
+        question=question,
+        retrieved_chunks=candidate_results,
+        top_k=top_k
+    )
+
+    return reranked_results
 
 
 def display_results(results):
     """
-    Display the raw retrieval results.
+    Display the final reranked retrieval results.
     """
 
     if not results:
@@ -63,8 +71,13 @@ def display_results(results):
         )
 
         print(
-            f"Distance    : "
+            f"Vector Distance : "
             f"{result['distance']}"
+        )
+
+        print(
+            f"Rerank Score    : "
+            f"{result['rerank_score']}"
         )
 
         print(

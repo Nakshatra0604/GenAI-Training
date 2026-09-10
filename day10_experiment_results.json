@@ -1,0 +1,308 @@
+{
+  "day": 10,
+  "task": "Retrieval Experiments",
+  "baseline_config_file": "baseline_config.yaml",
+  "experiment_matrix_file": "day9_experiment_matrix.json",
+  "experiments": [
+    {
+      "experiment_id": "EXP-001",
+      "case_id": "DQ-001",
+      "primary_variable": "query_rewrite",
+      "expected_document_id": "DOC-007",
+      "baseline": {
+        "question": "What should an employee do if their account is suspected to be compromised?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-015",
+            "distance": 1.076231837272644
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-012",
+            "distance": 1.114342212677002
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-007",
+            "distance": 1.137351632118225
+          }
+        ],
+        "expected_document_rank": 3,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.3333333333333333
+      },
+      "experiment": {
+        "question": "What steps should an employee take immediately after an account compromise is suspected, including password changes and reporting?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-008",
+            "distance": 0.9841503500938416
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-007",
+            "distance": 0.9847711324691772
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-015",
+            "distance": 1.0171037912368774
+          }
+        ],
+        "expected_document_rank": 2,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.5
+      },
+      "expected_outcome": "DOC-007 should move to a higher rank, ideally rank 1."
+    },
+    {
+      "experiment_id": "EXP-002",
+      "case_id": "DQ-002",
+      "primary_variable": "top_k",
+      "expected_document_id": "DOC-016",
+      "baseline": {
+        "question": "What should be considered during the planning stage before implementation begins?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-016",
+            "distance": 1.2289541959762573
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.3280214071273804
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.440535545349121
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "experiment": {
+        "question": "What should be considered during the planning stage before implementation begins?",
+        "top_k": 5,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-016",
+            "distance": 1.2289543151855469
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.3280216455459595
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.440535545349121
+          },
+          {
+            "rank": 4,
+            "document_id": "DOC-016",
+            "distance": 1.4409791231155396
+          },
+          {
+            "rank": 5,
+            "document_id": "DOC-016",
+            "distance": 1.5032308101654053
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_5": true,
+        "recall_at_5": 1,
+        "reciprocal_rank": 1.0
+      },
+      "expected_outcome": "Additional relevant chunks may be retrieved while DOC-016 remains the top-ranked document."
+    },
+    {
+      "experiment_id": "EXP-003",
+      "case_id": "DQ-005",
+      "primary_variable": "top_k",
+      "expected_document_id": "DOC-014",
+      "baseline": {
+        "question": "What is required before an employee can receive elevated access to production or financial systems?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "distance": 0.8806564211845398
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-014",
+            "distance": 1.2572771310806274
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-011",
+            "distance": 1.2829997539520264
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "experiment": {
+        "question": "What is required before an employee can receive elevated access to production or financial systems?",
+        "top_k": 2,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-014",
+            "distance": 0.8806565403938293
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-014",
+            "distance": 1.2572771310806274
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_2": true,
+        "recall_at_2": 1,
+        "reciprocal_rank": 1.0
+      },
+      "expected_outcome": "The retrieved results should contain the relevant DOC-014 chunks without the less-specific third result."
+    },
+    {
+      "experiment_id": "EXP-004",
+      "case_id": "DQ-004",
+      "primary_variable": "top_k",
+      "expected_document_id": "DOC-009",
+      "baseline": {
+        "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-006",
+            "distance": 0.7458717823028564
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-009",
+            "distance": 0.7495347261428833
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-001",
+            "distance": 1.3559645414352417
+          }
+        ],
+        "expected_document_rank": 2,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 0.5
+      },
+      "experiment": {
+        "question": "What is the process for requesting software that is not available in the standard IT catalog, and who is responsible for approving the request?",
+        "top_k": 5,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-006",
+            "distance": 0.7458717823028564
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-009",
+            "distance": 0.7495347261428833
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-001",
+            "distance": 1.3559645414352417
+          },
+          {
+            "rank": 4,
+            "document_id": "DOC-014",
+            "distance": 1.3673014640808105
+          },
+          {
+            "rank": 5,
+            "document_id": "DOC-028",
+            "distance": 1.377715826034546
+          }
+        ],
+        "expected_document_rank": 2,
+        "hit_at_5": true,
+        "recall_at_5": 1,
+        "reciprocal_rank": 0.5
+      },
+      "expected_outcome": "An additional relevant chunk may provide information about the approval owner while retaining the existing DOC-009 evidence."
+    },
+    {
+      "experiment_id": "EXP-005",
+      "case_id": "DQ-003",
+      "primary_variable": "query_rewrite",
+      "expected_document_id": "DOC-017",
+      "baseline": {
+        "question": "What is the recommended approach for handling errors in code?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "distance": 1.0028774738311768
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.373283863067627
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-019",
+            "distance": 1.4264901876449585
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "experiment": {
+        "question": "How should developers handle errors in application code, including logging and deciding where the error should be handled?",
+        "top_k": 3,
+        "retrieved_documents": [
+          {
+            "rank": 1,
+            "document_id": "DOC-017",
+            "distance": 0.8652883768081665
+          },
+          {
+            "rank": 2,
+            "document_id": "DOC-016",
+            "distance": 1.4396555423736572
+          },
+          {
+            "rank": 3,
+            "document_id": "DOC-016",
+            "distance": 1.4838939905166626
+          }
+        ],
+        "expected_document_rank": 1,
+        "hit_at_3": true,
+        "recall_at_3": 1,
+        "reciprocal_rank": 1.0
+      },
+      "expected_outcome": "DOC-017 should remain rank 1 while less-specific error-related documents are less likely to appear in the top results."
+    }
+  ]
+}
