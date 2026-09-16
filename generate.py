@@ -7,6 +7,7 @@ from retrieve import retrieve
 from grounded_prompt import build_grounded_prompt
 from citation_validator import validate_citations
 from answer_model import AnswerResponse
+from api.errors import ProviderError
 
 
 load_dotenv()
@@ -99,17 +100,24 @@ def generate_answer(prompt):
     Generate an answer using the configured generation model.
     """
 
-    response = client.chat.completions.create(
-        model=GENERATION_MODEL,
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ]
-    )
+    try:
+        response = client.chat.completions.create(
+    model=GENERATION_MODEL,
+    messages=[
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    max_tokens=1000
+)
 
-    return response.choices[0].message.content
+        return response.choices[0].message.content
+
+    except Exception as exc:
+        raise ProviderError(
+            "The AI provider failed to generate a response."
+        ) from exc
 
 
 def create_abstention_response():

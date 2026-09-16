@@ -2,3 +2,7 @@ chromadb
 openai
 python-dotenv
 pydantic
+fastapi
+uvicorn
+sqlalchemy
+pytest

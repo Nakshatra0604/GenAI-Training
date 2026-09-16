@@ -17,71 +17,85 @@ The project currently covers Day 5, Day 6, and Day 7 activities.
 
 # Project Structure
 
-```text
 GenAI_Day-5/
 
 │
 ├── raw_documents/                         # Original source documents
 ├── documents/                             # Sanitized document files
-├── cleaned_documents/                    # Cleaned document files
-├── vector_store/                         # Persistent ChromaDB vector index
+├── cleaned_documents/                     # Cleaned document files
+├── vector_store/                          # Persistent ChromaDB vector index
 │
-├── sanitize_documents.py                 # Sanitizes sensitive document values
-├── clean_documents.py                    # Loads and cleans document text
-├── chunk_documents.py                    # Splits cleaned documents into chunks
-├── chunk_quality_review.py               # Performs chunk quality checks
-├── chunk_quality_review.md               # Chunk quality review output
-├── chunks.jsonl                          # Normalized chunk dataset
+├── sanitize_documents.py                  # Sanitizes sensitive document values
+├── clean_documents.py                     # Loads and cleans document text
+├── chunk_documents.py                     # Splits cleaned documents into chunks
+├── chunk_quality_review.py                # Performs chunk quality checks
+├── chunk_quality_review.md                # Chunk quality review output
+├── chunks.jsonl                           # Normalized chunk dataset
 │
-├── generate_embeddings.py                # Generates and reuses embeddings
-├── create_vector_index.py                # Creates the ChromaDB vector index
-├── embeddings.jsonl                      # Chunk embeddings and metadata
+├── generate_embeddings.py                 # Generates and reuses embeddings
+├── create_vector_index.py                 # Creates the ChromaDB vector index
+├── embeddings.jsonl                       # Chunk embeddings and metadata
 │
-├── semantic_search.py                    # Reusable semantic search function
-├── filter_demo.py                        # Metadata-filtered search demonstration
-├── retrieval_test_set.json               # Retrieval test questions
-├── test_retrieval.py                     # Day 6 retrieval test runner
-├── retrieval_results.json                # Retrieval test results
+├── semantic_search.py                     # Reusable semantic search function
+├── filter_demo.py                         # Metadata-filtered search demonstration
+├── retrieval_test_set.json                # Retrieval test questions
+├── test_retrieval.py                      # Day 6 retrieval test runner
+├── retrieval_results.json                 # Retrieval test results
 │
-├── ingest.py                             # Complete document ingestion pipeline
-├── retrieve.py                           # Day 10 retrieval pipeline with reranking
-├── generate.py                           # Grounded answer generation pipeline
-├── grounded_prompt.py                    # Grounded answer prompt
-├── answer_model.py                       # Validated answer response model
-├── citation_validator.py                 # Validates answer citations
-├── test_pipeline.py                      # Day 7 integration tests
+├── ingest.py                              # Complete document ingestion pipeline
+├── retrieve.py                            # Day 10 retrieval pipeline with reranking
+├── generate.py                            # Grounded answer generation pipeline
+├── grounded_prompt.py                     # Grounded answer prompt and prompt version
+├── answer_model.py                        # Validated answer response model
+├── citation_validator.py                  # Validates answer citations
+├── test_pipeline.py                       # Day 7 integration tests
 │
-├── baseline_config.yaml                  # Frozen Day 9 baseline configuration
-├── day9_weak_questions.json              # Five weak retrieval cases
-├── day9_failure_analysis.json            # Day 9 retrieval failure analysis
-├── day9_experiment_matrix.json           # Controlled Day 9 experiment plan
-├── day9_baseline_metrics.py             # Day 9 baseline metric runner
-├── day9_baseline_metrics.json            # Day 9 baseline metric results
+├── baseline_config.yaml                   # Frozen Day 9 baseline configuration
+├── day9_weak_questions.json               # Five weak retrieval cases
+├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
+├── day9_experiment_matrix.json            # Controlled Day 9 experiment plan
+├── day9_baseline_metrics.py               # Day 9 baseline metric runner
+├── day9_baseline_metrics.json              # Day 9 baseline metric results
 │
-├── query_rewriter.py                     # Reusable query rewriting component
-├── day10_experiments.py                  # Executes planned Day 10 experiments
-├── day10_experiment_results.json         # Day 10 experiment results
-├── day10_query_rewrite_experiment.py    # Query rewriting experiment
-├── day10_query_rewrite_results.json      # Query rewriting results
-├── reranker.py                            # Cross-encoder reranking component
-├── day10_reranking_experiment.py         # Cross-encoder reranking experiment
-├── day10_reranking_results.json           # Reranking experiment results
-├── day10_regression_test.py               # Full retrieval regression test
-├── day10_regression_results.json          # Regression test results
-├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
-├── day10_final_config.yaml                # Selected Day 10 configuration
+├── query_rewriter.py                      # Reusable query rewriting component
+├── day10_experiments.py                   # Executes planned Day 10 experiments
+├── day10_experiment_results.json           # Day 10 experiment results
+├── day10_query_rewrite_experiment.py      # Query rewriting experiment
+├── day10_query_rewrite_results.json        # Query rewriting results
+├── reranker.py                             # Cross-encoder reranking component
+├── day10_reranking_experiment.py           # Cross-encoder reranking experiment
+├── day10_reranking_results.json             # Reranking experiment results
+├── day10_regression_test.py                 # Full retrieval regression test
+├── day10_regression_results.json            # Regression test results
+├── day10_before_after_retrieval_report.md   # Day 10 before-and-after report
+├── day10_final_config.yaml                  # Selected Day 10 configuration
 │
-├── api/                                   # FastAPI service layer
-│   ├── main.py                            # FastAPI application entry point
-│   ├── routes.py                          # API endpoint definitions
-│   ├── models.py                          # Pydantic request and response models
-│   └── dependencies.py                    # Configuration and dependency readiness checks
+├── api/                                    # FastAPI service layer
+│   ├── main.py                             # FastAPI application entry point
+│   ├── routes.py                           # API endpoint definitions and observability flow
+│   ├── models.py                           # Pydantic request, response, and error models
+│   ├── dependencies.py                     # Configuration and dependency readiness checks
+│   └── errors.py                           # Custom API/provider error definitions
 │
-├── requirements.txt                       # Python dependencies
-├── .env                                   # API and model configuration
-├── .env.example                           # Example environment configuration
-└── README.md                              # Project documentation
----
+├── observability/                          # SQL request observability layer
+│   ├── __init__.py                         # Observability package initialization
+│   ├── database.py                         # SQLAlchemy database configuration and sessions
+│   ├── observability_models.py              # Request and retrieved-source database models
+│   ├── logging_service.py                   # Request and source logging operations
+│   └── init_db.py                           # Creates observability database tables
+│
+├── tests/                                  # API test suite
+│   └── test_api.py                         # FastAPI API and error-handling tests
+│
+├── pytest.ini                              # Pytest configuration
+├── observability.db                        # Local SQLite observability database
+│
+├── requirements.txt                        # Python dependencies
+├── .env                                    # API and model configuration
+├── .env.example                            # Example environment configuration
+├── .gitignore                              # Git ignore rules for secrets, environments, and cache
+└── README.md                               # Project documentation
+-----
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
 
@@ -2202,3 +2216,595 @@ The API layer remains separate from the core RAG implementation and reuses the e
 **DAY 11 COMPLETED **
 
 All Day 11 implementation, endpoint testing, validation checks, OpenAPI verification, API examples, and completion-gate requirements have been completed successfully.
+
+# DAY 12 — Add SQL Observability, Error Handling, and API Tests
+
+## Practical Goal
+
+Make the FastAPI service diagnosable by recording request IDs, request timing, model and prompt versions, retrieved sources, outcomes, and error categories while providing consistent and safe API error responses.
+
+The objective of Day 12 was to add SQL-based observability to the existing FastAPI service, implement structured error handling, review blocking operations in the API execution path, and create repeatable API tests for successful and failure scenarios.
+
+---
+
+## Implementation
+
+### 1. Create SQL Observability Tables
+
+A dedicated SQL observability package was created under the `observability/` directory.
+
+The structure is:
+
+```text
+observability/
+├── __init__.py
+├── database.py
+├── observability_models.py
+├── logging_service.py
+└── init_db.py
+```
+
+#### `observability/database.py`
+
+This module configures the SQLite database using SQLAlchemy.
+
+The database is stored locally as: `observability.db`
+
+The module provides:
+- SQLAlchemy engine configuration
+- Database session factory
+- Base class for ORM models
+- Database session dependency
+
+SQLite is configured with:
+
+```python
+check_same_thread=False
+```
+
+so that database access can safely be used by the FastAPI service execution model.
+
+#### `observability/observability_models.py`
+
+Two SQL tables were created.
+
+**RequestLog**
+
+The `request_logs` table records request-level observability information.
+
+The table stores:
+- Request ID
+- Endpoint
+- Request start time
+- Total latency
+- Model version
+- Prompt version
+- Outcome
+- Error category
+
+The request ID is unique and indexed so that an API request can be traced efficiently.
+
+**RetrievedSource**
+
+The `retrieved_sources` table stores the sources selected during question answering.
+
+The table stores:
+- Request ID
+- Source ID
+- Retrieval score
+
+The request ID links retrieved source records to their corresponding request log.
+
+The relationship is:
+
+```text
+RequestLog
+    request_id
+        ├────────────── RetrievedSource
+        ├────────────── RetrievedSource
+        └────────────── RetrievedSource
+```
+
+#### `observability/logging_service.py`
+
+A logging service was implemented to perform the database operations required for request observability.
+
+The service provides functions for:
+- `create_request_log()`
+- `create_retrieved_source_logs()`
+- `update_request_log()`
+
+The request lifecycle is recorded as:
+
+```text
+Request Started
+      ↓
+Request Log Created
+      ↓
+RAG Processing
+      ↓
+Retrieved Sources Recorded
+      ↓
+Latency Calculated
+      ↓
+Outcome Recorded
+      ↓
+Request Log Updated
+```
+
+#### `observability/init_db.py`
+
+This module initializes the observability database tables.
+
+The resulting SQLite database contains:
+- `request_logs`
+- `retrieved_sources`
+
+The database was verified using SQLite database inspection.
+
+---
+
+### 2. Add Request IDs and Structured Request Logging
+
+The `/ask` endpoint was updated to generate a unique request ID for every request.
+
+A UUID is generated when the request begins:
+
+```text
+request_id = <UUID>
+```
+
+The same request ID is:
+- Returned in the `/ask` API response
+- Stored in the `request_logs` table
+- Used to associate retrieved source records with the request
+
+This provides request-level traceability across the API response and SQL observability records.
+
+The `/ask` request records:
+- Request ID
+- Endpoint
+- Started At
+- Latency
+- Model Version
+- Prompt Version
+- Outcome
+- Error Category
+
+The model version is taken from `GENERATION_MODEL` and the prompt version is taken from `PROMPT_VERSION`.
+
+The current configured values are:
+- Generation model: `gpt-4.1-mini`
+- Prompt version: `v1`
+
+Retrieved sources and their scores are stored separately in the `retrieved_sources` table.
+
+> Sensitive request content and API keys are not stored in the observability tables.
+
+---
+
+### 3. Extend the API Response with Request IDs
+
+The existing `AnswerResponse` model was updated to include:
+
+```python
+request_id: str | None = None
+```
+
+The response continues to provide:
+- `answer`
+- `sources`
+- `chunks`
+- `scores`
+- `status`
+
+and now also provides:
+- `request_id`
+
+An example successful response is:
+
+```json
+{
+  "request_id": "c56eb747-29eb-4607-8ee7-6a52a0309646",
+  "answer": "...",
+  "sources": [
+    "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+  ],
+  "chunks": [
+    "..."
+  ],
+  "scores": [
+    1.22895419597626
+  ],
+  "status": "answered"
+}
+```
+
+The request ID allows the returned API response to be connected directly to its SQL observability records.
+
+---
+
+### 4. Implement Consistent API Error Responses
+
+A structured error response model was added to `api/models.py`.
+
+The model is:
+
+```python
+class ErrorResponse(BaseModel):
+    error_code: str
+    message: str
+    request_id: str | None = None
+```
+
+A custom provider error was also added in `api/errors.py`:
+
+```python
+class ProviderError(Exception):
+    """Raised when an external AI/provider service fails."""
+```
+
+The FastAPI application now provides centralized error handlers for different failure categories.
+
+The supported error categories include:
+
+| Error | HTTP Status | Error Code |
+|---|---|---|
+| Invalid request | 422 | `VALIDATION_ERROR` |
+| Invalid document | 400 | `INVALID_DOCUMENT` |
+| Document not found | 404 | `DOCUMENT_NOT_FOUND` |
+| Missing evidence | 200 | `insufficient_evidence` |
+| AI provider failure | 502 | `PROVIDER_ERROR` |
+| Internal application failure | 500 | `INTERNAL_ERROR` |
+
+The API returns safe messages rather than exposing internal exception details or stack traces.
+
+For example, a provider failure returns:
+
+```json
+{
+  "error_code": "PROVIDER_ERROR",
+  "message": "The AI provider is temporarily unavailable.",
+  "request_id": null
+}
+```
+
+Internal provider exception details are not returned to the API consumer.
+
+---
+
+### 5. Handle AI Provider Failures Safely
+
+The generation function in `generate.py` was updated to catch provider exceptions and convert them into the application-level `ProviderError`.
+
+The generation request uses the configured OpenRouter provider and `gpt-4.1-mini`.
+
+A maximum generation output limit was also configured:
+
+```python
+max_tokens=1000
+```
+
+This prevents the provider request from requesting an unnecessarily large maximum output.
+
+The generation flow is:
+
+```text
+Grounded Prompt
+      ↓
+OpenRouter
+      ↓
+gpt-4.1-mini
+      ↓
+Generated Answer
+```
+
+If the provider fails, the internal exception is converted to `ProviderError`, which is handled by the FastAPI error handler and returned as `502 PROVIDER_ERROR` without exposing provider-specific internal details.
+
+---
+
+### 6. Review Blocking and Async Execution
+
+The API execution path was reviewed to ensure that the existing RAG and database operations do not require asynchronous model or database clients.
+
+The `/ask` route uses the existing synchronous RAG pipeline: `answer_question()`
+
+The route is implemented as a synchronous FastAPI endpoint, allowing FastAPI/Starlette to execute the synchronous endpoint work using its threadpool execution model rather than requiring the synchronous RAG operations to run directly on the async event loop.
+
+The existing ingestion and document metadata routes also use synchronous execution because they call synchronous file and pipeline operations.
+
+The existing RAG implementation remains unchanged in its core processing flow:
+
+```text
+Retrieval
+    ↓
+Reranking
+    ↓
+Evidence Check
+    ↓
+Grounded Prompt
+    ↓
+Generation
+    ↓
+Citation Validation
+```
+
+The Day 12 work therefore focuses on making the API execution and observability layer compatible with the existing synchronous RAG implementation without duplicating or redesigning the core pipeline.
+
+---
+
+### 7. Create API Test Suite
+
+A dedicated API test suite was created under:
+
+```text
+tests/
+└── test_api.py
+```
+
+The tests use FastAPI's `TestClient` and isolate the heavy retrieval dependency during test collection while retaining the real generation configuration.
+
+The test suite covers six required API scenarios:
+
+| Test | Scenario |
+|---|---|
+| `test_invalid_ask_request` | Invalid `/ask` request |
+| `test_unknown_document` | Unknown document ID |
+| `test_missing_evidence` | Question with insufficient evidence |
+| `test_successful_ask` | Successful question answering |
+| `test_provider_failure` | Simulated provider dependency failure |
+| `test_successful_ingestion` | Successful document ingestion |
+
+The tests verify both HTTP behavior and the structured response contracts.
+
+---
+
+### 8. Run API Tests
+
+The complete API test suite can be executed with one command:
+
+```bash
+python -m pytest tests/test_api.py -v
+```
+
+The final verification result was:
+
+```text
+6 passed in 5.85s
+```
+
+The test results were:
+
+```text
+test_invalid_ask_request       PASSED
+test_unknown_document          PASSED
+test_missing_evidence          PASSED
+test_successful_ask            PASSED
+test_provider_failure          PASSED
+test_successful_ingestion      PASSED
+```
+
+This confirms that the required successful, validation, not-found, missing-evidence, provider-failure, and ingestion scenarios are covered by the API test suite.
+
+---
+
+### 9. Successful End-to-End `/ask` Verification
+
+A real question from the existing 10-question evaluation dataset was used for end-to-end API verification.
+
+**Question:**
+> What should be considered during the planning stage before implementation begins?
+
+**Expected document:** `DOC-016`
+
+The API returned:
+- `request_id`: `c56eb747-29eb-4607-8ee7-6a52a0309646`
+- `status`: `answered`
+
+The response identified the source: `DOC-016:engineering\DOC-016_software_development_lifecycle.md`
+
+The request was processed through the existing RAG pipeline:
+
+```text
+Question
+    ↓
+FastAPI /ask
+    ↓
+Retrieval
+    ↓
+Cross-Encoder Reranking
+    ↓
+Evidence Check
+    ↓
+Grounded Prompt
+    ↓
+OpenRouter / gpt-4.1-mini
+    ↓
+Citation Validation
+    ↓
+AnswerResponse
+```
+
+The successful request was also recorded in the SQL observability database.
+
+The corresponding `request_logs` record contained:
+- Request ID: `c56eb747-29eb-4607-8ee7-6a52a0309646`
+- Endpoint: `/ask`
+- Model Version: `gpt-4.1-mini`
+- Prompt Version: `v1`
+- Outcome: `answered`
+
+The request latency was recorded as approximately: `19237.64 ms`
+
+The corresponding `retrieved_sources` record contained:
+- Source: `DOC-016:engineering\DOC-016_software_development_lifecycle.md`
+- Score: `1.22895419597626`
+
+This demonstrates that the successful API response can be traced to its request-level and retrieved-source observability records.
+
+---
+
+### 10. Failed End-to-End `/ask` Verification
+
+An unanswerable question was used to verify the missing-evidence behavior:
+
+**Question:**
+> What is the annual revenue of the company in 2035?
+
+The API correctly abstained instead of generating an unsupported answer.
+
+The API returned:
+- `request_id`: `7e1bdc9c-58e4-4260-a274-8ada5c68143b`
+- `status`: `insufficient_evidence`
+
+The response was:
+> Insufficient evidence to answer the question from the provided documents.
+
+The response contained no selected sources, chunks, or scores.
+
+The corresponding SQL observability record contained:
+- Request ID: `7e1bdc9c-58e4-4260-a274-8ada5c68143b`
+- Endpoint: `/ask`
+- Model Version: `gpt-4.1-mini`
+- Prompt Version: `v1`
+- Outcome: `insufficient_evidence`
+- Error Category: `missing_evidence`
+
+The recorded latency was approximately: `1124.64 ms`
+
+This demonstrates that an insufficient-evidence request is recorded separately from a successful request and receives the appropriate error category.
+
+---
+
+### 11. Day 12 Required Deliverables
+
+| Deliverable | Status |
+|---|---|
+| SQL request logging tables | Completed |
+| Retrieved source logging | Completed |
+| Request ID generation and response traceability | Completed |
+| Model and prompt version logging | Completed |
+| Latency logging | Completed |
+| Structured API error models | Completed |
+| Provider failure handling | Completed |
+| Safe error responses without stack traces | Completed |
+| API/integration test suite | Completed |
+| Successful ingestion test | Completed |
+| Successful `/ask` test | Completed |
+| Invalid input test | Completed |
+| Unknown document test | Completed |
+| Missing evidence test | Completed |
+| Simulated dependency failure test | Completed |
+| README test command | Documented |
+
+---
+
+### 12. Day 12 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| API tests pass with one command | PASS |
+| Every `/ask` response is traceable by request ID | PASS |
+| Request latency stored | PASS |
+| Selected sources and scores stored | PASS |
+| Prompt version stored | PASS |
+| Model version stored | PASS |
+| Request outcome stored | PASS |
+| Error category stored for failed request | PASS |
+| Internal stack traces exposed to API consumer | PASS |
+| Successful request verified end-to-end | PASS |
+| Failed request verified end-to-end | PASS |
+| Successful and failed SQL records matched to request IDs | PASS |
+
+---
+
+### 13. Day 12 End-of-Day Evidence
+
+#### Successful Request
+
+The following real evaluation question was used:
+> What should be considered during the planning stage before implementation begins?
+
+The API returned:
+- `request_id`: `c56eb747-29eb-4607-8ee7-6a52a0309646`
+- `status`: `answered`
+
+The response was grounded in: `DOC-016:engineering\DOC-016_software_development_lifecycle.md`
+
+The corresponding SQL records stored:
+- Model: `gpt-4.1-mini`
+- Prompt: `v1`
+- Outcome: `answered`
+- Latency: `19237.64 ms`
+- Retrieved source: `DOC-016:engineering\DOC-016_software_development_lifecycle.md`
+- Score: `1.22895419597626`
+
+#### Failed Request
+
+The following unanswerable question was used:
+> What is the annual revenue of the company in 2035?
+
+The API returned:
+- `request_id`: `7e1bdc9c-58e4-4260-a274-8ada5c68143b`
+- `status`: `insufficient_evidence`
+
+The corresponding SQL record stored:
+- Model: `gpt-4.1-mini`
+- Prompt: `v1`
+- Outcome: `insufficient_evidence`
+- Error category: `missing_evidence`
+- Latency: `1124.64 ms`
+
+The failed request did not generate a source record because no sufficient evidence was selected.
+
+These two examples demonstrate that both successful and unsuccessful `/ask` requests are traceable through request IDs and SQL observability records.
+
+---
+
+### 14. Day 12 Final Outcome
+
+Day 12 successfully added SQL-based observability, structured error handling, provider failure handling, request traceability, and repeatable API testing to the FastAPI service.
+
+The final request observability flow is:
+
+```text
+API Request
+    ↓
+Generate Request ID
+    ↓
+Create Request Log
+    ↓
+Execute Existing RAG Pipeline
+    ↓
+Record Retrieved Sources and Scores
+    ↓
+Calculate Latency
+    ↓
+Record Outcome and Error Category
+    ↓
+Return Structured API Response
+```
+
+The API now provides request-level traceability through:
+- Request ID
+- Latency
+- Model Version
+- Prompt Version
+- Outcome
+- Error Category
+- Retrieved Sources
+- Retrieved Scores
+
+The API test suite completed successfully with:
+
+```text
+6 passed in 5.85s
+```
+
+Both a successful grounded request and an insufficient-evidence request were verified end-to-end and matched to their corresponding SQL observability records.
+
+**DAY 12 COMPLETED**
+
+All Day 12 implementation, SQL observability, request tracing, error handling, provider failure handling, API testing, end-to-end verification, and completion-gate requirements have been completed successfully.
+
+

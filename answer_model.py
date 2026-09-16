@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Literal
 
 class AnswerResponse(BaseModel):
+    request_id: str | None = None
     answer:str
     sources: list[str]
     chunks: list[str]

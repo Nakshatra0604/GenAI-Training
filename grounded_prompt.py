@@ -1,3 +1,6 @@
+PROMPT_VERSION = "v1"
+
+
 GROUNDED_ANSWER_PROMPT = """
 You are a grounded question-answering assistant.
 

@@ -1,8 +1,10 @@
 from pathlib import Path
 import json
+import uuid
+import time
+from datetime import datetime, timezone
 
 from fastapi import APIRouter, HTTPException
-from starlette.concurrency import run_in_threadpool
 
 from api.models import (
     AskRequest,
@@ -15,6 +17,15 @@ from answer_model import AnswerResponse
 from generate import answer_question
 from ingest import ingest_documents
 
+from grounded_prompt import PROMPT_VERSION
+from generate import GENERATION_MODEL
+
+from observability.database import SessionLocal
+from observability.logging_service import (
+    create_request_log,
+    create_retrieved_source_logs,
+    update_request_log,
+)
 
 router = APIRouter()
 
@@ -76,16 +87,79 @@ def ingest(request: IngestRequest):
     "/ask",
     response_model=AnswerResponse
 )
-async def ask(request: AskRequest):
+def ask(request: AskRequest):
 
-    response = await run_in_threadpool(
-        answer_question,
-        request.question,
-        request.category,
-        request.max_distance
-    )
+    request_id = str(uuid.uuid4())
+    started_at = datetime.now(timezone.utc)
+    start_time = time.perf_counter()
 
-    return response
+    db = SessionLocal()
+
+    try:
+
+        request_log = create_request_log(
+            db,
+            request_id,
+            "/ask",
+            started_at,
+            GENERATION_MODEL,
+            PROMPT_VERSION,
+        )
+
+        response = answer_question(
+            request.question,
+            request.category,
+            request.max_distance
+        )
+
+        response.request_id = request_id
+
+        latency_ms = (
+            time.perf_counter() - start_time
+        ) * 1000
+
+        create_retrieved_source_logs(
+            db,
+            request_id,
+            response.sources,
+            response.scores,
+        )
+
+        error_category = None
+
+        if response.status == "insufficient_evidence":
+            error_category = "missing_evidence"
+
+        update_request_log(
+            db,
+            request_log,
+            latency_ms,
+            response.status,
+            error_category,
+        )
+
+        return response
+
+    except Exception:
+
+        latency_ms = (
+            time.perf_counter() - start_time
+        ) * 1000
+
+        # Only update the request log if it was successfully created.
+        if "request_log" in locals():
+            update_request_log(
+                db,
+                request_log,
+                latency_ms,
+                "error",
+                "internal_error",
+            )
+
+        raise
+
+    finally:
+        db.close()
 
 
 @router.get(

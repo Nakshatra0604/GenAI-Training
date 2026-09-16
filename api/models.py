@@ -29,3 +29,9 @@ class DocumentResponse(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     dependencies: dict[str, str]
+
+
+class ErrorResponse(BaseModel):
+    error_code: str
+    message: str
+    request_id: str | None = None
