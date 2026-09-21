@@ -18,7 +18,6 @@ The project currently covers Day 5, Day 6, and Day 7 activities.
 # Project Structure
 
 GenAI_Day-5/
-
 │
 ├── raw_documents/                         # Original source documents
 ├── documents/                             # Sanitized document files
@@ -55,47 +54,53 @@ GenAI_Day-5/
 ├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
 ├── day9_experiment_matrix.json            # Controlled Day 9 experiment plan
 ├── day9_baseline_metrics.py               # Day 9 baseline metric runner
-├── day9_baseline_metrics.json              # Day 9 baseline metric results
+├── day9_baseline_metrics.json             # Day 9 baseline metric results
 │
 ├── query_rewriter.py                      # Reusable query rewriting component
 ├── day10_experiments.py                   # Executes planned Day 10 experiments
-├── day10_experiment_results.json           # Day 10 experiment results
+├── day10_experiment_results.json          # Day 10 experiment results
 ├── day10_query_rewrite_experiment.py      # Query rewriting experiment
-├── day10_query_rewrite_results.json        # Query rewriting results
-├── reranker.py                             # Cross-encoder reranking component
-├── day10_reranking_experiment.py           # Cross-encoder reranking experiment
-├── day10_reranking_results.json             # Reranking experiment results
-├── day10_regression_test.py                 # Full retrieval regression test
-├── day10_regression_results.json            # Regression test results
-├── day10_before_after_retrieval_report.md   # Day 10 before-and-after report
-├── day10_final_config.yaml                  # Selected Day 10 configuration
+├── day10_query_rewrite_results.json       # Query rewriting results
+├── reranker.py                            # Cross-encoder reranking component
+├── day10_reranking_experiment.py          # Cross-encoder reranking experiment
+├── day10_reranking_results.json           # Reranking experiment results
+├── day10_regression_test.py               # Full retrieval regression test
+├── day10_regression_results.json          # Regression test results
+├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
+├── day10_final_config.yaml                # Selected Day 10 configuration
 │
-├── api/                                    # FastAPI service layer
-│   ├── main.py                             # FastAPI application entry point
-│   ├── routes.py                           # API endpoint definitions and observability flow
-│   ├── models.py                           # Pydantic request, response, and error models
-│   ├── dependencies.py                     # Configuration and dependency readiness checks
-│   └── errors.py                           # Custom API/provider error definitions
+├── api/                                   # FastAPI service layer
+│   ├── main.py                            # FastAPI application entry point
+│   ├── routes.py                          # API endpoint definitions and observability flow
+│   ├── models.py                          # Pydantic request, response, and error models
+│   ├── dependencies.py                    # Configuration and dependency readiness checks
+│   └── errors.py                          # Custom API/provider error definitions
 │
-├── observability/                          # SQL request observability layer
-│   ├── __init__.py                         # Observability package initialization
-│   ├── database.py                         # SQLAlchemy database configuration and sessions
-│   ├── observability_models.py              # Request and retrieved-source database models
-│   ├── logging_service.py                   # Request and source logging operations
-│   └── init_db.py                           # Creates observability database tables
+├── observability/                         # SQL request observability layer
+│   ├── __init__.py                        # Observability package initialization
+│   ├── database.py                        # SQLAlchemy database configuration and sessions
+│   ├── observability_models.py            # Request and retrieved-source database models
+│   ├── logging_service.py                 # Request and source logging operations
+│   └── init_db.py                         # Creates observability database tables
 │
-├── tests/                                  # API test suite
-│   └── test_api.py                         # FastAPI API and error-handling tests
+├── tests/                                 # API test suite
+│   └── test_api.py                        # FastAPI API and error-handling tests
 │
-├── pytest.ini                              # Pytest configuration
-├── observability.db                        # Local SQLite observability database
+├── evaluation/                            # Day 13 evaluation dataset and runner
+│   ├── golden_set.jsonl                   # 25-case golden evaluation dataset
+│   ├── dataset_review.md                  # Manual golden dataset review notes
+│   ├── run_evals.py                       # End-to-end evaluation runner
+│   └── results/                           # Timestamped machine-readable evaluation results
 │
-├── requirements.txt                        # Python dependencies
-├── .env                                    # API and model configuration
-├── .env.example                            # Example environment configuration
-├── .gitignore                              # Git ignore rules for secrets, environments, and cache
-└── README.md                               # Project documentation
------
+├── pytest.ini                             # Pytest configuration
+├── observability.db                       # Local SQLite observability database
+│
+├── requirements.txt                       # Python dependencies
+├── .env                                   # API and model configuration
+├── .env.example                           # Example environment configuration
+├── .gitignore                             # Git ignore rules for secrets, environments, and cache
+└── README.md                              # Project documentation
+----
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
 
@@ -2807,4 +2812,358 @@ Both a successful grounded request and an insufficient-evidence request were ver
 
 All Day 12 implementation, SQL observability, request tracing, error handling, provider failure handling, API testing, end-to-end verification, and completion-gate requirements have been completed successfully.
 
+# DAY 13 — Create the Golden Evaluation Dataset and Runner
 
+## Practical Goal
+
+Build a representative 25-case golden evaluation dataset and a repeatable evaluation runner for measuring the end-to-end quality of the RAG application.
+
+The objective of Day 13 was to define a structured evaluation case format, create a representative golden dataset covering different question types, review the dataset against the approved document corpus, build an automated evaluation runner, and generate timestamped machine-readable evaluation results.
+
+---
+
+## Implementation
+
+### 1. Define the Evaluation Case Format
+
+A structured evaluation case format was created for the golden dataset.
+
+Each case contains:
+
+- `case_id`
+- `question`
+- `category`
+- `expected_source_ids`
+- `answerable`
+- `expected_facts` where applicable
+- `answer_notes` where applicable
+
+The evaluation cases are stored in:
+
+```text
+evaluation/
+└── golden_set.jsonl
+```
+
+Each line in the JSONL file represents one independent evaluation case.
+
+The `expected_source_ids` field identifies the document or documents that should provide evidence for an answerable question.
+
+The `answerable` field indicates whether the question can be answered using the approved document corpus.
+
+---
+
+### 2. Create the 25-Case Golden Dataset
+
+A 25-case golden evaluation dataset was created using the same approved document corpus used by the RAG application.
+
+The dataset contains all required evaluation categories:
+
+| Category | Number of Cases |
+|---|---|
+| Answerable | 5 |
+| Unanswerable | 5 |
+| Ambiguous | 5 |
+| Multi-document | 5 |
+| Adversarial | 5 |
+| **Total** | **25** |
+
+The dataset therefore provides coverage for:
+
+- Direct answerable questions
+- Questions without sufficient evidence
+- Questions requiring interpretation of the relevant policy or document
+- Questions requiring evidence from multiple documents
+- Adversarial questions designed to test unsupported assumptions and retrieval weaknesses
+
+Every answerable case contains at least one expected source document.
+
+---
+
+### 3. Review the Golden Dataset
+
+A manual review of the 25-case dataset was performed against the approved document corpus.
+
+The review checked:
+
+- Case IDs and JSONL structure
+- Question clarity
+- Category assignment
+- Expected source document IDs
+- Answerability labels
+- Expected facts where provided
+- Multi-document source coverage
+- Adversarial case intent
+- Whether each case is useful for evaluating the RAG pipeline
+
+The review findings and dataset observations are documented in:
+
+```text
+evaluation/dataset_review.md
+```
+
+Several cases were refined during the review to make their evaluation intent and expected evidence clearer.
+
+Examples include:
+
+- **GS-011** — Security incident handling
+- **GS-016** — Significant product release and initial rollout
+
+Additional multi-document and ambiguous cases were individually validated against their expected source documents.
+
+---
+
+### 4. Build the Evaluation Runner
+
+A repeatable evaluation runner was implemented in:
+
+```text
+evaluation/run_evals.py
+```
+
+The runner loads the golden dataset and executes every evaluation case against the `/ask` API.
+
+The runner records the following information for each case:
+
+- Case ID
+- Expected evaluation information
+- HTTP status
+- Generated answer
+- Citations
+- Retrieved chunks
+- Retrieval scores
+- Answer status
+- Request ID
+- Latency
+- Errors
+
+The evaluation flow is:
+
+```text
+Golden Dataset
+      ↓
+Load Evaluation Cases
+      ↓
+Send Question to /ask API
+      ↓
+Capture API Response
+      ↓
+Record Answer and Citations
+      ↓
+Record Retrieval Results
+      ↓
+Record Status and Latency
+      ↓
+Save Machine-Readable Results
+```
+
+---
+
+### 5. Make Evaluation Runs Reproducible
+
+The evaluation runner uses environment-based configuration for the API endpoint and generation configuration.
+
+The current evaluation configuration includes:
+
+| Configuration | Value |
+|---|---|
+| API Base URL | `http://127.0.0.1:8000` |
+| Generation Model | `gpt-4.1-mini` |
+| Prompt Version | `v1` |
+
+Each evaluation run creates a new timestamped JSON result file under:
+
+```text
+evaluation/results/
+```
+
+The timestamped filename prevents previous evaluation results from being overwritten.
+
+Example:
+
+```text
+evaluation_run_20260921_151807_663365.json
+```
+
+The result file contains:
+
+- Run timestamp
+- Configuration
+- Total number of cases
+- Expected case information
+- Actual API results
+- Latency
+- Retrieval results
+- Status
+- Request IDs
+- Errors
+
+---
+
+### 6. Execute the 25-Case Evaluation
+
+The complete golden evaluation dataset was executed using:
+
+```bash
+python evaluation/run_evals.py
+```
+
+The runner loaded all 25 evaluation cases and executed them without manual intervention.
+
+The execution flow reported:
+
+```text
+Loaded 25 evaluation cases.
+Running GS-001...
+Running GS-002...
+...
+Running GS-025...
+Completed 25 evaluation cases.
+```
+
+A machine-readable result artifact was generated under:
+
+```text
+evaluation/results/
+```
+
+A previous evaluation result was preserved, and subsequent runs were written as separate timestamped artifacts.
+
+---
+
+### 7. Evaluation Observations
+
+The final 25-case evaluation provided coverage across answerable, unanswerable, ambiguous, multi-document, and adversarial scenarios.
+
+Several cases were also individually validated during the dataset review.
+
+Examples include:
+
+| Case | Validation |
+|---|---|
+| GS-011 | Security incident handling returned supporting security sources |
+| GS-013 | Expense and procurement information retrieved from both expected documents |
+| GS-015 | Lost/stolen device response retrieved the expected security and device-management sources |
+| GS-016 | Significant release question retrieved DOC-016 and DOC-021 |
+| GS-017 | Travel and expense information retrieved both expected documents |
+| GS-018 | Offboarding information retrieved the expected access and device documents |
+| GS-019 | Additional-access question retrieved the expected security and access-control documents |
+| GS-020 | Individually validated successfully against DOC-011 and DOC-026 |
+| GS-024 | Correctly handled the office-supplies vendor exception |
+| GS-025 | Retrieved the expected Restricted-data sharing sources |
+
+Two evaluation observations were retained as known cases for future retrieval analysis:
+
+- **GS-020** produced an unexpected `insufficient_evidence` result during the final batch run, although the same question had previously succeeded during individual validation.
+- **GS-023** consistently demonstrated a retrieval weakness for the password-sharing/MFA scenario and was retained as a useful adversarial evaluation case.
+
+No dataset modification was made solely to hide these retrieval observations.
+
+---
+
+### 8. Day 13 Required Deliverables
+
+| Deliverable | Status |
+|---|---|
+| 25-case `golden_set.jsonl` | Completed |
+| `run_evals.py` evaluation entry point | Completed |
+| Machine-readable evaluation result | Completed |
+| Dataset review documentation | Completed |
+
+The main Day 13 artifacts are:
+
+```text
+evaluation/
+├── golden_set.jsonl
+├── dataset_review.md
+├── run_evals.py
+└── results/
+    └── evaluation_run_<timestamp>.json
+```
+
+---
+
+### 9. Day 13 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| All required case categories are represented | PASS |
+| Every answerable case names at least one expected source | PASS |
+| All 25 cases run without manual intervention | PASS |
+| Results include configuration and version information | PASS |
+
+The technical completion gate is satisfied for the Day 13 evaluation dataset and runner.
+
+---
+
+### 10. Day 13 End-of-Day Evidence
+
+#### Dataset Distribution
+
+The final golden dataset contains:
+
+```text
+Answerable      : 5
+Unanswerable    : 5
+Ambiguous       : 5
+Multi-document  : 5
+Adversarial     : 5
+--------------------
+Total           : 25
+```
+
+#### Dataset Review Correction
+
+During manual dataset review, GS-016 was refined to make the required evidence from both the software development lifecycle and product release process explicit.
+
+Final question:
+
+> What should the team verify before releasing a significant product change to production, and what should they do during the initial rollout?
+
+Expected sources:
+
+- `DOC-016` — Software Development Lifecycle
+- `DOC-021` — Product Release Process
+
+The revised case was subsequently validated through the RAG application.
+
+---
+
+### 11. Day 13 Final Outcome
+
+Day 13 successfully established a repeatable evaluation foundation for the RAG application.
+
+The project now contains:
+
+- A 25-case golden evaluation dataset
+- Coverage across all required evaluation categories
+- Expected source information for answerable cases
+- Manual dataset review documentation
+- An automated evaluation runner
+- Timestamped machine-readable evaluation artifacts
+- Configuration and prompt-version information for reproducibility
+- Documented retrieval observations for future improvement
+
+The Day 13 evaluation workflow is:
+
+```text
+Approved Document Corpus
+          ↓
+Golden Evaluation Dataset
+          ↓
+Automated Evaluation Runner
+          ↓
+FastAPI /ask
+          ↓
+RAG Retrieval and Generation
+          ↓
+Answer / Citations / Retrieval Results
+          ↓
+Timestamped Evaluation Artifact
+```
+
+The resulting golden dataset and evaluation artifacts provide the baseline required for the next stage of the roadmap: retrieval and answer grading, scorecard generation, and regression checks.
+
+**DAY 13 COMPLETED**
+
+The Day 13 golden dataset, evaluation runner, dataset review, reproducible result generation, completion-gate requirements, and end-of-day evaluation evidence have been completed.

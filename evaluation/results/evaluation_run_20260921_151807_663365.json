@@ -1,0 +1,953 @@
+{
+  "run_timestamp": "20260921_151807_663365",
+  "configuration": {
+    "api_base_url": "http://127.0.0.1:8000",
+    "generation_model": "gpt-4.1-mini",
+    "prompt_version": "v1"
+  },
+  "total_cases": 25,
+  "results": [
+    {
+      "case_id": "GS-001",
+      "expected": {
+        "case_id": "GS-001",
+        "question": "What should be considered during the planning stage before implementation begins?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-016"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "The problem being addressed",
+          "Expected users",
+          "Business outcome",
+          "Dependencies",
+          "Constraints",
+          "Impact on existing services, APIs, databases, integrations, security controls, or operational procedures",
+          "What success looks like"
+        ],
+        "answer_notes": "The answer should be supported by the Planning section of DOC-016."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 7575.781699968502,
+        "answer": "During the planning stage before implementation begins, the following should be considered:\n\n1. The feature should begin as a written proposal describing the problem, the proposed approach, and rough scope.\n2. For anything larger than a small change, the proposal is reviewed in a weekly planning meeting to decide whether to proceed and how it fits into current priorities.\n3. The proposal should focus on explaining the problem being addressed, not just the requested implementation.\n4. Expected users, business outcomes, dependencies, and constraints should be identified to distinguish between a genuine product requirement and a technical solution needing further discussion.\n5. Consideration should be given to whether the proposed work affects existing services, APIs, databases, integrations, security controls, or operational procedures.\n6. Before implementation, the team should have enough information to understand what success looks like. This may include acceptance criteria, technical investigations, estimates, and design documents depending on the size of the work.\n7. Dependencies should be identified early with owners and expected timing recorded.\n8. Implementation should not begin when critical dependencies are unresolved unless such dependencies can be safely mocked or isolated.\n\nThese points outline what should be considered during planning before implementation starts [DOC-016]. \n\nThe provided context does not specify additional considerations beyond these points.",
+        "citations": [
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 2. Planning\n\nFeatures begin as a written proposal describing the problem, the proposed\napproach, and rough scope. Proposals for anything larger than a small\nchange are reviewed in a weekly planning meeting where the team decides\nwhether to proceed, and if so, roughly how it fits into the current\nquarter's priorities.\n\nA proposal should explain the problem being addressed rather than focusing\nonly on the requested implementation. Where possible, the proposal should\nidentify the expected users, business outcome, dependencies, and constraints.\nThis helps the team distinguish between a genuine product requirement and a\ntechnical solution that may need further discussion.\n\nPlanning should also consider whether the proposed work affects existing\nservices, APIs, databases, integrations, security controls, or operational\nprocedures. A feature that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation",
+            "that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation begins, the team should have enough information to\nunderstand what success looks like. The level of detail required depends on\nthe size of the work. A small maintenance change may only require a concise\nticket, while a larger feature may require acceptance criteria, technical\ninvestigation, estimates, and a design document.\n\nDependencies should be identified early. If another team, service, vendor,\nor infrastructure component is required, the owner and expected timing\nshould be recorded. Teams should avoid beginning implementation when a\ncritical dependency is unresolved unless the dependency can be safely\nmocked or isolated.",
+            "## 3. Design\n\nFor non-trivial features, an engineer writes a short design document\ncovering the technical approach, key trade-offs, and any impact on other\nteams' systems. Design documents are reviewed asynchronously by at least\none senior engineer before implementation begins.\n\nThe design should explain the major components involved and how information\nmoves between them. It should identify important interfaces, data\nstructures, external dependencies, and expected failure conditions. The\npurpose is not to document every line of code but to make significant\ntechnical decisions visible before implementation becomes expensive to\nchange.\n\nWhen multiple approaches are possible, the design should explain why the\nselected approach is preferred. Factors may include simplicity,\nmaintainability, performance, reliability, compatibility with existing\nsystems, and operational cost.\n\nDatabase changes should be considered during design rather than discovered\nduring deployment. Engineers should ident"
+          ],
+          "scores": [
+            1.2289541959762573,
+            1.3280212879180908,
+            1.4405354261398315
+          ]
+        },
+        "status": "answered",
+        "request_id": "fa5b33d1-f2c5-4b49-b717-408f053878c3",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-002",
+      "expected": {
+        "case_id": "GS-002",
+        "question": "What is the recommended approach for handling errors in code?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-017"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Errors should be handled at the layer that has enough context to decide what to do",
+          "Errors should not be swallowed silently",
+          "Errors should be logged with enough context to diagnose the issue later"
+        ],
+        "answer_notes": "The answer should be supported by the Error Handling section of DOC-017."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 9960.536700033117,
+        "answer": "The recommended approach for handling errors in code is to handle errors at the layer that has enough context to decide what to do about them. Silently swallowing errors is discouraged; at minimum, errors should be logged with sufficient context to allow diagnosis later [DOC-017].\n\nAdditionally, during code review, reviewers are expected to verify that errors are handled appropriately as part of assessing the correctness and behavior of the change [DOC-016].\n\nFor error responses in APIs, errors should include a machine-readable error code, a human-readable message, and where relevant, the specific field causing the validation error. The error codes must be documented and stable, while the human-readable message can change without a breaking change [DOC-019].\n\nNo further details on error handling approach are specified in the provided context.",
+        "citations": [
+          "DOC-019:engineering\\DOC-019_api_design_guidelines.md",
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md",
+          "DOC-017:engineering\\DOC-017_coding_standards.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Error Handling\n\nErrors should be handled at the layer that has enough context to decide\nwhat to do about them. Swallowing an error silently is discouraged;\nat minimum, an error should be logged with enough context to diagnose the\nissue later.",
+            "## 5. Code Review\n\nEvery change requires at least one approval before merging. Reviewers are\nexpected to check for correctness, readability, and test coverage, and to\nleave specific, actionable feedback rather than vague comments. Authors\nshould respond to every comment, even if only to explain why a suggestion\nwas not taken.\n\nReviewers should consider the behavior of the change rather than focusing\nonly on formatting. Important questions include whether the implementation\nmatches the intended requirement, whether errors are handled appropriately,\nand whether the change introduces unexpected side effects.\n\nReviewers should also consider maintainability. Code that works correctly\nbut is unnecessarily difficult to understand can increase future\nmaintenance cost. Clear naming, reasonable function boundaries, and\nconsistent project conventions should be preferred.\n\nFor changes affecting security, data handling, infrastructure, or shared\nservices, additional review may be appropriate. The r",
+            "## Error Responses\n\nError responses include a machine-readable error code, a human-readable\nmessage, and, where relevant, the specific field that caused a validation\nerror. Error codes are documented and stable; the wording of the\nhuman-readable message may change without being considered a breaking\nchange."
+          ],
+          "scores": [
+            1.0028773546218872,
+            1.3732836246490479,
+            1.4264899492263794
+          ]
+        },
+        "status": "answered",
+        "request_id": "6db88b2e-ede0-4f80-b1c0-631ed74da9fc",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-003",
+      "expected": {
+        "case_id": "GS-003",
+        "question": "Is approval required for purchase requests above $5,000?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Requests above $5,000 require manager approval",
+          "Requests above $5,000 require department head approval"
+        ],
+        "answer_notes": "The answer should be supported by the Approval Thresholds section of DOC-028."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 39051.69699998805,
+        "answer": "Yes, approval is required for purchase requests above $5,000. Specifically, requests above $5,000 require both manager and department head approval. Additionally, requests above $25,000 require finance team review before a purchase order is issued [DOC-028].",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "## Software Installation\n\nOnly software approved through the IT software catalog may be installed on\ncompany devices without a request. Installation of unapproved software,\nincluding browser extensions with broad data access, requires a request\nthrough the IT ticketing system and a brief security review."
+          ],
+          "scores": [
+            0.600548267364502,
+            0.8294342756271362,
+            1.4952678680419922
+          ]
+        },
+        "status": "answered",
+        "request_id": "c2b88933-4f9d-4d5e-ab68-5b1430eecb93",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-004",
+      "expected": {
+        "case_id": "GS-004",
+        "question": "Is training mandatory for new hires by the end of their first week?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-001"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Mandatory training is required for new hires",
+          "Security awareness training is required",
+          "Code of conduct training is required",
+          "Workplace safety training is required",
+          "The training must be completed by the end of week one"
+        ],
+        "answer_notes": "The answer should be supported by the Week One section of DOC-001."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 5225.710800033994,
+        "answer": "Yes, training is mandatory for new hires to complete by the end of their first week. Specifically, mandatory training modules including security awareness, code of conduct, and workplace safety must be completed by the end of week one [DOC-001]. Additionally, new hires acknowledge the Code of Conduct as part of the onboarding process during their first week [DOC-004].\n\nThe context does not specify if there are other types of training beyond these modules that are mandatory by the end of the first week.",
+        "citations": [
+          "DOC-004:hr\\DOC-004_code_of_conduct.md",
+          "DOC-001:hr\\DOC-001_employee_onboarding_guide.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Week One\n\nThe first day begins with a welcome session led by People Operations,\nfollowed by a laptop setup session with IT. Managers are expected to\nschedule a one-on-one within the first three days to review team goals and\nintroduce the new hire to immediate teammates. Mandatory training modules\n(security awareness, code of conduct, and workplace safety) must be\ncompleted by the end of week one.",
+            "## Welcome to NexaCore Solutions\n\nThis guide walks new hires through their first two weeks at NexaCore Solutions.\nIt covers account setup, required training, and who to contact for common\nquestions during the first month.",
+            "## 9. Annual Acknowledgment\n\nAll employees are required to review and acknowledge this Code of Conduct\nannually through the HR portal. New hires acknowledge it as part of the\nonboarding process during their first week."
+          ],
+          "scores": [
+            0.9142929911613464,
+            1.0680042505264282,
+            1.1929765939712524
+          ]
+        },
+        "status": "answered",
+        "request_id": "3d895490-a7ee-4cba-9fde-eba1f6fcfded",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-005",
+      "expected": {
+        "case_id": "GS-005",
+        "question": "What is the process for requesting software that is not in the standard IT catalog?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-009"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Submit a request through the IT ticketing system",
+          "Include the software name",
+          "Provide a business justification",
+          "State whether the software will handle company or customer data"
+        ],
+        "answer_notes": "The answer should be supported by the Software Installation Request Process in DOC-009."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 10272.099699999671,
+        "answer": "The process for requesting software that is not in the standard IT catalog is as follows:\n\n1. The employee submits a request through the IT ticketing system.\n2. The request must include:\n   - The software name,\n   - Business justification,\n   - Whether the software will handle any company or customer data.\n\n3. Requests are reviewed within three business days.\n4. If the software handles sensitive data, an additional security review is conducted, which can take up to two weeks depending on vendor responsiveness.\n5. Free trials of unapproved software should not be installed without submitting a request first, even for evaluation purposes.\n6. Once approved, IT will:\n   - Install the software remotely for managed devices, or\n   - Provide installation instructions if remote installation is not possible.\n7. Approved software is added to the internal catalog to expedite future requests for the same tool.\n\nThis process ensures compliance and security review before installation of non-catalog software [DOC-009][DOC-006].\n\nInformation about purchase requests related to software above $500 or budgeting is given in a different document but is not specifically tied to the software installation request process in this context [DOC-028].",
+        "citations": [
+          "DOC-006:it\\DOC-006_acceptable_use_policy.md",
+          "DOC-028:finance\\DOC-028_procurement_procedure.md",
+          "DOC-009:it\\DOC-009_software_installation_request_process.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "# Software Installation Request Process\n\nEmployees who need software not available in the standard IT catalog can\nsubmit a request through the IT ticketing system. Requests should include\nthe software name, business justification, and whether the tool will\nhandle any company or customer data.\n\nRequests are reviewed within three business days. Tools that handle\nsensitive data require an additional security review, which can take up to\ntwo weeks depending on the vendor's responsiveness to security\nquestionnaires. Free trials of unapproved software should not be installed\nwithout submitting a request first, even for evaluation purposes.\n\nOnce approved, IT installs the software remotely for managed devices or\nprovides installation instructions for cases where remote installation is\nnot possible. Approved software is added to the internal catalog so future\nrequests for the same tool by other employees can be fast-tracked.",
+            "## Software Installation\n\nOnly software approved through the IT software catalog may be installed on\ncompany devices without a request. Installation of unapproved software,\nincluding browser extensions with broad data access, requires a request\nthrough the IT ticketing system and a brief security review.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process."
+          ],
+          "scores": [
+            0.7749063968658447,
+            0.8201674222946167,
+            1.4195408821105957
+          ]
+        },
+        "status": "answered",
+        "request_id": "50bfcea6-d359-454a-a751-d9e3b2aa33c2",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-006",
+      "expected": {
+        "case_id": "GS-006",
+        "question": "What was NexaCore Solutions' total revenue in 2025?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not contain the company's total revenue for 2025. The system should indicate insufficient evidence rather than inventing a figure."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 875.4658999969251,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "4d7683b5-6613-483a-9789-60e9e892a507",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-007",
+      "expected": {
+        "case_id": "GS-007",
+        "question": "What is the company's current employee headcount?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's current employee headcount. The system should indicate insufficient evidence rather than inventing a figure."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 683.7830999866128,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "03014980-4a74-4f24-a436-6347378abe37",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-008",
+      "expected": {
+        "case_id": "GS-008",
+        "question": "What is NexaCore Solutions' official office address?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's official office address. The system should indicate insufficient evidence rather than inventing an address."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2987.352199968882,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "9c8a99e5-9fa5-4f93-bdb2-c0cccbdd4f7b",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-009",
+      "expected": {
+        "case_id": "GS-009",
+        "question": "What is NexaCore Solutions' flagship product?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not identify a flagship product for NexaCore Solutions. The system should indicate insufficient evidence rather than inventing a product name."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 1030.4120000218973,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "e37c4926-0c92-40e1-854e-91f2c652d542",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-010",
+      "expected": {
+        "case_id": "GS-010",
+        "question": "When was NexaCore Solutions founded?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's founding date or year. The system should indicate insufficient evidence rather than inventing a date."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 904.5604999992065,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "4e70ddb0-0e5f-4360-90db-4313f4610445",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-011",
+      "expected": {
+        "case_id": "GS-011",
+        "question": "What should I do if I suspect a security problem?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-012",
+          "DOC-015"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Suspected security incidents should be reported immediately to IT Security",
+          "Security incidents should be reported through the incident hotline or #security-incident",
+          "Suspicious emails should be reported using the Report Phishing mechanism",
+          "Employees should not investigate or resolve suspected security incidents independently"
+        ],
+        "answer_notes": "The question is intentionally broad enough to involve security incident reporting and security-awareness reporting guidance. The answer should be grounded in DOC-012 and DOC-015."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3857.876499998383,
+        "answer": "If you suspect a security problem, you should report it immediately to IT Security rather than trying to resolve it yourself. You can do this by contacting the incident hotline or using the #security-incident channel. Early reporting is preferred, even if it turns out to be a false alarm. This applies to suspected security issues such as suspicious emails, unexpected password reset requests, or lost devices. Employees should avoid investigating independently and instead report the issue promptly [DOC-012], [DOC-015].\n\nAdditionally, for suspicious emails, it's recommended to use the \"Report Phishing\" button rather than forwarding them to colleagues. Employees should be cautious of emails that create urgency, ask for credentials or payment details, or appear to be from addresses similar to legitimate contacts but slightly different [DOC-015].\n\nNo other specific actions are mentioned in the provided context.",
+        "citations": [
+          "DOC-012:security\\DOC-012_incident_response_procedure.md",
+          "DOC-015:security\\DOC-015_security_awareness_training_guide.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 3. Reporting an Incident\n\nAny employee who suspects a security incident should report it immediately\nto IT Security through the incident hotline or the #security-incident\nchannel, rather than attempting to resolve it themselves. Early reporting,\neven of something that turns out to be a false alarm, is always preferred\nover delayed reporting.",
+            "dditional support\nrather than discipline.\n\nAny suspected real security issue, including a suspicious email, an\nunexpected password reset request, or a lost device, should be reported to\nIT Security immediately rather than investigated independently by the\nemployee.",
+            "# Security Awareness Training Guide\n\nAll employees complete a security awareness module during onboarding and a\nrefresher annually. The training covers recognizing phishing attempts,\nsafe password practices, and how to report a suspected security issue.\n\nPhishing emails often create urgency, ask for credentials or payment\ndetails, or come from an address that looks similar to a real contact but\nis subtly different. Employees should hover over links before clicking and\nreport suspicious emails using the \"Report Phishing\" button rather than\nforwarding them to colleagues.\n\nNexaCore Solutions also runs periodic simulated phishing tests. Employees\nwho click a simulated phishing link are shown a short educational message\nand are not penalized; the goal is awareness, not enforcement. Repeated\nclicks may prompt a manager conversation focused on additional support\nrather than discipline.\n\nAny suspected real security issue, including a suspicious email, an\nunexpected password reset request, or a"
+          ],
+          "scores": [
+            1.0823099613189697,
+            1.0554757118225098,
+            1.3278565406799316
+          ]
+        },
+        "status": "answered",
+        "request_id": "82a5341a-47ad-4a45-80e3-ef77576ab9ac",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-012",
+      "expected": {
+        "case_id": "GS-012",
+        "question": "How should a new employee request access to the systems they need for work?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-014"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "New access is requested through the access request portal",
+          "The request requires approval from the employee's manager and relevant system owner",
+          "Access is granted based on role and business need following least privilege",
+          "Standard baseline access such as email and calendar is provisioned automatically during onboarding"
+        ],
+        "answer_notes": "The question was refined after the original expected DOC-001 and DOC-014 pairing did not retrieve naturally. The validated answer is directly supported by DOC-014, which provides the actual system-access request and approval process."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3527.997699973639,
+        "answer": "A new employee should request access to additional systems they need for work through the access request portal. This request requires approval from the employee's manager and the relevant system owner. Standard access like email, calendar, and general company tools is automatically provisioned during onboarding based on the employee's department, so no separate request is needed for these baseline systems. Access is granted based on role and business need, following the principle of least privilege [DOC-014][DOC-011].",
+        "citations": [
+          "DOC-011:security\\DOC-011_information_security_policy.md",
+          "DOC-014:security\\DOC-014_access_control_policy.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "# Access Control Policy\n\nAccess to NexaCore Solutions systems is granted based on role and business\nneed, following the principle of least privilege described in the\nInformation Security Policy. New access is requested through the access\nrequest portal and requires approval from the employee's manager and the\nrelevant system owner.",
+            "## Standard Access\n\nStandard access, such as email, calendar, and general company tools, is\nprovisioned automatically as part of onboarding based on the employee's\ndepartment. No separate request is needed for these baseline systems.",
+            "## 5. Least Privilege\n\nEmployees are granted the minimum level of access required to perform\ntheir role. Additional access should be requested through the access\nrequest process rather than assumed, and temporary access granted for a\nspecific project should be removed once the project concludes."
+          ],
+          "scores": [
+            1.0012402534484863,
+            1.117032766342163,
+            1.1931151151657104
+          ]
+        },
+        "status": "answered",
+        "request_id": "8c4cd5ab-3b57-43e2-83c4-e878e2426190",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-013",
+      "expected": {
+        "case_id": "GS-013",
+        "question": "What are the steps for handling a business expense or purchase?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-027",
+          "DOC-028"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Business purchases may require a procurement request depending on the purchase amount",
+          "Purchases over $500 require a procurement request with business justification and budget code",
+          "Business expenses are submitted through the standard expense process",
+          "Expense submissions require applicable receipts and must follow the required submission timeline",
+          "Required approval steps depend on the applicable procurement or expense process"
+        ],
+        "answer_notes": "The question intentionally spans both purchase procurement and expense reimbursement. The answer should recognize the two applicable processes and provide the relevant steps from DOC-027 and DOC-028."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 6602.078199968673,
+        "answer": "The steps for handling a business expense or purchase are:\n\n1. For purchases over five hundred dollars:\n   - Submit a purchase request through the procurement portal.\n   - Include the business justification and the budget code the purchase will be charged against [DOC-028].\n\n2. For purchases under five hundred dollars:\n   - Employees can generally make the purchase directly.\n   - Expense the purchase through the standard expense process [DOC-028].\n\n3. To submit expenses for reimbursement (such as client meals, approved travel, necessary equipment not provided by the company):\n   - Submit the expense through the expense portal.\n   - Attach a receipt for any expense over twenty-five dollars.\n   - Ensure submission within thirty days of the expense being incurred.\n   - If submitting after ninety days, obtain manager approval with an explanation; late submissions may be denied at manager discretion [DOC-027].\n\n4. Expense report approval and reimbursement:\n   - Managers review and approve reports within five business days.\n   - Reimbursement is processed in the next payroll cycle following approval [DOC-027].\n\nAdditional notes on expenses:\n- Meal expenses have a daily cap varying by city cost of living.\n- Alcohol is reimbursable only in the context of a client meal and only partially.\n- Personal expenses during business trips, such as side trips, are not reimbursable and should be excluded from reports [DOC-027].\n\nInformation about any further steps after reimbursement processing is not specified in the provided context.",
+        "citations": [
+          "DOC-027:finance\\DOC-027_expense_reimbursement_policy.md",
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "# Expense Reimbursement Policy\n\nEmployees may submit expenses for business-related costs such as client\nmeals, approved travel, and necessary equipment not provided by the\ncompany. Expenses are submitted through the expense portal with a receipt\nattached for any amount over twenty-five dollars.\n\nExpense reports should be submitted within thirty days of the expense being\nincurred. Reports submitted after ninety days require manager approval and\na brief explanation for the delay, and may be denied at the manager's\ndiscretion if the delay is excessive.\n\nMeal expenses have a daily cap that varies by city cost of living, listed\nin the expense portal's reference table. Alcohol is reimbursable only in\nthe context of a client meal and only up to a modest portion of the total\nbill. Personal expenses incidentally mixed into a business trip, such as a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimb",
+            "a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimbursement\nis processed in the next payroll cycle following approval."
+          ],
+          "scores": [
+            1.1521096229553223,
+            1.4226007461547852,
+            1.3948848247528076
+          ]
+        },
+        "status": "answered",
+        "request_id": "adbf2b8e-2bb4-40f7-8661-e0241a4615be",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-014",
+      "expected": {
+        "case_id": "GS-014",
+        "question": "Who approves a purchase request?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because the required approval depends on the purchase amount. DOC-028 specifies different approval requirements for requests up to $5,000, above $5,000, and above $25,000. The system should clarify the purchase amount or explain the different approval thresholds."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2730.8808999950998,
+        "answer": "Purchase requests up to five thousand dollars require manager approval. For requests above five thousand dollars, approval is required from both the manager and the department head. Additionally, for requests above twenty-five thousand dollars, the finance team must review the request before a purchase order is issued [DOC-028].\n\nThe context does not specify who initiates the approval beyond these roles or any other approvers involved.",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "## Receiving and Payment\n\nOnce goods or services are received, the requester confirms receipt in the\nprocurement portal, which triggers the payment process. Payment terms with\nvendors are typically net thirty days from invoice unless a different term\nis negotiated as part of the contract."
+          ],
+          "scores": [
+            0.8516162037849426,
+            1.0585170984268188,
+            1.3945225477218628
+          ]
+        },
+        "status": "answered",
+        "request_id": "79e970ca-200f-4f11-8d30-3903f9980cba",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-015",
+      "expected": {
+        "case_id": "GS-015",
+        "question": "What should an employee do if their company device is lost or stolen?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-008",
+          "DOC-015"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "A lost or stolen device should be reported to the IT Helpdesk immediately",
+          "IT can remotely lock or wipe an enrolled device",
+          "Employees should change passwords for accounts that were logged in on the lost or stolen device",
+          "A lost device should also be reported to IT Security as a suspected security issue"
+        ],
+        "answer_notes": "The question naturally combines device-management handling from DOC-008 with security-awareness reporting guidance from DOC-015. The answer should use both documents."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2714.0742000192404,
+        "answer": "If an employee's company device is lost or stolen, they should report it to the IT Helpdesk immediately. IT can then remotely lock or wipe the device if it is enrolled. Additionally, employees should change passwords for any accounts that were logged in on the device as a precaution. Any suspected lost device should also be reported to IT Security immediately rather than investigated independently by the employee [DOC-008][DOC-015].\n\nNo further steps or details about the process after reporting are specified in the provided context.",
+        "citations": [
+          "DOC-015:security\\DOC-015_security_awareness_training_guide.md",
+          "DOC-008:it\\DOC-008_device_management_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Lost or Stolen Devices\n\nA lost or stolen device should be reported to the IT Helpdesk immediately.\nIT can remotely lock or wipe an enrolled device. Employees should also\nchange passwords for any accounts that were logged in on the device as a\nprecaution.",
+            "## Device Retirement\n\nWhen an employee leaves the company or receives a replacement device, the\nold device is returned to IT for a full wipe and reimaging before it is\nreassigned or decommissioned. Devices are not reassigned without going\nthrough this process.",
+            "dditional support\nrather than discipline.\n\nAny suspected real security issue, including a suspicious email, an\nunexpected password reset request, or a lost device, should be reported to\nIT Security immediately rather than investigated independently by the\nemployee."
+          ],
+          "scores": [
+            0.6470735669136047,
+            1.1718863248825073,
+            1.0213311910629272
+          ]
+        },
+        "status": "answered",
+        "request_id": "4338ccf8-9f63-4e45-9ffc-d65adac67853",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-016",
+      "expected": {
+        "case_id": "GS-016",
+        "question": "What should the team verify before releasing a significant product change to production, and what should they do during the initial rollout?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-016",
+          "DOC-021"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "The release should satisfy relevant release-readiness checks including testing, monitoring, rollback or recovery, and operational readiness",
+          "Customer-facing documentation should be prepared when applicable",
+          "The product manager should review significant changes against the intended requirements",
+          "Significant changes should initially be released to 5% of customers for 48 hours",
+          "The rollout should be monitored and paused if error rates or support volume rise"
+        ],
+        "answer_notes": "The answer should combine release-readiness requirements from DOC-016 with the gradual rollout and monitoring requirements from DOC-021."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 4796.4326000073925,
+        "answer": "Before releasing a significant product change to production, the team should verify the following:\n\n- The feature has completed the appropriate design and review process.\n- The intended behavior has been clearly defined.\n- The implementation has received the required code review.\n- Relevant automated tests have passed.\n- Important failure cases have been considered.\n- Required configuration changes are available.\n- Database or data migration requirements have been addressed.\n- Monitoring and logging are sufficient.\n- The rollback or recovery approach is understood.\n- Relevant documentation and operational procedures are updated.\n- The owning team knows how to respond if the release causes an issue.\n\nAdditionally, before production deployment, engineers should verify that required configuration, database migrations, permissions, and dependent services are available in the target environment. Deployments should be observable, with knowledge of which version was deployed and the ability to detect new errors or unexpected behavior. For database migrations, both forward migration and rollback/recovery strategies should be considered, and the deployment should allow application versions to coexist safely if a complete rollback is not practical [DOC-016].\n\nDuring the initial rollout of a significant change, it should be rolled out to an initial five percent of customers for forty-eight hours before a wider release. This allows the team to monitor for unexpected issues at a manageable scale. The rollout should be paused immediately if error rates or customer support volume increases noticeably during this window [DOC-021].",
+        "citations": [
+          "DOC-021:product\\DOC-021_product_release_process.md",
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 15. Release Readiness Checklist\n\nBefore a significant production release, the team should confirm that the\nfeature has completed the appropriate design and review process.\n\nThe following questions provide a basic readiness check:\n\n- Has the intended behavior been clearly defined?\n- Has the implementation received the required code review?\n- Have relevant automated tests passed?\n- Have important failure cases been considered?\n- Are required configuration changes available?\n- Have database or data migration requirements been addressed?\n- Are monitoring and logging sufficient?\n- Is the rollback or recovery approach understood?\n- Are relevant documentation and operational procedures updated?\n- Does the owning team know how to respond if the release causes an issue?\n\nThe checklist should be adapted according to the risk and size of the\nrelease rather than treated as a mandatory identical process for every\nchange.",
+            "## Gradual Rollout\n\nSignificant changes are rolled out to an initial five percent of customers\nfor forty-eight hours before wider release, allowing the team to monitor\nfor unexpected issues at a manageable scale. Rollout is paused immediately\nif error rates or customer support volume increases noticeably during this\nwindow.",
+            "## 7. Deployment\n\nMost services deploy automatically to a staging environment on merge and\nrequire a manual approval step to promote to production. High-risk changes\nare deployed behind a feature flag so they can be enabled gradually and\nrolled back quickly if an issue is found.\n\nBefore production deployment, engineers should verify that required\nconfiguration, database migrations, permissions, and dependent services\nare available in the target environment.\n\nDeployments should be observable. The team should know which version was\ndeployed and should have a way to determine whether the deployment caused\nnew errors or unexpected behavior.\n\nFor changes involving database migrations, engineers should consider both\nthe forward migration and the rollback or recovery strategy. Where a\ncomplete rollback is not practical, the deployment should be designed so\nthat application versions can coexist safely during the transition.\n\nProduction deployments should avoid unnecessary changes outside the s"
+          ],
+          "scores": [
+            1.0230071544647217,
+            1.1379998922348022,
+            1.0555843114852905
+          ]
+        },
+        "status": "answered",
+        "request_id": "2a3acc1e-040e-466f-a775-5048174a1a5f",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-017",
+      "expected": {
+        "case_id": "GS-017",
+        "question": "What should an employee do when arranging business travel and submitting the related expenses?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-027",
+          "DOC-029"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Business travel should generally be booked through the approved travel booking tool",
+          "Flights, hotels, and ground transportation should follow the applicable travel guidelines and approval requirements",
+          "Travel booked outside the approved tool should be flagged in the expense report",
+          "Related business expenses should be submitted through the expense process with applicable receipts",
+          "Expense reports should be submitted within the required timeline"
+        ],
+        "answer_notes": "The answer should combine business-travel booking requirements from DOC-029 with expense submission and reimbursement requirements from DOC-027."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 10440.491800021846,
+        "answer": "When arranging business travel, an employee should:\n\n1. Book travel through the approved travel booking tool whenever possible, as it consolidates billing and provides duty-of-care tracking in emergencies.\n2. Book economy class flights for trips under six hours; for longer international flights, premium economy may be booked with manager approval.\n3. Book hotels within the nightly rate guideline for the destination city listed in the travel tool; exceptions require manager approval if the guideline rate is not reasonably available.\n4. Choose the most practical reasonable option for ground transportation, such as ride-share or taxis; rental cars should be reserved only when public transport or ride-share is impractical.\n5. If travel is booked outside the approved tool (e.g., directly through an airline for schedule reasons), the expense is still reimbursable but must be flagged in the expense report [DOC-029].\n\nWhen submitting the related expenses, an employee should:\n\n1. Submit expenses through the expense portal.\n2. Attach receipts for any expenses over twenty-five dollars.\n3. Submit expense reports within thirty days of incurring the expense; reports submitted after ninety days require manager approval and a brief explanation and may be denied if the delay is excessive.\n4. Exclude any personal expenses incidentally mixed into the business trip, such as personal side trips, from the report.\n5. Note that meal expenses have a daily cap varying by city cost of living, alcohol is only reimbursable as a modest portion of a client meal, and personal expenses are not reimbursable.\n6. Expense reports are approved by managers within five business days, and reimbursement is processed in the next payroll cycle following approval [DOC-027].\n\nThe context does not specify additional details about the submission process or how to flag expenses booked outside the travel tool beyond stating that flagging is required.",
+        "citations": [
+          "DOC-027:finance\\DOC-027_expense_reimbursement_policy.md",
+          "DOC-029:finance\\DOC-029_travel_booking_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "# Expense Reimbursement Policy\n\nEmployees may submit expenses for business-related costs such as client\nmeals, approved travel, and necessary equipment not provided by the\ncompany. Expenses are submitted through the expense portal with a receipt\nattached for any amount over twenty-five dollars.\n\nExpense reports should be submitted within thirty days of the expense being\nincurred. Reports submitted after ninety days require manager approval and\na brief explanation for the delay, and may be denied at the manager's\ndiscretion if the delay is excessive.\n\nMeal expenses have a daily cap that varies by city cost of living, listed\nin the expense portal's reference table. Alcohol is reimbursable only in\nthe context of a client meal and only up to a modest portion of the total\nbill. Personal expenses incidentally mixed into a business trip, such as a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimb",
+            "a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimbursement\nis processed in the next payroll cycle following approval.",
+            "# Travel Booking Guidelines\n\nBusiness travel should be booked through the approved travel booking tool\nwhenever possible, since it consolidates billing and provides duty-of-care\ntracking in case of an emergency during travel. Flights should generally be\nbooked economy class for trips under six hours and may be booked premium\neconomy for longer international flights, subject to manager approval.\n\nHotel bookings should stay within the nightly rate guideline for the\ndestination city listed in the travel tool, with exceptions requiring\nmanager approval when the guideline rate is not reasonably available.\nGround transportation should favor the most practical reasonable option;\nride-share and taxis are acceptable for most trips, with a rental car\nreserved for trips where public transport or ride-share is impractical.\n\nTravel booked outside the approved tool, such as directly through an\nairline for a schedule reason, is still reimbursable but should be flagged\nin the expense report, since it"
+          ],
+          "scores": [
+            1.2607285976409912,
+            1.3136706352233887,
+            1.1810811758041382
+          ]
+        },
+        "status": "answered",
+        "request_id": "53be4cfc-b676-4d89-b869-f1bc9cee718f",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-018",
+      "expected": {
+        "case_id": "GS-018",
+        "question": "What happens to an employee's system access and company device when they leave the company?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-014",
+          "DOC-008"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "All system access should be revoked on the employee's last working day",
+          "Access revocation should be coordinated between People Operations and IT",
+          "The employee's company device should be returned to IT",
+          "The returned device should be fully wiped and reimaged before reassignment or decommissioning"
+        ],
+        "answer_notes": "The answer should combine system-access offboarding requirements from DOC-014 with device-retirement requirements from DOC-008."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 9925.660500011873,
+        "answer": "When an employee leaves the company, all their system access is revoked on their last working day. For roles with access to highly sensitive systems, access may be revoked earlier if the departure is involuntary. This process is coordinated between People Operations and IT, and in some cases, involves the employee's manager [DOC-014].\n\nRegarding company devices, the old device used by the departing employee is returned to IT for a full wipe and reimaging before it can be reassigned or decommissioned. Devices are not reassigned without going through this process [DOC-008].\n\nThe provided context does not specify any further details about how the employee's personal devices used to access company resources are handled upon their departure.",
+        "citations": [
+          "DOC-014:security\\DOC-014_access_control_policy.md",
+          "DOC-008:it\\DOC-008_device_management_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Device Retirement\n\nWhen an employee leaves the company or receives a replacement device, the\nold device is returned to IT for a full wipe and reimaging before it is\nreassigned or decommissioned. Devices are not reassigned without going\nthrough this process.",
+            "## Offboarding\n\nWhen an employee leaves NexaCore Solutions, all system access is revoked\non their last working day, coordinated between People Operations and IT.\nFor roles with access to highly sensitive systems, access may be revoked\nearlier if the departure is involuntary, in coordination with the\nemployee's manager.",
+            "## 2. Scope\n\nThis policy applies to all employees, contractors, and any third party\ngranted access to NexaCore Solutions systems or data, regardless of\nwhether that access is temporary or long-term. It covers company-owned\ndevices as well as personal devices used to access company email or\ninternal tools."
+          ],
+          "scores": [
+            0.9782279133796692,
+            1.0269389152526855,
+            1.173940896987915
+          ]
+        },
+        "status": "answered",
+        "request_id": "79fcebd0-c42b-4b51-bae4-75e0df9b969c",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-019",
+      "expected": {
+        "case_id": "GS-019",
+        "question": "What approvals and security requirements apply when an employee needs additional access to a company system?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-014"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Access is granted based on role and business need following the principle of least privilege",
+          "Additional access should be requested through the access request process rather than assumed",
+          "New access requires approval from the employee's manager and the relevant system owner",
+          "Additional or elevated access requires appropriate authorization and justification",
+          "Temporary access granted for a specific project should be removed when the project concludes"
+        ],
+        "answer_notes": "This case was redesigned after the original DOC-011 and DOC-013 query repeatedly failed to retrieve both documents. The validated question naturally combines security principles from DOC-011 with the access-request and approval process from DOC-014."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 6050.30479998095,
+        "answer": "When an employee needs additional access to a company system, the following approvals and security requirements apply:\n\n1. Access is granted based on role and business need, following the principle of least privilege, meaning the minimum level of access necessary is given [DOC-011], [DOC-014].\n\n2. Additional access must be requested through the access request portal [DOC-014].\n\n3. Approval is required from both the employee's manager and the relevant system owner before access is granted [DOC-014].\n\n4. Temporary access for specific projects should be removed once the project concludes [DOC-011].\n\nInformation on other specific security requirements or approvals beyond these is not specified in the provided context.",
+        "citations": [
+          "DOC-011:security\\DOC-011_information_security_policy.md",
+          "DOC-014:security\\DOC-014_access_control_policy.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 7. Third-Party and Vendor Access\n\nVendors requiring access to company systems must sign a data processing\nagreement before access is granted. Vendor access is reviewed alongside\nemployee access during the quarterly access review and is removed promptly\nwhen a vendor engagement ends.",
+            "# Access Control Policy\n\nAccess to NexaCore Solutions systems is granted based on role and business\nneed, following the principle of least privilege described in the\nInformation Security Policy. New access is requested through the access\nrequest portal and requires approval from the employee's manager and the\nrelevant system owner.",
+            "## 5. Least Privilege\n\nEmployees are granted the minimum level of access required to perform\ntheir role. Additional access should be requested through the access\nrequest process rather than assumed, and temporary access granted for a\nspecific project should be removed once the project concludes."
+          ],
+          "scores": [
+            1.1440125703811646,
+            0.9403470158576965,
+            1.0755095481872559
+          ]
+        },
+        "status": "answered",
+        "request_id": "3fc664c2-1e28-46e9-947c-ed4a8abc8c24",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-020",
+      "expected": {
+        "case_id": "GS-020",
+        "question": "What security requirements should be followed when a third-party vendor has access to company systems?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-026"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Vendors accessing company systems or handling company or customer data must undergo the applicable security review",
+          "Contracts involving data processing require a data processing agreement",
+          "Vendor access is included in the quarterly access review",
+          "Vendors with access to Restricted data are reviewed annually",
+          "Vendor access should be removed promptly when the vendor engagement ends"
+        ],
+        "answer_notes": "The question was refined from the original wording and successfully retrieved both DOC-011 and DOC-026. The answer should combine third-party security requirements from DOC-011 with vendor onboarding and review requirements from DOC-026."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 4577.049499959685,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "ad443a05-1346-4e30-ab16-a44f73ea6fae",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-021",
+      "expected": {
+        "case_id": "GS-021",
+        "question": "According to the company's policy, what is the maximum number of days an employee can keep a company laptop after leaving the organization?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-008"
+        ],
+        "answerable": false,
+        "expected_facts": [],
+        "answer_notes": "DOC-008 states that when an employee leaves, the company device must be returned to IT for full wipe and reimaging before reassignment or decommissioning. It does not specify a maximum number of days the employee may keep the laptop. The system should identify that the requested timeframe is not supported by the corpus rather than inventing a number."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 653.2436000416055,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "71364581-2974-474d-96cf-4069c18e8095",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-022",
+      "expected": {
+        "case_id": "GS-022",
+        "question": "According to the procurement procedure, can a manager approve a purchase of $6,000 without department head approval?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": false,
+        "expected_facts": [],
+        "answer_notes": "DOC-028 states that purchases above $5,000 require both manager approval and department head approval. The question contains a misleading premise that manager approval alone may be sufficient. The system should correct this premise using the documented approval threshold rather than accepting it."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3229.155799956061,
+        "answer": "According to the procurement procedure, a manager cannot approve a purchase of $6,000 without department head approval. Purchases above five thousand dollars require both manager and department head approval before a purchase order is issued [DOC-028].",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimbursement\nis processed in the next payroll cycle following approval."
+          ],
+          "scores": [
+            0.7985711693763733,
+            1.2264208793640137,
+            1.4530061483383179
+          ]
+        },
+        "status": "answered",
+        "request_id": "a30cb180-4c6c-4b80-87db-1608cf9693d8",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-023",
+      "expected": {
+        "case_id": "GS-023",
+        "question": "Since MFA is enabled, can an employee share their password with a coworker who needs temporary access to their account?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-007",
+          "DOC-014"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "MFA does not make password sharing an approved practice",
+          "Access should be provided through the appropriate access-request process",
+          "Elevated or additional access requires appropriate justification and approval"
+        ],
+        "answer_notes": "The question contains a misleading security assumption that MFA makes password sharing acceptable. Multiple natural rewrites were tested, but the current retrieval pipeline returned insufficient evidence without retrieving the relevant documents. The original case is intentionally retained as a known retrieval weakness rather than being artificially rewritten to force retrieval."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 876.7446000128984,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "2c3ead3b-b81b-43c7-b79d-3efbf93a5b63",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-024",
+      "expected": {
+        "case_id": "GS-024",
+        "question": "Since all vendors are reviewed annually, does an office supplies vendor need an annual security review as well?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-026"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Vendors with access to Restricted data are reviewed annually",
+          "Office supplies vendors that do not access systems or data follow a lighter procurement-only process"
+        ],
+        "answer_notes": "The question contains a misleading generalization that all vendors require an annual security review. DOC-026 distinguishes vendors based on whether they access systems or data and specifically states that office supplies vendors without such access follow a lighter procurement-only process. The system should correct the premise rather than apply the annual review requirement to every vendor."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 6567.918199987616,
+        "answer": "An office supplies vendor does not need an annual security review. According to the context, vendors with access to Restricted data undergo an annual review of their security posture, but vendors that do not access company systems or data, such as an office supplies vendor, follow a lighter procurement-only process and are not included in the annual security review process [DOC-026]. \n\nAll vendors' access is reviewed quarterly, but security reviews are specifically for those with system or data access, which does not apply to office supplies vendors [DOC-011][DOC-026].\n\nTherefore, while all vendors might have some form of review depending on their role, the annual security review is only required for vendors with access to restricted data or company systems, not office supplies vendors.",
+        "citations": [
+          "DOC-026:operations\\DOC-026_vendor_management_procedure.md",
+          "DOC-011:security\\DOC-011_information_security_policy.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Ongoing Vendor Review\n\nVendors with access to Restricted data are reviewed annually, covering any\nchanges to their security posture, incident history, and continued\nbusiness need for the relationship. Vendor access is included in the\nquarterly access review alongside employee access.",
+            "## Vendor Onboarding\n\nNew vendors that will access company systems or handle company or customer\ndata go through a review that includes a security questionnaire and, for\nhigher-risk vendors, a review of their own security certifications. Vendors\nthat will not access systems or data, such as an office supplies vendor,\nfollow a lighter procurement-only process.",
+            "## 7. Third-Party and Vendor Access\n\nVendors requiring access to company systems must sign a data processing\nagreement before access is granted. Vendor access is reviewed alongside\nemployee access during the quarterly access review and is removed promptly\nwhen a vendor engagement ends."
+          ],
+          "scores": [
+            0.8161181211471558,
+            0.7704800963401794,
+            1.1012499332427979
+          ]
+        },
+        "status": "answered",
+        "request_id": "28c7eb9d-0815-4876-9090-a8cf24b221f9",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-025",
+      "expected": {
+        "case_id": "GS-025",
+        "question": "What security requirements apply when sharing Restricted data with a customer outside the company?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-013"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Restricted data must be handled using approved systems with appropriate security controls",
+          "Restricted data requires explicit authorization to access or share",
+          "External sharing requires identity verification and usually manager or Legal approval",
+          "A customer's request alone does not establish that the sharing is authorized"
+        ],
+        "answer_notes": "The question was refined from the original personal-email scenario because the original wording retrieved only DOC-013. The validated wording successfully retrieved both DOC-011 and DOC-013 and tests whether the system applies authorization and external-sharing requirements rather than treating a customer's request as sufficient authorization."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3611.9006000226364,
+        "answer": "When sharing Restricted data with a customer outside the company, the following security requirements apply:\n\n1. Verification of the external party's identity is required.\n2. In most cases, approval must be obtained from a manager or the Legal team before sharing.\n3. Restricted data must only be stored in approved systems that support encryption at rest and access logging.\n4. Storing Restricted data in personal cloud storage, personal email, or unmanaged spreadsheets on local desktops is prohibited.\n\nThe data is classified as Restricted if it includes customer data, financial records, or security configurations, and sharing such data requires explicit authorization.\n\nThese requirements ensure that the data is handled securely when shared externally with customers [DOC-011][DOC-013].\n\nNo additional details on specific procedures or technology controls for sharing beyond these points are provided in the context.",
+        "citations": [
+          "DOC-011:security\\DOC-011_information_security_policy.md",
+          "DOC-013:security\\DOC-013_data_handling_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Sharing Data Externally\n\nSharing Restricted data with an external party, including a customer\nrequesting their own records, requires verification of identity and, in\nmost cases, approval from a manager or the Legal team. Public and most\nInternal data can generally be shared externally without additional\napproval, but the classification should be confirmed if there is any\ndoubt.",
+            "## 3. Data Classification\n\nInformation at NexaCore Solutions is classified into three levels: Public,\nInternal, and Restricted. Public information can be shared outside the\ncompany without approval. Internal information is intended for employees\nand approved contractors only. Restricted information includes customer\ndata, financial records, and security configurations, and requires\nexplicit authorization to access or share.",
+            "## Storing Data\n\nRestricted data, such as customer records or financial information, must\nbe stored only in approved systems that support encryption at rest and\naccess logging. Storing Restricted data in personal cloud storage,\npersonal email, or unmanaged spreadsheets on a local desktop is not\npermitted under any circumstance."
+          ],
+          "scores": [
+            0.7455261945724487,
+            1.182343602180481,
+            0.9660555124282837
+          ]
+        },
+        "status": "answered",
+        "request_id": "b2bdaed5-74b8-4693-92c7-4875e7853b36",
+        "error": null
+      }
+    }
+  ]
+}

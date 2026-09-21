@@ -1,0 +1,880 @@
+{
+  "run_timestamp": "20260916_152713_606112",
+  "configuration": {
+    "api_base_url": "http://127.0.0.1:8000",
+    "generation_model": "gpt-4.1-mini",
+    "prompt_version": "v1"
+  },
+  "total_cases": 25,
+  "results": [
+    {
+      "case_id": "GS-001",
+      "expected": {
+        "case_id": "GS-001",
+        "question": "What should be considered during the planning stage before implementation begins?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-016"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "The problem being addressed",
+          "Expected users",
+          "Business outcome",
+          "Dependencies",
+          "Constraints",
+          "Impact on existing services, APIs, databases, integrations, security controls, or operational procedures",
+          "What success looks like"
+        ],
+        "answer_notes": "The answer should be supported by the Planning section of DOC-016."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 12937.554599999885,
+        "answer": "During the planning stage before implementation begins, the following should be considered:\n\n1. The feature should start as a written proposal that describes the problem being addressed, the proposed approach, and the rough scope.\n\n2. The proposal should explain the problem rather than just the requested implementation, and where possible, identify:\n   - Expected users\n   - Business outcome\n   - Dependencies\n   - Constraints\n   This helps differentiate between a genuine product requirement and a possible technical solution needing more discussion.\n\n3. The team should review proposals for anything larger than a small change in a weekly planning meeting to decide whether to proceed and how it fits into current priorities.\n\n4. It is important to consider whether the proposed work affects existing services, APIs, databases, integrations, security controls, or operational procedures, since even a small user-facing change can have significant technical consequences if it impacts shared components.\n\n5. Before starting implementation, the team should have enough information to understand what success looks like. The level of detail depends on the size of the work: small changes may only require a concise ticket, while larger features may need acceptance criteria, technical investigation, estimates, and a design document.\n\n6. Dependencies should be identified early, including the owner and expected timing if another team, service, vendor, or infrastructure component is required. Implementation should not begin if a critical dependency is unresolved unless it can be safely mocked or isolated.\n\nThis summary captures the considerations during planning prior to implementation based on the provided context [DOC-016].",
+        "citations": [
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 2. Planning\n\nFeatures begin as a written proposal describing the problem, the proposed\napproach, and rough scope. Proposals for anything larger than a small\nchange are reviewed in a weekly planning meeting where the team decides\nwhether to proceed, and if so, roughly how it fits into the current\nquarter's priorities.\n\nA proposal should explain the problem being addressed rather than focusing\nonly on the requested implementation. Where possible, the proposal should\nidentify the expected users, business outcome, dependencies, and constraints.\nThis helps the team distinguish between a genuine product requirement and a\ntechnical solution that may need further discussion.\n\nPlanning should also consider whether the proposed work affects existing\nservices, APIs, databases, integrations, security controls, or operational\nprocedures. A feature that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation",
+            "that appears small from a user perspective may still\nhave significant technical consequences if it changes a shared component.\n\nBefore implementation begins, the team should have enough information to\nunderstand what success looks like. The level of detail required depends on\nthe size of the work. A small maintenance change may only require a concise\nticket, while a larger feature may require acceptance criteria, technical\ninvestigation, estimates, and a design document.\n\nDependencies should be identified early. If another team, service, vendor,\nor infrastructure component is required, the owner and expected timing\nshould be recorded. Teams should avoid beginning implementation when a\ncritical dependency is unresolved unless the dependency can be safely\nmocked or isolated.",
+            "## 3. Design\n\nFor non-trivial features, an engineer writes a short design document\ncovering the technical approach, key trade-offs, and any impact on other\nteams' systems. Design documents are reviewed asynchronously by at least\none senior engineer before implementation begins.\n\nThe design should explain the major components involved and how information\nmoves between them. It should identify important interfaces, data\nstructures, external dependencies, and expected failure conditions. The\npurpose is not to document every line of code but to make significant\ntechnical decisions visible before implementation becomes expensive to\nchange.\n\nWhen multiple approaches are possible, the design should explain why the\nselected approach is preferred. Factors may include simplicity,\nmaintainability, performance, reliability, compatibility with existing\nsystems, and operational cost.\n\nDatabase changes should be considered during design rather than discovered\nduring deployment. Engineers should ident"
+          ],
+          "scores": [
+            1.2289541959762573,
+            1.3280212879180908,
+            1.4405354261398315
+          ]
+        },
+        "status": "answered",
+        "request_id": "7b62bf29-c7d8-4d0d-81ed-abc2489c494e",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-002",
+      "expected": {
+        "case_id": "GS-002",
+        "question": "What is the recommended approach for handling errors in code?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-017"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Errors should be handled at the layer that has enough context to decide what to do",
+          "Errors should not be swallowed silently",
+          "Errors should be logged with enough context to diagnose the issue later"
+        ],
+        "answer_notes": "The answer should be supported by the Error Handling section of DOC-017."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3253.615299999865,
+        "answer": "The recommended approach for handling errors in code is to handle errors at the layer that has enough context to decide what to do about them. Silently swallowing errors is discouraged; at minimum, errors should be logged with enough context to diagnose the issue later [DOC-017]. Additionally, during code review, reviewers should check that errors are handled appropriately as part of evaluating the correctness and behavior of the change [DOC-016].\n\nWhen returning error responses in APIs, error responses should include a machine-readable error code, a human-readable message, and, when relevant, the specific field that caused a validation error. The error codes should be documented and stable, while the human-readable message can change without being a breaking change [DOC-019].\n\nNo further details about error handling approaches beyond these points are specified in the provided context.",
+        "citations": [
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md",
+          "DOC-017:engineering\\DOC-017_coding_standards.md",
+          "DOC-019:engineering\\DOC-019_api_design_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Error Handling\n\nErrors should be handled at the layer that has enough context to decide\nwhat to do about them. Swallowing an error silently is discouraged;\nat minimum, an error should be logged with enough context to diagnose the\nissue later.",
+            "## 5. Code Review\n\nEvery change requires at least one approval before merging. Reviewers are\nexpected to check for correctness, readability, and test coverage, and to\nleave specific, actionable feedback rather than vague comments. Authors\nshould respond to every comment, even if only to explain why a suggestion\nwas not taken.\n\nReviewers should consider the behavior of the change rather than focusing\nonly on formatting. Important questions include whether the implementation\nmatches the intended requirement, whether errors are handled appropriately,\nand whether the change introduces unexpected side effects.\n\nReviewers should also consider maintainability. Code that works correctly\nbut is unnecessarily difficult to understand can increase future\nmaintenance cost. Clear naming, reasonable function boundaries, and\nconsistent project conventions should be preferred.\n\nFor changes affecting security, data handling, infrastructure, or shared\nservices, additional review may be appropriate. The r",
+            "## Error Responses\n\nError responses include a machine-readable error code, a human-readable\nmessage, and, where relevant, the specific field that caused a validation\nerror. Error codes are documented and stable; the wording of the\nhuman-readable message may change without being considered a breaking\nchange."
+          ],
+          "scores": [
+            1.0028773546218872,
+            1.3732836246490479,
+            1.4264899492263794
+          ]
+        },
+        "status": "answered",
+        "request_id": "8a43bdb7-9f8e-46bb-9f17-5fbde3c45a05",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-003",
+      "expected": {
+        "case_id": "GS-003",
+        "question": "Is approval required for purchase requests above $5,000?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Requests above $5,000 require manager approval",
+          "Requests above $5,000 require department head approval"
+        ],
+        "answer_notes": "The answer should be supported by the Approval Thresholds section of DOC-028."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2559.001399999943,
+        "answer": "Yes, approval is required for purchase requests above $5,000. Specifically, purchase requests above five thousand dollars require both manager and department head approval. Additionally, requests above twenty-five thousand dollars require finance team review before a purchase order is issued [DOC-028].",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "## Software Installation\n\nOnly software approved through the IT software catalog may be installed on\ncompany devices without a request. Installation of unapproved software,\nincluding browser extensions with broad data access, requires a request\nthrough the IT ticketing system and a brief security review."
+          ],
+          "scores": [
+            0.6005483865737915,
+            0.8294344544410706,
+            1.4952681064605713
+          ]
+        },
+        "status": "answered",
+        "request_id": "e2dd8d99-e8f8-4932-a1ad-1f3a37ac70f5",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-004",
+      "expected": {
+        "case_id": "GS-004",
+        "question": "Is training mandatory for new hires by the end of their first week?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-001"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Mandatory training is required for new hires",
+          "Security awareness training is required",
+          "Code of conduct training is required",
+          "Workplace safety training is required",
+          "The training must be completed by the end of week one"
+        ],
+        "answer_notes": "The answer should be supported by the Week One section of DOC-001."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2193.272999999863,
+        "answer": "Yes, training is mandatory for new hires to complete by the end of their first week. Specifically, mandatory training modules on security awareness, code of conduct, and workplace safety must be completed by the end of week one [DOC-001].",
+        "citations": [
+          "DOC-001:hr\\DOC-001_employee_onboarding_guide.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Week One\n\nThe first day begins with a welcome session led by People Operations,\nfollowed by a laptop setup session with IT. Managers are expected to\nschedule a one-on-one within the first three days to review team goals and\nintroduce the new hire to immediate teammates. Mandatory training modules\n(security awareness, code of conduct, and workplace safety) must be\ncompleted by the end of week one.",
+            "## Welcome to NexaCore Solutions\n\nThis guide walks new hires through their first two weeks at NexaCore Solutions.\nIt covers account setup, required training, and who to contact for common\nquestions during the first month.",
+            "## 9. Annual Acknowledgment\n\nAll employees are required to review and acknowledge this Code of Conduct\nannually through the HR portal. New hires acknowledge it as part of the\nonboarding process during their first week."
+          ],
+          "scores": [
+            0.9142932891845703,
+            1.0680043697357178,
+            1.1929768323898315
+          ]
+        },
+        "status": "answered",
+        "request_id": "081baac5-f6ad-41e2-9095-1eda03730f7a",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-005",
+      "expected": {
+        "case_id": "GS-005",
+        "question": "What is the process for requesting software that is not in the standard IT catalog?",
+        "category": "answerable",
+        "expected_source_ids": [
+          "DOC-009"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Submit a request through the IT ticketing system",
+          "Include the software name",
+          "Provide a business justification",
+          "State whether the software will handle company or customer data"
+        ],
+        "answer_notes": "The answer should be supported by the Software Installation Request Process in DOC-009."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2985.979699999916,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "3bcd512a-4e81-4e14-95d5-c13ca2ce1eaf",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-006",
+      "expected": {
+        "case_id": "GS-006",
+        "question": "What was NexaCore Solutions' total revenue in 2025?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not contain the company's total revenue for 2025. The system should indicate insufficient evidence rather than inventing a figure."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 698.8117999999304,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "32f58223-feb3-4366-8b31-f8e5db8323f9",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-007",
+      "expected": {
+        "case_id": "GS-007",
+        "question": "What is the company's current employee headcount?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's current employee headcount. The system should indicate insufficient evidence rather than inventing a figure."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 661.4065000001119,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "c573d5e8-4f61-469a-b752-019987997e7a",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-008",
+      "expected": {
+        "case_id": "GS-008",
+        "question": "What is NexaCore Solutions' official office address?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's official office address. The system should indicate insufficient evidence rather than inventing an address."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2256.6699999999855,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "df2e2602-9877-4767-830b-0d93cbb872f4",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-009",
+      "expected": {
+        "case_id": "GS-009",
+        "question": "What is NexaCore Solutions' flagship product?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not identify a flagship product for NexaCore Solutions. The system should indicate insufficient evidence rather than inventing a product name."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 720.0482000000648,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "4945286c-08bc-4e75-a96a-0967130f4bbb",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-010",
+      "expected": {
+        "case_id": "GS-010",
+        "question": "When was NexaCore Solutions founded?",
+        "category": "unanswerable",
+        "expected_source_ids": [],
+        "answerable": false,
+        "answer_notes": "The approved document corpus does not provide the company's founding date or year. The system should indicate insufficient evidence rather than inventing a date."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 647.5772000001143,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "42864238-32c5-40ae-946d-bb0f54f7ea38",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-011",
+      "expected": {
+        "case_id": "GS-011",
+        "question": "What is the process for reporting a security issue?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-007",
+          "DOC-012",
+          "DOC-015"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because 'security issue' could refer to different security-related situations covered by DOC-007, DOC-012, and DOC-015. The system should clarify the type of security issue before providing a specific reporting procedure."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2785.788700000012,
+        "answer": "The process for reporting a security issue is as follows:\n\n- Any employee who suspects a security incident should report it immediately to IT Security. \n- The report can be made through the incident hotline or via the #security-incident channel.\n- Employees should not attempt to resolve the issue themselves.\n- Early reporting is preferred, even if the suspicion turns out to be a false alarm.\n- This applies to any suspected real security issue, including suspicious emails, unexpected password reset requests, lost devices, or data handling mistakes, such as sending restricted data to the wrong person or storing it in an unauthorized location.\n- Immediate reporting allows IT Security to contain the exposure quickly, for example, by revoking access to shared links.\n\nThis procedure encourages prompt reporting rather than delayed action or independent investigation by employees [DOC-012][DOC-013][DOC-015].",
+        "citations": [
+          "DOC-015:security\\DOC-015_security_awareness_training_guide.md",
+          "DOC-012:security\\DOC-012_incident_response_procedure.md",
+          "DOC-013:security\\DOC-013_data_handling_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 3. Reporting an Incident\n\nAny employee who suspects a security incident should report it immediately\nto IT Security through the incident hotline or the #security-incident\nchannel, rather than attempting to resolve it themselves. Early reporting,\neven of something that turns out to be a false alarm, is always preferred\nover delayed reporting.",
+            "## Reporting a Data Handling Mistake\n\nIf Restricted data is sent to the wrong person or stored somewhere it\nshould not be, this should be reported to IT Security immediately, even if\nthe mistake seems minor. Early reporting allows the exposure to be\ncontained quickly, such as revoking a shared link before it is accessed.",
+            "dditional support\nrather than discipline.\n\nAny suspected real security issue, including a suspicious email, an\nunexpected password reset request, or a lost device, should be reported to\nIT Security immediately rather than investigated independently by the\nemployee."
+          ],
+          "scores": [
+            0.922024130821228,
+            1.213496208190918,
+            1.03720223903656
+          ]
+        },
+        "status": "answered",
+        "request_id": "f67b271c-7b6c-4d37-b18b-cddd14d0c031",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-012",
+      "expected": {
+        "case_id": "GS-012",
+        "question": "Who should I contact to get access to a system?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-001",
+          "DOC-014"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because it could be asking who handles the access request or who must approve new access. DOC-001 identifies the IT Helpdesk for account access, while DOC-014 requires manager and system-owner approval for new access. The system should clarify whether the user is asking about the request channel or the required approvers."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 721.6991999998754,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "2e98a1a3-38f8-4bec-9fc4-7d21b1783788",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-013",
+      "expected": {
+        "case_id": "GS-013",
+        "question": "How do I request something from IT?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-009",
+          "DOC-010"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because it could refer to a software installation request covered by DOC-009 or a general IT support request covered by DOC-010. The system should clarify what type of IT request the user needs to make."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 725.0358000001142,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "89d844c8-c461-4008-87c0-93888ae67b96",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-014",
+      "expected": {
+        "case_id": "GS-014",
+        "question": "Who approves a purchase request?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because the required approval depends on the purchase amount. DOC-028 specifies different approval requirements for requests up to $5,000, above $5,000, and above $25,000. The system should clarify the purchase amount or explain the different approval thresholds."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3199.8914000000696,
+        "answer": "Purchase requests are approved as follows according to the amount:\n- Up to $5,000: requires manager approval.\n- Above $5,000: requires both manager and department head approval.\n- Above $25,000: requires manager and department head approval plus finance team review before a purchase order is issued. \n\nThis information defines who approves purchase requests at different monetary thresholds [DOC-028].",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "## Receiving and Payment\n\nOnce goods or services are received, the requester confirms receipt in the\nprocurement portal, which triggers the payment process. Payment terms with\nvendors are typically net thirty days from invoice unless a different term\nis negotiated as part of the contract."
+          ],
+          "scores": [
+            0.8516163229942322,
+            1.0585174560546875,
+            1.3945229053497314
+          ]
+        },
+        "status": "answered",
+        "request_id": "d19cf1d2-725b-4485-b5f6-bc184f266b94",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-015",
+      "expected": {
+        "case_id": "GS-015",
+        "question": "Who should I contact if I have questions about my employee setup?",
+        "category": "ambiguous",
+        "expected_source_ids": [
+          "DOC-001",
+          "DOC-010"
+        ],
+        "answerable": true,
+        "answer_notes": "The question is ambiguous because 'employee setup' could refer to onboarding matters handled by People Operations or IT-related setup such as equipment and account access handled by the IT Helpdesk. The system should clarify what type of setup the user is asking about."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 712.3799999999392,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "c11050ab-f9dd-4da0-a9df-e94beacaf63f",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-016",
+      "expected": {
+        "case_id": "GS-016",
+        "question": "What should the team check before releasing a significant feature to production?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-016",
+          "DOC-021"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "The feature should pass QA",
+          "Customer-facing documentation should be prepared when applicable",
+          "The product manager should review the feature against the original requirements",
+          "Relevant testing, monitoring, and rollback requirements should be addressed"
+        ],
+        "answer_notes": "The answer should combine relevant release-readiness requirements from DOC-016 with product release requirements from DOC-021."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 4185.351399999945,
+        "answer": "Before releasing a significant feature to production, the team should check the following as part of release readiness:\n\n- Confirm that the feature has completed the appropriate design and review process.\n- Ensure the intended behavior has been clearly defined.\n- Verify the implementation has received the required code review.\n- Check that relevant automated tests have passed.\n- Consider important failure cases.\n- Make sure required configuration changes are available.\n- Address database or data migration requirements.\n- Confirm monitoring and logging are sufficient.\n- Understand the rollback or recovery approach.\n- Update relevant documentation and operational procedures.\n- Ensure the owning team knows how to respond if the release causes an issue.\n\nAdditionally, the checklist should be adapted based on the risk and size of the release, not treated as mandatory for every change [DOC-016].\n\nOperational readiness is also key before a release and includes:\n\n- Ensuring logging, monitoring, alerts, dashboards, runbooks, deployment instructions, recovery procedures, and ownership information are prepared.\n- Documenting new failure modes, how to diagnose them, and the required actions.\n- Confirming the owning team knows who is responsible for responding to production issues related to the feature [DOC-016].\n\nDuring deployment, the team should:\n\n- Verify required configuration, database migrations, permissions, and dependent services are available in the production environment.\n- Ensure deployments are observable: track which version was deployed and monitor for new errors or unexpected behavior.\n- For database migrations, consider both forward migration and rollback/recovery strategies, and design deployments to allow safe coexistence of different application versions if rollback is not practical [DOC-016].\n\nNo other information about pre-release checks is provided in the context.",
+        "citations": [
+          "DOC-016:engineering\\DOC-016_software_development_lifecycle.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 15. Release Readiness Checklist\n\nBefore a significant production release, the team should confirm that the\nfeature has completed the appropriate design and review process.\n\nThe following questions provide a basic readiness check:\n\n- Has the intended behavior been clearly defined?\n- Has the implementation received the required code review?\n- Have relevant automated tests passed?\n- Have important failure cases been considered?\n- Are required configuration changes available?\n- Have database or data migration requirements been addressed?\n- Are monitoring and logging sufficient?\n- Is the rollback or recovery approach understood?\n- Are relevant documentation and operational procedures updated?\n- Does the owning team know how to respond if the release causes an issue?\n\nThe checklist should be adapted according to the risk and size of the\nrelease rather than treated as a mandatory identical process for every\nchange.",
+            "## 13. Operational Readiness\n\nA feature is not considered fully ready simply because the application\ncode works. The team should also consider how the service will be operated\nafter release.\n\nOperational readiness may include logging, monitoring, alerts, dashboards,\nrunbooks, deployment instructions, recovery procedures, and ownership\ninformation.\n\nIf a new failure mode is introduced, the team should document how it can\nbe diagnosed and what action should be taken. This is particularly\nimportant for services that operate continuously or support business\nprocesses outside normal working hours.\n\nThe owning team should know who is responsible for responding to\nproduction issues related to the feature.",
+            "## 7. Deployment\n\nMost services deploy automatically to a staging environment on merge and\nrequire a manual approval step to promote to production. High-risk changes\nare deployed behind a feature flag so they can be enabled gradually and\nrolled back quickly if an issue is found.\n\nBefore production deployment, engineers should verify that required\nconfiguration, database migrations, permissions, and dependent services\nare available in the target environment.\n\nDeployments should be observable. The team should know which version was\ndeployed and should have a way to determine whether the deployment caused\nnew errors or unexpected behavior.\n\nFor changes involving database migrations, engineers should consider both\nthe forward migration and the rollback or recovery strategy. Where a\ncomplete rollback is not practical, the deployment should be designed so\nthat application versions can coexist safely during the transition.\n\nProduction deployments should avoid unnecessary changes outside the s"
+          ],
+          "scores": [
+            0.86831134557724,
+            1.1933727264404297,
+            1.1093223094940186
+          ]
+        },
+        "status": "answered",
+        "request_id": "15e4ffa6-6c52-4f68-b801-1ee28d3c119e",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-017",
+      "expected": {
+        "case_id": "GS-017",
+        "question": "What should the organization do to maintain operations when a major system disruption occurs?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-012",
+          "DOC-025"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Affected systems should be contained and recovered appropriately when the disruption is a security incident",
+          "Critical business functions should have continuity and recovery measures",
+          "Services should use appropriate failover or documented manual failover procedures",
+          "Communication should use channels that do not depend on the affected infrastructure"
+        ],
+        "answer_notes": "The answer should combine relevant incident-response measures from DOC-012 with business-continuity measures from DOC-025."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 780.9296000000359,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "8a4ac1b0-ea6a-40dc-9fae-ff8261dc791c",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-018",
+      "expected": {
+        "case_id": "GS-018",
+        "question": "What should happen to an employee's system access and company device when they leave NexaCore Solutions?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-014",
+          "DOC-008"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "All system access should be revoked on the employee's last working day",
+          "Access revocation should be coordinated between People Operations and IT",
+          "The employee's company device should be returned to IT",
+          "The returned device should be fully wiped and reimaged before reassignment or decommissioning"
+        ],
+        "answer_notes": "The answer should combine system-access offboarding requirements from DOC-014 with device-retirement requirements from DOC-008."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3049.6270999999524,
+        "answer": "When an employee leaves NexaCore Solutions, all system access must be revoked on their last working day. This revocation is coordinated between People Operations and IT. In cases where the employee has access to highly sensitive systems and the departure is involuntary, access may be revoked earlier in coordination with the employee's manager [DOC-014].\n\nRegarding company devices, the provided context specifies that the policies cover company-owned devices as well as personal devices used to access company systems or data, but it does not explicitly state what should happen to the company device itself when an employee leaves [DOC-011].\n\nTherefore, the process for system access deactivation is clearly defined, but the handling or return of company devices upon employee departure is not specified in the provided context.",
+        "citations": [
+          "DOC-014:security\\DOC-014_access_control_policy.md",
+          "DOC-011:security\\DOC-011_information_security_policy.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Offboarding\n\nWhen an employee leaves NexaCore Solutions, all system access is revoked\non their last working day, coordinated between People Operations and IT.\nFor roles with access to highly sensitive systems, access may be revoked\nearlier if the departure is involuntary, in coordination with the\nemployee's manager.",
+            "## 2. Scope\n\nThis policy applies to all employees, contractors, and any third party\ngranted access to NexaCore Solutions systems or data, regardless of\nwhether that access is temporary or long-term. It covers company-owned\ndevices as well as personal devices used to access company email or\ninternal tools.",
+            "# Acceptable Use Policy\n\nThis policy governs the use of NexaCore Solutions computing resources,\nincluding laptops, email, internal systems, and network access. It applies\nto all employees, contractors, and any third party granted access to\ncompany systems."
+          ],
+          "scores": [
+            0.6831036806106567,
+            0.7514961957931519,
+            0.8968002796173096
+          ]
+        },
+        "status": "answered",
+        "request_id": "48968942-7bf5-4834-b156-0308c502b989",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-019",
+      "expected": {
+        "case_id": "GS-019",
+        "question": "What should employees consider when handling sensitive company or customer data?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-013"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Restricted information such as customer data and financial records requires appropriate authorization",
+          "Restricted data should be stored only in approved systems with appropriate security controls",
+          "Data should be shared only with people or external parties who meet the applicable access and authorization requirements",
+          "Data should not be retained longer than necessary and should be disposed of appropriately",
+          "Data-handling mistakes involving Restricted data should be reported to IT Security immediately"
+        ],
+        "answer_notes": "The answer should combine information-security principles from DOC-011 with practical data-handling requirements from DOC-013."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2991.524100000106,
+        "answer": "Employees should consider the following when handling sensitive company or customer data:\n\n1. Data Storage, Sharing, and Disposal: Employees should store, share, and dispose of data according to its sensitivity level, following NexaCore Solutions' Information Security Policy classification levels. Data should not be retained longer than necessary for business purposes. Customer data must be deleted or anonymized after the retention period defined in the company\u2019s data retention policy. Paper documents with Restricted data must be shredded instead of discarded in regular waste bins [DOC-013].\n\n2. Security While Working Remotely: Employees must connect to internal systems via the company VPN and avoid using public, unsecured Wi-Fi networks to access confidential data. Screens should be locked when unattended, and physical documents containing sensitive information should not be left visible in shared or public spaces [DOC-003].\n\nNo additional details about handling sensitive data beyond these points are specified in the provided context.",
+        "citations": [
+          "DOC-003:hr\\DOC-003_remote_work_policy.md",
+          "DOC-013:security\\DOC-013_data_handling_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Purpose\n\nThese guidelines describe how employees at NexaCore Solutions should store,\nshare, and dispose of company and customer data according to its\nsensitivity, in line with the Information Security Policy's classification\nlevels.",
+            "## Security Requirements While Remote\n\nEmployees must connect to internal systems through the company VPN and\nmust not use public, unsecured Wi-Fi networks to access confidential data.\nScreens should be locked when unattended, and physical documents containing\nsensitive information should not be left visible in shared or public\nspaces.",
+            "## Data Retention and Disposal\n\nData should not be kept longer than necessary for its business purpose.\nCustomer data is retained according to the schedule defined in the\ncompany's data retention policy, and is deleted or anonymized once that\nperiod ends. Paper documents containing Restricted data must be shredded\nrather than placed in regular waste bins."
+          ],
+          "scores": [
+            0.9932427406311035,
+            1.313438892364502,
+            1.3001973628997803
+          ]
+        },
+        "status": "answered",
+        "request_id": "d5ea62c2-76d0-4a92-a846-fd5769241052",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-020",
+      "expected": {
+        "case_id": "GS-020",
+        "question": "What security requirements apply when a third-party vendor needs access to company systems?",
+        "category": "multi-document",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-026"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Vendors accessing company systems or handling company or customer data must undergo a security review",
+          "Contracts involving data processing require a data processing agreement",
+          "Vendor access is included in the quarterly access review",
+          "Vendors with access to Restricted data are reviewed annually",
+          "All vendor access must be revoked when the vendor relationship ends"
+        ],
+        "answer_notes": "The answer should combine third-party security requirements from DOC-011 with vendor onboarding, review, and offboarding requirements from DOC-026."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2773.9258000001428,
+        "answer": "The following security requirements apply when a third-party vendor needs access to company systems:\n\n1. The vendor must sign a data processing agreement before access to company systems is granted [DOC-011].\n\n2. The vendor undergoes a review process that includes completing a security questionnaire. For higher-risk vendors, their security certifications are reviewed [DOC-026].\n\n3. Vendor access is reviewed during the quarterly access review alongside employee access and must be removed promptly when the vendor engagement ends [DOC-011].\n\nNo additional specific security requirements for vendor access beyond these are provided in the context. Information about security measures such as VPN use or handling of confidential data applies to employees but is not explicitly stated for vendors in the provided documents [DOC-003].",
+        "citations": [
+          "DOC-003:hr\\DOC-003_remote_work_policy.md",
+          "DOC-011:security\\DOC-011_information_security_policy.md",
+          "DOC-026:operations\\DOC-026_vendor_management_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## 7. Third-Party and Vendor Access\n\nVendors requiring access to company systems must sign a data processing\nagreement before access is granted. Vendor access is reviewed alongside\nemployee access during the quarterly access review and is removed promptly\nwhen a vendor engagement ends.",
+            "## Vendor Onboarding\n\nNew vendors that will access company systems or handle company or customer\ndata go through a review that includes a security questionnaire and, for\nhigher-risk vendors, a review of their own security certifications. Vendors\nthat will not access systems or data, such as an office supplies vendor,\nfollow a lighter procurement-only process.",
+            "## Security Requirements While Remote\n\nEmployees must connect to internal systems through the company VPN and\nmust not use public, unsecured Wi-Fi networks to access confidential data.\nScreens should be locked when unattended, and physical documents containing\nsensitive information should not be left visible in shared or public\nspaces."
+          ],
+          "scores": [
+            0.6316236257553101,
+            0.9057814478874207,
+            1.1794153451919556
+          ]
+        },
+        "status": "answered",
+        "request_id": "91600d05-ac2b-4f55-b838-50db562a5e1c",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-021",
+      "expected": {
+        "case_id": "GS-021",
+        "question": "According to the company's policy, what is the maximum number of days an employee can keep a company laptop after leaving the organization?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-008"
+        ],
+        "answerable": false,
+        "expected_facts": [],
+        "answer_notes": "DOC-008 states that when an employee leaves, the company device must be returned to IT for full wipe and reimaging before reassignment or decommissioning. It does not specify a maximum number of days the employee may keep the laptop. The system should identify that the requested timeframe is not supported by the corpus rather than inventing a number."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 625.9692999999515,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "93616b37-30bc-4d06-bcac-358c76fa263d",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-022",
+      "expected": {
+        "case_id": "GS-022",
+        "question": "According to the procurement procedure, can a manager approve a purchase of $6,000 without department head approval?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "answerable": false,
+        "expected_facts": [],
+        "answer_notes": "DOC-028 states that purchases above $5,000 require both manager approval and department head approval. The question contains a misleading premise that manager approval alone may be sufficient. The system should correct this premise using the documented approval threshold rather than accepting it."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 2140.748799999983,
+        "answer": "According to the procurement procedure, a manager cannot approve a purchase of $6,000 without department head approval. The procedure states that purchase requests above five thousand dollars require both manager and department head approval [DOC-028].",
+        "citations": [
+          "DOC-028:finance\\DOC-028_procurement_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Approval Thresholds\n\nPurchase requests up to five thousand dollars require manager approval.\nRequests above five thousand dollars require both manager and department\nhead approval, and requests above twenty-five thousand dollars additionally\nrequire finance team review before a purchase order is issued.",
+            "## Purchase Requests\n\nPurchases over five hundred dollars require a purchase request submitted\nthrough the procurement portal, including the business justification and\nthe budget code the purchase will be charged against. Purchases under this\nthreshold can generally be made directly by the employee and expensed\nthrough the standard expense process.",
+            "a\npersonal side trip, are not reimbursable and should be excluded from the\nreport.\n\nManagers approve expense reports within five business days. Reimbursement\nis processed in the next payroll cycle following approval."
+          ],
+          "scores": [
+            0.7985715270042419,
+            1.2264214754104614,
+            1.4530067443847656
+          ]
+        },
+        "status": "answered",
+        "request_id": "2937d1cc-dfdf-4539-a0b5-a3529e11e87d",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-023",
+      "expected": {
+        "case_id": "GS-023",
+        "question": "Since MFA is enabled, can an employee share their password with a coworker who needs temporary access to their account?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-007",
+          "DOC-014"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "MFA does not make password sharing an approved practice",
+          "Access should be provided through the appropriate access-request process",
+          "Elevated or additional access requires appropriate justification and approval"
+        ],
+        "answer_notes": "The question contains a misleading security assumption that MFA makes password sharing acceptable. The system should reject that premise and direct access through the documented access-control process rather than recommending credential sharing."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 786.9524000000183,
+        "answer": "Insufficient evidence to answer the question from the provided documents.",
+        "citations": [],
+        "retrieval_results": {
+          "chunks": [],
+          "scores": []
+        },
+        "status": "insufficient_evidence",
+        "request_id": "e9894317-a77d-4403-a5b1-cd11f515209b",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-024",
+      "expected": {
+        "case_id": "GS-024",
+        "question": "Since all vendors are reviewed annually, does an office supplies vendor need an annual security review as well?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-026"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Vendors with access to Restricted data are reviewed annually",
+          "Office supplies vendors that do not access systems or data follow a lighter procurement-only process"
+        ],
+        "answer_notes": "The question contains a misleading generalization that all vendors require an annual security review. DOC-026 distinguishes vendors based on whether they access systems or data and specifically states that office supplies vendors without such access follow a lighter procurement-only process. The system should correct the premise rather than apply the annual review requirement to every vendor."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 4608.206399999972,
+        "answer": "An office supplies vendor does not need an annual security review because such vendors do not access company systems or data. They follow a lighter procurement-only process instead of a security review. Annual security reviews are conducted for vendors with access to Restricted data, covering their security posture and incident history, but this does not apply to vendors like office supplies that have no system or data access [DOC-026].",
+        "citations": [
+          "DOC-026:operations\\DOC-026_vendor_management_procedure.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Ongoing Vendor Review\n\nVendors with access to Restricted data are reviewed annually, covering any\nchanges to their security posture, incident history, and continued\nbusiness need for the relationship. Vendor access is included in the\nquarterly access review alongside employee access.",
+            "## Vendor Onboarding\n\nNew vendors that will access company systems or handle company or customer\ndata go through a review that includes a security questionnaire and, for\nhigher-risk vendors, a review of their own security certifications. Vendors\nthat will not access systems or data, such as an office supplies vendor,\nfollow a lighter procurement-only process.",
+            "## 7. Third-Party and Vendor Access\n\nVendors requiring access to company systems must sign a data processing\nagreement before access is granted. Vendor access is reviewed alongside\nemployee access during the quarterly access review and is removed promptly\nwhen a vendor engagement ends."
+          ],
+          "scores": [
+            0.8161181211471558,
+            0.7704800963401794,
+            1.1012499332427979
+          ]
+        },
+        "status": "answered",
+        "request_id": "165980e2-faa7-4b9c-9d57-d8e099bb6cff",
+        "error": null
+      }
+    },
+    {
+      "case_id": "GS-025",
+      "expected": {
+        "case_id": "GS-025",
+        "question": "Because Restricted data must be stored in approved systems, can employees send Restricted data to a customer's personal email address if the customer has requested it?",
+        "category": "adversarial",
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-013"
+        ],
+        "answerable": true,
+        "expected_facts": [
+          "Restricted data must be handled using approved systems with appropriate security controls",
+          "External sharing requires identity verification and usually manager or Legal approval",
+          "A customer's request alone does not establish that the sharing is authorized"
+        ],
+        "answer_notes": "The question combines legitimate requirements from DOC-011 and DOC-013 but introduces the misleading premise that a customer's request automatically permits sending Restricted data to a personal email address. The system should explain the applicable authorization and external-sharing requirements rather than treating the customer's request as sufficient authorization."
+      },
+      "actual": {
+        "http_status": 200,
+        "latency_ms": 3908.4756999998262,
+        "answer": "No, employees cannot send Restricted data to a customer's personal email address even if the customer requests it. The guidelines explicitly state that Restricted data must be stored only in approved systems with encryption and access logging, and storing Restricted data in personal email is not permitted under any circumstance. Additionally, sharing Restricted data externally requires identity verification and usually manager or Legal team approval, but it does not authorize sending it to personal email accounts [DOC-013].",
+        "citations": [
+          "DOC-013:security\\DOC-013_data_handling_guidelines.md"
+        ],
+        "retrieval_results": {
+          "chunks": [
+            "## Storing Data\n\nRestricted data, such as customer records or financial information, must\nbe stored only in approved systems that support encryption at rest and\naccess logging. Storing Restricted data in personal cloud storage,\npersonal email, or unmanaged spreadsheets on a local desktop is not\npermitted under any circumstance.",
+            "## Sharing Data Externally\n\nSharing Restricted data with an external party, including a customer\nrequesting their own records, requires verification of identity and, in\nmost cases, approval from a manager or the Legal team. Public and most\nInternal data can generally be shared externally without additional\napproval, but the classification should be confirmed if there is any\ndoubt.",
+            "## Sharing Data Internally\n\nInternal and Restricted data should be shared only with colleagues who\nhave a legitimate business need, using approved internal tools. Broad\ndistribution lists should be used carefully; a message intended for one\nteam should not be sent to a company-wide list simply because it is\nconvenient."
+          ],
+          "scores": [
+            0.6069309115409851,
+            0.9848510026931763,
+            1.1613541841506958
+          ]
+        },
+        "status": "answered",
+        "request_id": "fd1f2f02-c562-4891-bdcd-9dafc6fe9f3a",
+        "error": null
+      }
+    }
+  ]
+}
