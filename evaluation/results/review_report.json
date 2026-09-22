@@ -1,0 +1,761 @@
+{
+  "report_name": "Day 14 Review-Friendly Evaluation Report",
+  "generated_at": "2026-09-22T12:39:52.563750",
+  "source_evaluation_file": "D:\\Nakshatra\\GenAI-Training\\evaluation\\results\\evaluation_run_20260922_061052_237066.json",
+  "top_k": 3,
+  "summary": {
+    "total_cases": 25,
+    "passed_cases": 16,
+    "failed_cases": 9,
+    "pass_rate": 0.64
+  },
+  "cases": [
+    {
+      "case_id": "GS-001",
+      "question": "What should be considered during the planning stage before implementation begins?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-016"
+        ],
+        "retrieved_source_ids": [
+          "DOC-016",
+          "DOC-016",
+          "DOC-016"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 27013.6129000457,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-002",
+      "question": "What is the recommended approach for handling errors in code?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-017"
+        ],
+        "retrieved_source_ids": [
+          "DOC-017",
+          "DOC-016",
+          "DOC-019"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 3346.573200018611,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-003",
+      "question": "Is approval required for purchase requests above $5,000?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "retrieved_source_ids": [
+          "DOC-028",
+          "DOC-028",
+          "DOC-006"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 3006.037799990736,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-004",
+      "question": "Is training mandatory for new hires by the end of their first week?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-001"
+        ],
+        "retrieved_source_ids": [
+          "DOC-001",
+          "DOC-001",
+          "DOC-004"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2791.821799997706,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-005",
+      "question": "What is the process for requesting software that is not in the standard IT catalog?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-009"
+        ],
+        "retrieved_source_ids": [
+          "DOC-009",
+          "DOC-006",
+          "DOC-028"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 4339.048900001217,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-006",
+      "question": "What was NexaCore Solutions' total revenue in 2025?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 828.3086000010371,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-007",
+      "question": "What is the company's current employee headcount?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 679.613700020127,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-008",
+      "question": "What is NexaCore Solutions' official office address?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 1975.5223999964073,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-009",
+      "question": "What is NexaCore Solutions' flagship product?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 602.1168000297621,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-010",
+      "question": "When was NexaCore Solutions founded?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 691.9722000020556,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-011",
+      "question": "What should I do if I suspect a security problem?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-012",
+          "DOC-015"
+        ],
+        "retrieved_source_ids": [
+          "DOC-012",
+          "DOC-015",
+          "DOC-015"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 3101.856300025247,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    },
+    {
+      "case_id": "GS-012",
+      "question": "How should a new employee request access to the systems they need for work?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-014"
+        ],
+        "retrieved_source_ids": [
+          "DOC-014",
+          "DOC-014",
+          "DOC-011"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2925.312199979089,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-013",
+      "question": "What are the steps for handling a business expense or purchase?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-027",
+          "DOC-028"
+        ],
+        "retrieved_source_ids": [
+          "DOC-028",
+          "DOC-027",
+          "DOC-027"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 4004.1756000136957,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    },
+    {
+      "case_id": "GS-014",
+      "question": "Who approves a purchase request?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "retrieved_source_ids": [
+          "DOC-028",
+          "DOC-028",
+          "DOC-028"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2761.948899948038,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-015",
+      "question": "What should an employee do if their company device is lost or stolen?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-008",
+          "DOC-015"
+        ],
+        "retrieved_source_ids": [
+          "DOC-008",
+          "DOC-008",
+          "DOC-015"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2544.6211000089534,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-016",
+      "question": "What should the team verify before releasing a significant product change to production, and what should they do during the initial rollout?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-016",
+          "DOC-021"
+        ],
+        "retrieved_source_ids": [
+          "DOC-016",
+          "DOC-021",
+          "DOC-016"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 4452.387099969201,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    },
+    {
+      "case_id": "GS-017",
+      "question": "What should an employee do when arranging business travel and submitting the related expenses?",
+      "expected_answerable": true,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-027",
+          "DOC-029"
+        ],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": false,
+        "citation_presence_pass": false,
+        "citation_validity_pass": false,
+        "required_facts_pass": false,
+        "abstention_pass": false
+      },
+      "latency_ms": 4378.586900013033,
+      "failure_categories": [
+        "RETRIEVAL_FAILURE",
+        "ANSWERABILITY_FAILURE",
+        "CITATION_PRESENCE_FAILURE",
+        "CITATION_VALIDITY_FAILURE",
+        "FACT_COVERAGE_FAILURE",
+        "ABSTENTION_FAILURE"
+      ],
+      "primary_failure_category": "RETRIEVAL_FAILURE"
+    },
+    {
+      "case_id": "GS-018",
+      "question": "What happens to an employee's system access and company device when they leave the company?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-014",
+          "DOC-008"
+        ],
+        "retrieved_source_ids": [
+          "DOC-008",
+          "DOC-014",
+          "DOC-011"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 2829.3876000097953,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    },
+    {
+      "case_id": "GS-019",
+      "question": "What approvals and security requirements apply when an employee needs additional access to a company system?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-014"
+        ],
+        "retrieved_source_ids": [
+          "DOC-011",
+          "DOC-014",
+          "DOC-011"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 2809.0725999791175,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    },
+    {
+      "case_id": "GS-020",
+      "question": "What security requirements should be followed when a third-party vendor has access to company systems?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-026"
+        ],
+        "retrieved_source_ids": [
+          "DOC-011",
+          "DOC-026",
+          "DOC-003"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": false,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 3463.925799995195,
+      "failure_categories": [
+        "CITATION_VALIDITY_FAILURE",
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "CITATION_VALIDITY_FAILURE"
+    },
+    {
+      "case_id": "GS-021",
+      "question": "According to the company's policy, what is the maximum number of days an employee can keep a company laptop after leaving the organization?",
+      "expected_answerable": false,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-008"
+        ],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 542.3468999797478,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-022",
+      "question": "According to the procurement procedure, can a manager approve a purchase of $6,000 without department head approval?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-028"
+        ],
+        "retrieved_source_ids": [
+          "DOC-028",
+          "DOC-028",
+          "DOC-027"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2006.2189000309445,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-023",
+      "question": "Since MFA is enabled, can an employee share their password with a coworker who needs temporary access to their account?",
+      "expected_answerable": true,
+      "actual_status": "insufficient_evidence",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-007",
+          "DOC-014"
+        ],
+        "retrieved_source_ids": [],
+        "hit_at_3": 0,
+        "recall_at_3": 0.0,
+        "mrr": 0.0
+      },
+      "answer": {
+        "answerability_pass": false,
+        "citation_presence_pass": false,
+        "citation_validity_pass": false,
+        "required_facts_pass": false,
+        "abstention_pass": false
+      },
+      "latency_ms": 984.627099998761,
+      "failure_categories": [
+        "RETRIEVAL_FAILURE",
+        "ANSWERABILITY_FAILURE",
+        "CITATION_PRESENCE_FAILURE",
+        "CITATION_VALIDITY_FAILURE",
+        "FACT_COVERAGE_FAILURE",
+        "ABSTENTION_FAILURE"
+      ],
+      "primary_failure_category": "RETRIEVAL_FAILURE"
+    },
+    {
+      "case_id": "GS-024",
+      "question": "Since all vendors are reviewed annually, does an office supplies vendor need an annual security review as well?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "PASS",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-026"
+        ],
+        "retrieved_source_ids": [
+          "DOC-026",
+          "DOC-026",
+          "DOC-011"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": true,
+        "abstention_pass": true
+      },
+      "latency_ms": 2701.334899989888,
+      "failure_categories": [],
+      "primary_failure_category": "-"
+    },
+    {
+      "case_id": "GS-025",
+      "question": "What security requirements apply when sharing Restricted data with a customer outside the company?",
+      "expected_answerable": true,
+      "actual_status": "answered",
+      "overall_result": "FAIL",
+      "retrieval": {
+        "expected_source_ids": [
+          "DOC-011",
+          "DOC-013"
+        ],
+        "retrieved_source_ids": [
+          "DOC-013",
+          "DOC-011",
+          "DOC-013"
+        ],
+        "hit_at_3": 1,
+        "recall_at_3": 1.0,
+        "mrr": 1.0
+      },
+      "answer": {
+        "answerability_pass": true,
+        "citation_presence_pass": true,
+        "citation_validity_pass": true,
+        "required_facts_pass": false,
+        "abstention_pass": true
+      },
+      "latency_ms": 4079.4840000453405,
+      "failure_categories": [
+        "FACT_COVERAGE_FAILURE"
+      ],
+      "primary_failure_category": "FACT_COVERAGE_FAILURE"
+    }
+  ]
+}

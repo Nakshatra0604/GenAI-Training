@@ -53,7 +53,7 @@ GenAI_Day-5/
 ├── day9_weak_questions.json               # Five weak retrieval cases
 ├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
 ├── day9_experiment_matrix.json            # Controlled Day 9 experiment plan
-├── day9_baseline_metrics.py               # Day 9 baseline metric runner
+├── day9_baseline_metrics.py              # Day 9 baseline metric runner
 ├── day9_baseline_metrics.json             # Day 9 baseline metric results
 │
 ├── query_rewriter.py                      # Reusable query rewriting component
@@ -63,7 +63,7 @@ GenAI_Day-5/
 ├── day10_query_rewrite_results.json       # Query rewriting results
 ├── reranker.py                            # Cross-encoder reranking component
 ├── day10_reranking_experiment.py          # Cross-encoder reranking experiment
-├── day10_reranking_results.json           # Reranking experiment results
+├── day10_reranking_results.json           # Day 10 reranking results
 ├── day10_regression_test.py               # Full retrieval regression test
 ├── day10_regression_results.json          # Regression test results
 ├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
@@ -86,11 +86,19 @@ GenAI_Day-5/
 ├── tests/                                 # API test suite
 │   └── test_api.py                        # FastAPI API and error-handling tests
 │
-├── evaluation/                            # Day 13 evaluation dataset and runner
+├── evaluation/                            # Day 13–14 evaluation framework
 │   ├── golden_set.jsonl                   # 25-case golden evaluation dataset
 │   ├── dataset_review.md                  # Manual golden dataset review notes
 │   ├── run_evals.py                       # End-to-end evaluation runner
-│   └── results/                           # Timestamped machine-readable evaluation results
+│   ├── retrieval_grader.py                # Retrieval quality grader
+│   ├── answer_grader.py                   # Answer quality and citation grader
+│   ├── review_report.py                   # Per-case review and failure report
+│   ├── scorecard.py                       # Evaluation scorecard generator
+│   ├── regression_check.py                # One-command regression threshold check
+│   └── results/                           # Machine-readable evaluation results
+│       ├── evaluation_run_*.json          # Timestamped evaluation run results
+│       ├── review_report.json              # Per-case evaluation report
+│       └── scorecard.json                  # Baseline evaluation scorecard
 │
 ├── pytest.ini                             # Pytest configuration
 ├── observability.db                       # Local SQLite observability database
@@ -98,8 +106,9 @@ GenAI_Day-5/
 ├── requirements.txt                       # Python dependencies
 ├── .env                                   # API and model configuration
 ├── .env.example                           # Example environment configuration
-├── .gitignore                             # Git ignore rules for secrets, environments, and cache
+├── .gitignore                              # Git ignore rules for secrets, environments, and cache
 └── README.md                              # Project documentation
+
 ----
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
@@ -3167,3 +3176,503 @@ The resulting golden dataset and evaluation artifacts provide the baseline requi
 **DAY 13 COMPLETED**
 
 The Day 13 golden dataset, evaluation runner, dataset review, reproducible result generation, completion-gate requirements, and end-of-day evaluation evidence have been completed.
+
+# DAY 14 — Build Retrieval and Answer Graders, Scorecard, and Regression Checks
+
+## Practical Goal
+
+Build a repeatable evaluation and regression framework for measuring retrieval quality, answer quality, citation correctness, abstention behavior, latency, and overall RAG performance.
+
+The objective of Day 14 was to separate retrieval failures from answer failures, generate a review-friendly per-case report, create a baseline evaluation scorecard, identify the main failure categories, and enforce critical quality thresholds through a one-command regression check.
+
+---
+
+## Implementation
+
+### 1. Build the Retrieval Grader
+
+A dedicated retrieval grader was created in:
+
+```text
+evaluation/retrieval_grader.py
+```
+
+The retrieval grader evaluates the expected source documents against the sources returned by the RAG pipeline.
+
+The grader calculates:
+
+- Hit@K
+- Recall@K
+- Mean Reciprocal Rank (MRR)
+- Expected source IDs
+- Retrieved source IDs
+
+The Day 14 retrieval evaluation uses:
+
+```text
+Top-K = 3
+```
+
+Unanswerable evaluation cases are excluded from retrieval quality calculations because they do not have an expected source that the system is required to retrieve.
+
+The retrieval grader therefore measures retrieval performance only across answerable evaluation cases.
+
+---
+
+### 2. Build the Answer Grader
+
+A dedicated answer grader was created in:
+
+```text
+evaluation/answer_grader.py
+```
+
+The answer grader checks the generated response against the expected evaluation information.
+
+The checks include:
+
+- Answerability
+- Citation presence
+- Citation validity
+- Required fact coverage
+- Correct abstention behavior
+
+The grader also validates whether cited document IDs correspond to the expected evidence for the evaluation case.
+
+This separates answer-generation quality from retrieval quality and makes it possible to identify whether a failed case was caused by retrieval, answer generation, citation handling, or abstention behavior.
+
+---
+
+### 3. Generate the Review-Friendly Per-Case Report
+
+A review report generator was created in:
+
+```text
+evaluation/review_report.py
+```
+
+The report combines the evaluation results and grader results into a single per-case review artifact.
+
+Each case contains information such as:
+
+- Case ID
+- Question
+- Expected answerability
+- Actual answer status
+- Overall PASS or FAIL result
+- Expected source IDs
+- Retrieved source IDs
+- Hit@3
+- Recall@3
+- MRR
+- Answerability result
+- Citation presence result
+- Citation validity result
+- Required fact result
+- Abstention result
+- Latency
+- Failure category
+
+The generated report is saved to:
+
+```text
+evaluation/results/review_report.json
+```
+
+The report provides a review-friendly view of the complete 25-case evaluation.
+
+---
+
+### 4. Generate the Baseline Evaluation Scorecard
+
+A scorecard generator was created in:
+
+```text
+evaluation/scorecard.py
+```
+
+The scorecard is generated from the saved evaluation and review results.
+
+The scorecard reports:
+
+- Overall pass rate
+- Retrieval Hit@3
+- Retrieval Recall@3
+- MRR
+- Citation presence
+- Citation validity
+- Required fact coverage
+- Abstention accuracy
+- Failure categories
+- Average latency
+- Minimum latency
+- Maximum latency
+- P95 latency
+- Evaluation request count as a cost proxy
+
+The generated scorecard is saved to:
+
+```text
+evaluation/results/scorecard.json
+```
+
+The scorecard therefore provides a repeatable baseline for comparing future changes to the RAG pipeline.
+
+---
+
+### 5. Baseline Evaluation Scorecard
+
+The Day 14 baseline evaluation was generated from the 25-case golden evaluation run.
+
+The baseline results were:
+
+| Metric | Result |
+|---|---:|
+| Total cases | 25 |
+| Passed cases | 16 |
+| Failed cases | 9 |
+| Overall pass rate | 64.00% |
+| Evaluated answerable cases | 19 |
+| Hit@3 | 89.47% |
+| Recall@3 | 89.47% |
+| MRR | 89.47% |
+| Citation presence | 89.47% |
+| Citation validity | 84.21% |
+| Required fact coverage | 52.63% |
+| Abstention accuracy | 92.00% |
+| Average latency | 3554.40 ms |
+| Minimum latency | 542.35 ms |
+| Maximum latency | 27013.61 ms |
+| P95 latency | 4437.63 ms |
+| Evaluation requests | 25 |
+
+The retrieval metrics were calculated across the 19 answerable cases.
+
+The six intentionally unanswerable cases were excluded from retrieval quality metrics but were included when evaluating abstention behavior.
+
+---
+
+### 6. Identify Failure Categories
+
+The review report classified failed evaluation cases into failure categories.
+
+The baseline evaluation identified the following categories:
+
+| Failure Category | Number of Cases |
+|---|---:|
+| `FACT_COVERAGE_FAILURE` | 6 |
+| `RETRIEVAL_FAILURE` | 2 |
+| `CITATION_VALIDITY_FAILURE` | 1 |
+
+The failures were identified from the per-case evaluation report rather than from aggregate metrics alone.
+
+The retrieval failures occurred in:
+
+```text
+GS-017
+GS-023
+```
+
+The citation validity failure occurred in:
+
+```text
+GS-020
+```
+
+The fact coverage failures occurred in:
+
+```text
+GS-011
+GS-013
+GS-016
+GS-018
+GS-019
+GS-025
+```
+
+The failure categorization provides a clear starting point for future RAG quality improvements.
+
+---
+
+### 7. Analyze the Weakest Component
+
+The Day 14 scorecard shows that retrieval performance is stronger than answer completeness.
+
+Retrieval performance:
+
+```text
+Hit@3      : 89.47%
+Recall@3   : 89.47%
+MRR        : 89.47%
+```
+
+Answer-related metrics showed lower performance, particularly required fact coverage:
+
+```text
+Required fact coverage : 52.63%
+Citation validity      : 84.21%
+```
+
+The failure report identified:
+
+```text
+FACT_COVERAGE_FAILURE     : 6
+RETRIEVAL_FAILURE         : 2
+CITATION_VALIDITY_FAILURE : 1
+```
+
+Therefore, the main weakness identified by the Day 14 baseline is answer completeness and required-fact coverage rather than the overall retrieval ranking performance.
+
+This distinction is important because a case can retrieve the correct source document while the generated answer still fails to include all required facts.
+
+---
+
+### 8. Create Regression Thresholds
+
+A regression checker was created in:
+
+```text
+evaluation/regression_check.py
+```
+
+The regression checker defines minimum acceptable thresholds for critical evaluation metrics.
+
+The configured thresholds are:
+
+| Metric | Minimum Threshold |
+|---|---:|
+| Overall pass rate | 60% |
+| Hit@3 | 85% |
+| Recall@3 | 85% |
+| MRR | 85% |
+| Citation validity | 80% |
+| Abstention accuracy | 90% |
+
+The regression checker reads the saved scorecard and compares the current metrics against these thresholds.
+
+If all thresholds are satisfied, the quality check passes.
+
+If any critical threshold falls below its minimum value, the command exits with a failure status.
+
+---
+
+### 9. Run the One-Command Quality Check
+
+The regression check can be executed with:
+
+```bash
+python -m evaluation.regression_check
+```
+
+The successful baseline check produced:
+
+```text
+DAY 14 - REGRESSION CHECK
+----------------------------------------------------------------------
+
+overall_pass_rate            actual=64.00% minimum=60.00% [PASS]
+hit_at_3                     actual=89.47% minimum=85.00% [PASS]
+recall_at_3                  actual=89.47% minimum=85.00% [PASS]
+mrr                          actual=89.47% minimum=85.00% [PASS]
+citation_validity_rate       actual=84.21% minimum=80.00% [PASS]
+abstention_accuracy          actual=92.00% minimum=90.00% [PASS]
+
+----------------------------------------------------------------------
+
+REGRESSION CHECK PASSED
+All critical thresholds are satisfied.
+```
+
+The regression check therefore provides a single command for determining whether the current evaluation scorecard satisfies the defined quality gates.
+
+---
+
+### 10. Deliberately Test a Regression Failure
+
+The regression mechanism was deliberately tested by temporarily increasing the Hit@3 threshold from:
+
+```text
+85%
+```
+
+to:
+
+```text
+95%
+```
+
+The actual Hit@3 remained:
+
+```text
+89.47%
+```
+
+Therefore, the deliberately weakened threshold caused the regression check to fail.
+
+The result was:
+
+```text
+hit_at_3                     actual=89.47% minimum=95.00% [FAIL]
+
+REGRESSION CHECK FAILED
+1 critical threshold(s) were not satisfied.
+```
+
+After the test, the threshold was restored to:
+
+```text
+"hit_at_3": 0.85
+```
+
+The normal regression check was then executed again and passed.
+
+This confirms that the regression checker can detect a deliberately broken quality threshold.
+
+---
+
+### 11. Day 14 Evaluation Artifacts
+
+The Day 14 evaluation framework contains the following artifacts:
+
+```text
+evaluation/
+├── golden_set.jsonl
+├── dataset_review.md
+├── run_evals.py
+├── retrieval_grader.py
+├── answer_grader.py
+├── review_report.py
+├── scorecard.py
+├── regression_check.py
+└── results/
+    ├── evaluation_run_<timestamp>.json
+    ├── review_report.json
+    └── scorecard.json
+```
+
+The main Day 14 artifacts are:
+
+| Artifact | Purpose |
+|---|---|
+| `retrieval_grader.py` | Measures retrieval quality |
+| `answer_grader.py` | Measures answer, citation, fact, and abstention quality |
+| `review_report.py` | Generates per-case evaluation and failure details |
+| `scorecard.py` | Generates the baseline evaluation scorecard |
+| `regression_check.py` | Performs one-command quality threshold validation |
+| `review_report.json` | Stores per-case review results |
+| `scorecard.json` | Stores the baseline scorecard |
+
+---
+
+## Day 14 Required Deliverables
+
+| Deliverable | Status |
+|---|---|
+| Retrieval and answer grader modules | Completed |
+| Baseline evaluation scorecard | Completed |
+| Per-case failure report | Completed |
+| Regression thresholds and one-command quality check | Completed |
+
+The Day 14 evaluation framework provides separate retrieval and answer grading, automated scorecard generation, failure categorization, and regression protection.
+
+---
+
+## Day 14 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| Retrieval and answer failures are reported separately | PASS |
+| The scorecard is generated automatically from run results | PASS |
+| At least the top three failure categories are identified | PASS |
+| A deliberately weakened configuration triggers a regression failure | PASS |
+
+The Day 14 technical completion gate is satisfied.
+
+---
+
+## Day 14 End-of-Day Evidence
+
+### Baseline Scorecard
+
+The final Day 14 baseline scorecard reported:
+
+```text
+Overall pass rate     : 64.00%
+Hit@3                 : 89.47%
+Recall@3              : 89.47%
+MRR                   : 89.47%
+Citation validity     : 84.21%
+Required fact coverage: 52.63%
+Abstention accuracy   : 92.00%
+```
+
+### Weakest Component
+
+The weakest component identified from the evaluation report was answer completeness, specifically required fact coverage.
+
+The evidence was:
+
+```text
+FACT_COVERAGE_FAILURE       : 6 cases
+RETRIEVAL_FAILURE           : 2 cases
+CITATION_VALIDITY_FAILURE   : 1 case
+```
+
+The retrieval metrics remained comparatively strong at 89.47% for Hit@3, Recall@3, and MRR.
+
+This indicates that the primary quality gap in the Day 14 baseline is generated-answer fact coverage rather than basic retrieval ranking.
+
+---
+
+## Day 14 Evaluation Workflow
+
+```text
+Golden Evaluation Dataset
+        ↓
+End-to-End Evaluation Run
+        ↓
+Retrieval Grader
+        +
+Answer Grader
+        ↓
+Per-Case Review Report
+        ↓
+Baseline Scorecard
+        ↓
+Failure Category Analysis
+        ↓
+Regression Threshold Check
+        ↓
+PASS / FAIL Quality Gate
+```
+
+The Day 14 workflow converts the existing Day 13 evaluation runner into a measurable quality framework with retrieval metrics, answer checks, failure analysis, scorecard generation, and regression protection.
+
+---
+
+## Day 14 Final Outcome
+
+Day 14 successfully established a repeatable evaluation and regression framework for the RAG application.
+
+The project now contains:
+
+- Retrieval quality grading
+- Answer quality grading
+- Hit@3, Recall@3, and MRR metrics
+- Citation presence and validity checks
+- Required fact coverage checks
+- Abstention accuracy checks
+- Per-case failure reporting
+- Failure category classification
+- Baseline evaluation scorecard
+- Latency measurements
+- Cost proxy measurement
+- Regression quality thresholds
+- One-command regression validation
+- Deliberate regression failure testing
+
+The Day 14 baseline provides a measurable reference point for future improvements to the RAG application.
+
+**DAY 14 COMPLETED**
+
+The Day 14 retrieval and answer graders, baseline scorecard, per-case failure report, failure categorization, regression thresholds, one-command quality check, completion-gate requirements, and end-of-day evaluation evidence have been completed.

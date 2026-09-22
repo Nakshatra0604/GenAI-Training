@@ -119,6 +119,10 @@ def run_case(case):
                 "scores": response_data.get(
                     "scores",
                     []
+                ),
+                "source_ids": response_data.get(
+                    "retrieved_source_ids",
+                    []
                 )
             },
 
@@ -150,7 +154,8 @@ def run_case(case):
 
             "retrieval_results": {
                 "chunks": [],
-                "scores": []
+                "scores": [],
+                "source_ids": []
             },
 
             "status": "error",

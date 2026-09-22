@@ -1,0 +1,45 @@
+{
+  "report_name": "Day 14 Evaluation Scorecard",
+  "source_report": "evaluation\\results\\review_report.json",
+  "total_cases": 25,
+  "passed_cases": 16,
+  "failed_cases": 9,
+  "overall_pass_rate": 0.64,
+  "retrieval_metrics": {
+    "evaluated_cases": 19,
+    "hit_at_3": 0.8947,
+    "recall_at_3": 0.8947,
+    "mrr": 0.8947
+  },
+  "citation_metrics": {
+    "evaluated_cases": 19,
+    "citation_presence_rate": 0.8947,
+    "citation_validity_rate": 0.8421
+  },
+  "required_facts": {
+    "evaluated_cases": 19,
+    "pass_rate": 0.5263
+  },
+  "abstention": {
+    "evaluated_cases": 25,
+    "correct_cases": 23,
+    "accuracy": 0.92
+  },
+  "failure_categories": {
+    "FACT_COVERAGE_FAILURE": 6,
+    "RETRIEVAL_FAILURE": 2,
+    "CITATION_VALIDITY_FAILURE": 1
+  },
+  "latency_ms": {
+    "cases_with_latency": 25,
+    "average": 3554.4,
+    "minimum": 542.35,
+    "maximum": 27013.61,
+    "p95": 4437.63
+  },
+  "cost_proxy": {
+    "type": "evaluation_request_count",
+    "value": 25,
+    "unit": "requests"
+  }
+}

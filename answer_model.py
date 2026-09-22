@@ -1,14 +1,17 @@
 from pydantic import BaseModel
 from typing import Literal
 
+
 class AnswerResponse(BaseModel):
     request_id: str | None = None
-    answer:str
+    answer: str
     sources: list[str]
     chunks: list[str]
     scores: list[float]
+    retrieved_source_ids: list[str]
     status: Literal["answered", "insufficient_evidence"]
-     
+
+
 if __name__ == "__main__":
 
     response = AnswerResponse(
@@ -20,6 +23,9 @@ if __name__ == "__main__":
             "If required software is not available in the standard IT catalog..."
         ],
         scores=[0.21],
+        retrieved_source_ids=[
+            "DOC-009"
+        ],
         status="answered"
     )
 

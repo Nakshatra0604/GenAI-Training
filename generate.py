@@ -101,20 +101,22 @@ def generate_answer(prompt):
     """
 
     try:
+
         response = client.chat.completions.create(
-    model=GENERATION_MODEL,
-    messages=[
-        {
-            "role": "user",
-            "content": prompt
-        }
-    ],
-    max_tokens=1000
-)
+            model=GENERATION_MODEL,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            max_tokens=1000
+        )
 
         return response.choices[0].message.content
 
     except Exception as exc:
+
         raise ProviderError(
             "The AI provider failed to generate a response."
         ) from exc
@@ -133,6 +135,7 @@ def create_abstention_response():
         sources=[],
         chunks=[],
         scores=[],
+        retrieved_source_ids=[],
         status="insufficient_evidence"
     )
 
@@ -214,6 +217,10 @@ def answer_question(
         ],
         scores=[
             result["distance"]
+            for result in selected_results
+        ],
+        retrieved_source_ids=[
+            result["document_id"]
             for result in selected_results
         ],
         status="answered"
