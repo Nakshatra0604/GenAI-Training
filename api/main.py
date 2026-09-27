@@ -1,3 +1,6 @@
+import uuid
+from datetime import datetime, timezone
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
@@ -12,6 +15,15 @@ from api.models import HealthResponse
 from api.routes import router
 from api.errors import ProviderError
 
+from grounded_prompt import PROMPT_VERSION
+from generate import GENERATION_MODEL
+
+from observability.database import SessionLocal
+from observability.logging_service import (
+    create_request_log,
+    create_guardrail_decision,
+)
+
 
 app = FastAPI(
     title="GenAI RAG API",
@@ -19,8 +31,12 @@ app = FastAPI(
     version="1.0.0"
 )
 
+
 @app.exception_handler(ProviderError)
-async def provider_error_handler(request: Request, exc: ProviderError):
+async def provider_error_handler(
+    request: Request,
+    exc: ProviderError
+):
     request_id = request.headers.get("X-Request-ID")
 
     return JSONResponse(
@@ -31,6 +47,7 @@ async def provider_error_handler(request: Request, exc: ProviderError):
             "request_id": request_id
         }
     )
+
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(
@@ -63,12 +80,67 @@ async def validation_exception_handler(
     request: Request,
     exc: RequestValidationError
 ):
+    request_id = request.headers.get(
+        "X-Request-ID"
+    ) or str(uuid.uuid4())
+
+    control = "request_schema_validation"
+    reason_code = "MALFORMED_PAYLOAD"
+
+    errors = exc.errors()
+
+    for error in errors:
+
+        error_type = error.get("type")
+        error_location = error.get("loc", [])
+
+        if (
+            error_type == "string_too_long"
+            and "question" in error_location
+        ):
+            control = "input_length_limit"
+            reason_code = "EXCESSIVE_INPUT"
+            break
+
+    db = SessionLocal()
+
+    try:
+
+        request_log = create_request_log(
+            db,
+            request_id,
+            request.url.path,
+            datetime.now(timezone.utc),
+            GENERATION_MODEL,
+            PROMPT_VERSION,
+        )
+
+        create_guardrail_decision(
+            db,
+            request_id,
+            control,
+            "blocked",
+            reason_code,
+        )
+
+        request_log.latency_ms = 0.0
+        request_log.outcome = "blocked"
+        request_log.error_category = reason_code
+
+        db.commit()
+
+    except Exception:
+        db.rollback()
+
+    finally:
+        db.close()
+
     return JSONResponse(
         status_code=422,
         content={
             "error_code": "VALIDATION_ERROR",
             "message": "Invalid request input.",
-            "request_id": request.headers.get("X-Request-ID")
+            "request_id": request_id
         }
     )
 
@@ -93,6 +165,7 @@ async def internal_exception_handler(
     response_model=HealthResponse
 )
 def health_check():
+
     generation_status = check_generation_readiness()
     vector_store_status = check_vector_store_readiness()
 

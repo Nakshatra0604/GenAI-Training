@@ -4,6 +4,8 @@ from sqlalchemy.orm import Session
 
 from observability.observability_models import RequestLog
 from observability.observability_models import RetrievedSource
+from observability.observability_models import GuardrailDecision
+
 
 def create_request_log(
     db: Session,
@@ -29,6 +31,7 @@ def create_request_log(
 
     return request_log
 
+
 def create_retrieved_source_logs(
     db: Session,
     request_id: str,
@@ -37,6 +40,7 @@ def create_retrieved_source_logs(
 ) -> None:
 
     for source_id, score in zip(sources, scores):
+
         source_log = RetrievedSource(
             request_id=request_id,
             source_id=source_id,
@@ -46,6 +50,28 @@ def create_retrieved_source_logs(
         db.add(source_log)
 
     db.commit()
+
+
+def create_guardrail_decision(
+    db: Session,
+    request_id: str,
+    control: str,
+    outcome: str,
+    reason_code: str,
+) -> GuardrailDecision:
+
+    guardrail_decision = GuardrailDecision(
+        request_id=request_id,
+        control=control,
+        outcome=outcome,
+        reason_code=reason_code,
+    )
+
+    db.add(guardrail_decision)
+    db.commit()
+    db.refresh(guardrail_decision)
+
+    return guardrail_decision
 
 
 def update_request_log(

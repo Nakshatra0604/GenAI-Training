@@ -7,22 +7,22 @@ from observability.database import Base
 
 
 class RequestLog(Base):
-    __tablename__= "request_logs"
+    __tablename__ = "request_logs"
 
-    id : Mapped[int] = mapped_column(
+    id: Mapped[int] = mapped_column(
         Integer,
         primary_key=True,
         autoincrement=True
     )
 
-    request_id : Mapped[str] = mapped_column(
+    request_id: Mapped[str] = mapped_column(
         String,
         unique=True,
         nullable=False,
         index=True
     )
 
-    endpoint : Mapped[str] = mapped_column(
+    endpoint: Mapped[str] = mapped_column(
         String,
         nullable=False
     )
@@ -62,6 +62,11 @@ class RequestLog(Base):
         cascade="all, delete-orphan"
     )
 
+    guardrail_decisions: Mapped[list["GuardrailDecision"]] = relationship(
+        back_populates="request",
+        cascade="all, delete-orphan"
+    )
+
 
 class RetrievedSource(Base):
     __tablename__ = "retrieved_sources"
@@ -91,4 +96,40 @@ class RetrievedSource(Base):
 
     request: Mapped["RequestLog"] = relationship(
         back_populates="retrieved_sources"
+    )
+
+
+class GuardrailDecision(Base):
+    __tablename__ = "guardrail_decisions"
+
+    id: Mapped[int] = mapped_column(
+        Integer,
+        primary_key=True,
+        autoincrement=True
+    )
+
+    request_id: Mapped[str] = mapped_column(
+        String,
+        ForeignKey("request_logs.request_id"),
+        nullable=False,
+        index=True
+    )
+
+    control: Mapped[str] = mapped_column(
+        String,
+        nullable=False
+    )
+
+    outcome: Mapped[str] = mapped_column(
+        String,
+        nullable=False
+    )
+
+    reason_code: Mapped[str] = mapped_column(
+        String,
+        nullable=False
+    )
+
+    request: Mapped["RequestLog"] = relationship(
+        back_populates="guardrail_decisions"
     )

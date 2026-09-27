@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from retrieve import retrieve
-from grounded_prompt import build_grounded_prompt
+from grounded_prompt import (build_grounded_prompt, SYSTEM_RULES)
 from citation_validator import validate_citations
 from answer_model import AnswerResponse
 from api.errors import ProviderError
@@ -106,6 +106,10 @@ def generate_answer(prompt):
             model=GENERATION_MODEL,
             messages=[
                 {
+                    "role": "system",
+                    "content": SYSTEM_RULES
+                },
+                {
                     "role": "user",
                     "content": prompt
                 }
@@ -184,7 +188,7 @@ def answer_question(
 
         return create_abstention_response()
 
-    # Step 5: Build grounded prompt.
+    # Step 5: Build grounded user prompt.
     prompt = build_grounded_prompt(
         question,
         context
