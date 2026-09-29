@@ -16,7 +16,9 @@ Follow these application rules at all times:
    for something unless the context explicitly says so.
 8. Do not infer responsibility from actions such as submitting, reviewing,
    approving, or installing.
-9. If there is not enough evidence to answer the question, clearly state:
+9. If there is not enough evidence to answer the question, or if the
+   provided sources contain conflicting factual information, do not select
+   one value as definitive. Clearly identify the limitation and state:
    "Insufficient evidence to answer the question from the provided documents."
 
 Instruction hierarchy and document safety:

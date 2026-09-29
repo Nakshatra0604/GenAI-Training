@@ -4,10 +4,11 @@ from dotenv import load_dotenv
 from openai import OpenAI
 
 from retrieve import retrieve
-from grounded_prompt import (build_grounded_prompt, SYSTEM_RULES)
+from grounded_prompt import build_grounded_prompt, SYSTEM_RULES
 from citation_validator import validate_citations
 from answer_model import AnswerResponse
 from api.errors import ProviderError
+from content_guardrail import check_content_policy
 
 
 load_dotenv()
@@ -25,9 +26,7 @@ client = OpenAI(
 MAX_CONTEXT_CHUNKS = 3
 
 
-def prepare_context(
-    results
-):
+def prepare_context(results):
     """
     Convert selected retrieval results
     into grounded LLM context.
@@ -36,7 +35,6 @@ def prepare_context(
     context_parts = []
 
     for result in results:
-
         source = (
             f"{result['document_id']}:"
             f"{result['source_path']}"
@@ -64,7 +62,6 @@ def get_selected_results(
     seen_chunks = set()
 
     for result in results:
-
         chunk_text = result["chunk_text"].strip()
 
         if chunk_text in seen_chunks:
@@ -82,17 +79,38 @@ def get_selected_results(
 
 def has_sufficient_evidence(results):
     """
-    Check whether the reranker identified at least one
-    strongly relevant candidate.
-
-    The cross-encoder score is used because the selected
-    Day 10 retrieval configuration is based on reranking.
+    Check whether retrieved results contain
+    the minimum required evidence fields.
     """
 
     if not results:
         return False
 
-    return results[0]["rerank_score"] > 0
+    for result in results:
+        document_id = result.get("document_id")
+        source_path = result.get("source_path")
+        chunk_text = result.get("chunk_text")
+        rerank_score = result.get("rerank_score")
+
+        if not document_id:
+            return False
+
+        if not source_path:
+            return False
+
+        if not isinstance(
+            chunk_text,
+            str
+        ) or not chunk_text.strip():
+            return False
+
+        if not isinstance(
+            rerank_score,
+            (int, float)
+        ):
+            return False
+
+    return True
 
 
 def generate_answer(prompt):
@@ -101,7 +119,6 @@ def generate_answer(prompt):
     """
 
     try:
-
         response = client.chat.completions.create(
             model=GENERATION_MODEL,
             messages=[
@@ -120,7 +137,6 @@ def generate_answer(prompt):
         return response.choices[0].message.content
 
     except Exception as exc:
-
         raise ProviderError(
             "The AI provider failed to generate a response."
         ) from exc
@@ -144,6 +160,96 @@ def create_abstention_response():
     )
 
 
+def validate_final_response(
+    response,
+    selected_results
+):
+    """
+    Validate the final AnswerResponse before returning it.
+
+    Ensures:
+    - The response matches the AnswerResponse schema.
+    - The answer is not empty.
+    - The status is allowed.
+    - Required fields are populated for answered responses.
+    - Abstention responses do not contain partial evidence.
+    - Sources belong to the selected retrieved evidence.
+    - Retrieved document IDs belong to the selected evidence.
+    - Scores contain valid numeric values.
+    """
+
+    try:
+        validated = AnswerResponse.model_validate(
+            response.model_dump()
+        )
+    except Exception:
+        return None
+
+    if not validated.answer.strip():
+        return None
+
+    if validated.status == "insufficient_evidence":
+        if (
+            validated.sources
+            or validated.chunks
+            or validated.scores
+            or validated.retrieved_source_ids
+        ):
+            return None
+
+        return validated
+
+    if validated.status != "answered":
+        return None
+
+    if not validated.sources:
+        return None
+
+    if not validated.chunks:
+        return None
+
+    if not validated.scores:
+        return None
+
+    if not validated.retrieved_source_ids:
+        return None
+
+    if not all(
+        isinstance(
+            score,
+            (int, float)
+        )
+        for score in validated.scores
+    ):
+        return None
+
+    expected_sources = {
+        f"{result['document_id']}:{result['source_path']}"
+        for result in selected_results
+    }
+
+    if not set(
+        validated.sources
+    ).issubset(
+        expected_sources
+    ):
+        return None
+
+    expected_document_ids = {
+        result["document_id"]
+        for result in selected_results
+    }
+
+    if not set(
+        validated.retrieved_source_ids
+    ).issubset(
+        expected_document_ids
+    ):
+        return None
+
+    return validated
+
+
 def answer_question(
     question: str,
     category: str | None = None,
@@ -153,9 +259,18 @@ def answer_question(
     Run the complete grounded RAG question-answering pipeline.
 
     Pipeline:
-    retrieval -> reranking -> evidence check ->
-    grounded prompt -> generation -> citation validation.
+    content policy -> retrieval -> reranking ->
+    evidence check -> grounded prompt -> generation ->
+    citation validation -> final response validation.
     """
+
+    # Step 0: Check content and policy rules.
+    policy_result = check_content_policy(
+        question
+    )
+
+    if not policy_result["allowed"]:
+        return create_abstention_response()
 
     # Step 1: Retrieve final reranked evidence.
     #
@@ -168,10 +283,11 @@ def answer_question(
         max_distance=max_distance
     )
 
-    # Step 2: Check whether the reranker
-    # identifies sufficient evidence.
-    if not has_sufficient_evidence(results):
-
+    # Step 2: Check whether the retrieved
+    # results contain sufficient evidence.
+    if not has_sufficient_evidence(
+        results
+    ):
         return create_abstention_response()
 
     # Step 3: Select the final reranked chunks.
@@ -185,7 +301,6 @@ def answer_question(
     )
 
     if not context:
-
         return create_abstention_response()
 
     # Step 5: Build grounded user prompt.
@@ -205,16 +320,14 @@ def answer_question(
         context
     )
 
-    # Step 8: Decide final status.
+    # Step 8: Reject invalid citations.
     if not citation_result["valid"]:
-
         return create_abstention_response()
 
-    return AnswerResponse(
+    # Step 9: Build the structured final response.
+    response = AnswerResponse(
         answer=answer,
-        sources=citation_result[
-            "valid_sources"
-        ],
+        sources=citation_result["valid_sources"],
         chunks=[
             result["chunk_text"]
             for result in selected_results
@@ -229,6 +342,18 @@ def answer_question(
         ],
         status="answered"
     )
+
+    # Step 10: Validate the complete response.
+    validated_response = validate_final_response(
+        response,
+        selected_results
+    )
+
+    # Do not return partially valid output.
+    if validated_response is None:
+        return create_abstention_response()
+
+    return validated_response
 
 
 if __name__ == "__main__":
@@ -253,6 +378,7 @@ if __name__ == "__main__":
 
         print("\nFinal Answer Response")
         print("=" * 60)
+
         print(
             response.model_dump_json(
                 indent=2

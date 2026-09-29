@@ -20,99 +20,103 @@ The project currently covers Day 5, Day 6, and Day 7 activities.
 GenAI_Day-5/
 
 │
-├── raw_documents/                         # Original source documents
-├── documents/                             # Sanitized document files
-├── cleaned_documents/                     # Cleaned document files
-├── vector_store/                          # Persistent ChromaDB vector index
+├── raw_documents/                          # Original source documents
+├── documents/                              # Sanitized document files
+├── cleaned_documents/                      # Cleaned document files
+├── vector_store/                           # Persistent ChromaDB vector index
 │
-├── sanitize_documents.py                  # Sanitizes sensitive document values
-├── clean_documents.py                     # Loads and cleans document text
-├── chunk_documents.py                     # Splits cleaned documents into chunks
-├── chunk_quality_review.py                # Performs chunk quality checks
-├── chunk_quality_review.md                # Chunk quality review output
-├── chunks.jsonl                           # Normalized chunk dataset
+├── sanitize_documents.py                   # Sanitizes sensitive document values
+├── clean_documents.py                      # Loads and cleans document text
+├── chunk_documents.py                      # Splits cleaned documents into chunks
+├── chunk_quality_review.py                 # Performs chunk quality checks
+├── chunk_quality_review.md                 # Chunk quality review output
+├── chunks.jsonl                            # Normalized chunk dataset
 │
-├── generate_embeddings.py                 # Generates and reuses embeddings
-├── create_vector_index.py                 # Creates the ChromaDB vector index
-├── embeddings.jsonl                       # Chunk embeddings and metadata
+├── generate_embeddings.py                  # Generates and reuses embeddings
+├── create_vector_index.py                  # Creates the ChromaDB vector index
+├── embeddings.jsonl                        # Chunk embeddings and metadata
 │
-├── semantic_search.py                     # Reusable semantic search function
-├── filter_demo.py                         # Metadata-filtered search demonstration
-├── retrieval_test_set.json                # Retrieval test questions
-├── test_retrieval.py                      # Day 6 retrieval test runner
-├── retrieval_results.json                 # Retrieval test results
+├── semantic_search.py                      # Reusable semantic search function
+├── filter_demo.py                          # Metadata-filtered search demonstration
+├── retrieval_test_set.json                 # Retrieval test questions
+├── test_retrieval.py                       # Day 6 retrieval test runner
+├── retrieval_results.json                  # Retrieval test results
 │
-├── ingest.py                              # Complete document ingestion pipeline
-├── retrieve.py                            # Day 10 retrieval pipeline with reranking
-├── generate.py                            # Grounded answer generation pipeline
-├── grounded_prompt.py                     # Grounded answer prompt and instruction hierarchy
-├── answer_model.py                        # Validated answer response model
-├── citation_validator.py                  # Validates answer citations
-├── test_pipeline.py                       # Day 7 integration tests
+├── ingest.py                               # Complete document ingestion pipeline
+├── retrieve.py                             # Day 10 retrieval pipeline with reranking
+├── generate.py                             # Grounded answer generation, evidence checks, and final response validation
+├── grounded_prompt.py                      # Grounded answer prompt, instruction hierarchy, and conflict handling
+├── answer_model.py                          # Validated answer response model
+├── citation_validator.py                   # Validates answer citations
+├── content_guardrail.py                    # Application-specific content and policy guardrails
+├── test_pipeline.py                        # Day 7 integration tests
 │
-├── baseline_config.yaml                   # Frozen Day 9 baseline configuration
-├── day9_weak_questions.json               # Five weak retrieval cases
+├── baseline_config.yaml                    # Frozen Day 9 baseline configuration
+├── day9_weak_questions.json                # Five weak retrieval cases
 ├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
-├── day9_experiment_matrix.json            # Controlled Day 9 experiment plan
-├── day9_baseline_metrics.py              # Day 9 baseline metric runner
-├── day9_baseline_metrics.json             # Day 9 baseline metric results
+├── day9_experiment_matrix.json              # Controlled Day 9 experiment plan
+├── day9_baseline_metrics.py               # Day 9 baseline metric runner
+├── day9_baseline_metrics.json              # Day 9 baseline metric results
 │
-├── query_rewriter.py                      # Reusable query rewriting component
-├── day10_experiments.py                   # Executes planned Day 10 experiments
-├── day10_experiment_results.json          # Day 10 experiment results
-├── day10_query_rewrite_experiment.py      # Query rewriting experiment
-├── day10_query_rewrite_results.json       # Query rewriting results
-├── reranker.py                            # Cross-encoder reranking component
-├── day10_reranking_experiment.py          # Cross-encoder reranking experiment
-├── day10_reranking_results.json           # Day 10 reranking results
-├── day10_regression_test.py               # Full retrieval regression test
-├── day10_regression_results.json         # Regression test results
-├── day10_before_after_retrieval_report.md # Day 10 before-and-after report
-├── day10_final_config.yaml                # Selected Day 10 configuration
+├── query_rewriter.py                       # Reusable query rewriting component
+├── day10_experiments.py                    # Executes planned Day 10 experiments
+├── day10_experiment_results.json           # Day 10 experiment results
+├── day10_query_rewrite_experiment.py       # Query rewriting experiment
+├── day10_query_rewrite_results.json        # Query rewriting results
+├── reranker.py                             # Cross-encoder reranking component
+├── day10_reranking_experiment.py           # Cross-encoder reranking experiment
+├── day10_reranking_results.json            # Day 10 reranking results
+├── day10_regression_test.py                # Full retrieval regression test
+├── day10_regression_results.json           # Regression test results
+├── day10_before_after_retrieval_report.md  # Day 10 before-and-after report
+├── day10_final_config.yaml                 # Selected Day 10 configuration
 │
-├── api/                                   # FastAPI service layer
-│   ├── main.py                            # FastAPI application entry point and validation guardrails
-│   ├── routes.py                          # API endpoint definitions and observability flow
-│   ├── models.py                          # Pydantic request, response, and input validation models
-│   ├── dependencies.py                    # Configuration and dependency readiness checks
-│   └── errors.py                          # Custom API/provider error definitions
+├── api/                                    # FastAPI service layer
+│   ├── main.py                             # FastAPI application entry point and validation guardrails
+│   ├── routes.py                           # API endpoint definitions and observability flow
+│   ├── models.py                           # Pydantic request, response, and input validation models
+│   ├── dependencies.py                     # Configuration and dependency readiness checks
+│   └── errors.py                           # Custom API/provider error definitions
 │
-├── observability/                         # SQL request observability and guardrail logging
-│   ├── __init__.py                        # Observability package initialization
-│   ├── database.py                        # SQLAlchemy database configuration and sessions
+├── observability/                          # SQL request observability and guardrail logging
+│   ├── __init__.py                         # Observability package initialization
+│   ├── database.py                         # SQLAlchemy database configuration and sessions
 │   ├── observability_models.py             # Request, source, and guardrail decision models
-│   ├── logging_service.py                 # Request, source, and guardrail logging operations
-│   └── init_db.py                         # Creates observability database tables
+│   ├── logging_service.py                  # Request, source, and guardrail logging operations
+│   └── init_db.py                          # Creates observability database tables
 │
-├── tests/                                 # API test suite
-│   └── test_api.py                        # FastAPI API and error-handling tests
+├── tests/                                  # API test suite
+│   └── test_api.py                         # FastAPI API and error-handling tests
 │
-├── evaluation/                            # Day 13–15 evaluation framework
-│   ├── golden_set.jsonl                   # 25-case golden evaluation dataset
-│   ├── adversarial_set.jsonl              # 10-case Day 15 adversarial test suite
-│   ├── dataset_review.md                  # Manual golden dataset review notes
-│   ├── run_evals.py                       # End-to-end evaluation runner
-│   ├── run_adversarial_baseline.py        # Adversarial test runner and automated behavior checks
-│   ├── retrieval_grader.py                # Retrieval quality grader
-│   ├── answer_grader.py                   # Answer quality and citation grader
-│   ├── review_report.py                   # Per-case review and failure report
-│   ├── scorecard.py                       # Evaluation scorecard generator
-│   ├── regression_check.py                # One-command regression threshold check
-│   └── results/                           # Machine-readable evaluation results
-│       ├── evaluation_run_*.json         # Timestamped evaluation run results
-│       ├── review_report.json             # Per-case evaluation report
-│       ├── scorecard.json                 # Baseline evaluation scorecard
+├── evaluation/                             # Day 13–16 evaluation framework
+│   ├── golden_set.jsonl                    # 25-case golden evaluation dataset
+│   ├── adversarial_set.jsonl               # 10-case Day 15 adversarial test suite
+│   ├── dataset_review.md                   # Manual golden dataset review notes
+│   ├── run_evals.py                        # End-to-end evaluation runner
+│   ├── run_adversarial_baseline.py         # Adversarial test runner and automated behavior checks
+│   ├── day16_guardrail_cases.jsonl         # Day 16 adversarial and benign guardrail cases
+│   ├── day16_guardrail_eval.py             # Day 16 guardrail metrics evaluator
+│   ├── retrieval_grader.py                 # Retrieval quality grader
+│   ├── answer_grader.py                    # Answer quality and citation grader
+│   ├── review_report.py                    # Per-case review and failure report
+│   ├── scorecard.py                         # Evaluation scorecard generator
+│   ├── regression_check.py                 # One-command regression threshold check
+│   └── results/                            # Machine-readable evaluation results
+│       ├── evaluation_run_*.json           # Timestamped evaluation run results
+│       ├── review_report.json              # Per-case evaluation report
+│       ├── scorecard.json                  # Baseline evaluation scorecard
 │       ├── adversarial_baseline_20260924_133742_695641.json  # Day 15 baseline adversarial report
-│       └── adversarial_validation.json                       # Day 15 post-control validation results
+│       ├── adversarial_validation.json     # Day 15 post-control validation results
+│       └── day16_guardrail_20260929_132220_256797.json       # Final Day 16 guardrail metric report
 │
-├── pytest.ini                             # Pytest configuration
-├── observability.db                       # Local SQLite observability database
+├── pytest.ini                              # Pytest configuration
+├── observability.db                        # Local SQLite observability database
 │
-├── requirements.txt                       # Python dependencies
-├── .env                                   # API and model configuration
-├── .env.example                           # Example environment configuration
+├── requirements.txt                        # Python dependencies
+├── .env                                    # API and model configuration
+├── .env.example                            # Example environment configuration
 ├── .gitignore                              # Git ignore rules for secrets, environments, and cache
-└── README.md                              # Project documentation
+└── README.md                               # Project documentation
 
 -----
 
@@ -4355,3 +4359,165 @@ The Day 15 controls strengthen the application without changing the core RAG ret
 **DAY 15 COMPLETED**
 
 The Day 15 adversarial suite, baseline behavior report, input validation, instruction hierarchy protection, retrieved-document safety controls, guardrail logging, automated validation checks, completion-gate requirements, and end-of-day evidence have been completed.
+
+# DAY 16 — Add Output Guardrails, Fallback Behavior, and Guardrail Metrics
+
+## Practical Goal
+
+Reduce unsupported or malformed answers through evidence checks, output validation, safe fallback behavior, content guardrails, and measured guardrail outcomes.
+
+## Day 16 Implementation
+
+### 1. Evidence Requirements
+
+Added evidence sufficiency checks in `generate.py`.
+
+Before returning an `answered` response, retrieved results are validated for:
+
+- Valid document ID
+- Valid source path
+- Non-empty chunk text
+- Numeric rerank score
+
+Invalid or insufficient evidence is routed to the standard abstention response.
+
+---
+
+### 2. Final Output Validation
+
+Added final response validation using the `AnswerResponse` model and validation logic in `generate.py`.
+
+The final response is checked for:
+
+- Valid response schema
+- Allowed status
+- Required fields
+- Valid source references
+- Retrieved document IDs
+- Retrieval scores
+
+Invalid or partially parsed model output is not returned to the client.
+
+---
+
+### 3. Content and Policy Checks
+
+Added:
+
+```text
+content_guardrail.py
+```
+
+The guardrail detects application-specific restricted-data requests involving passwords, API keys, tokens, credentials, SSNs, account numbers, and routing numbers.
+
+Restricted requests are routed to the safe fallback behavior.
+
+---
+
+### 4. Safe Fallback
+
+The application uses a consistent abstention response:
+
+> Insufficient evidence to answer the question from the provided documents.
+
+The abstention response does not return sources, chunks, scores, or retrieved source IDs.
+
+Conflicting factual sources are also handled without selecting one value as definitive.
+
+---
+
+### 5. Guardrail Evaluation
+
+Added:
+
+```text
+evaluation/day16_guardrail_cases.jsonl
+evaluation/day16_guardrail_eval.py
+```
+
+The evaluation contains:
+
+- 10 adversarial cases
+- 5 benign cases
+
+The evaluation measures correctly contained adversarial cases, false accepts, correctly allowed benign cases, and false rejects.
+
+---
+
+### Before and After Guardrail Metrics
+
+**Before Tuning**
+
+```text
+Adversarial cases       : 10
+Correctly contained     : 9
+False accepts           : 1
+
+Benign cases            : 5
+Correctly allowed       : 5
+False rejects           : 0
+```
+
+The initial false accept involved conflicting source information. The grounded prompt was strengthened to prevent selecting one conflicting value as definitive.
+
+An intermediate evaluation also identified a benign false reject for GS-005. The case was subsequently verified successfully, and the final evaluation showed no remaining false rejects.
+
+**After Tuning**
+
+```text
+Adversarial cases       : 10
+Correctly contained     : 10
+False accepts           : 0
+
+Benign cases            : 5
+Correctly allowed       : 5
+False rejects           : 0
+```
+
+---
+
+## Day 16 Key Artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `content_guardrail.py` | Application-specific content and policy checks |
+| `generate.py` | Evidence checks and final response validation |
+| `grounded_prompt.py` | Grounded generation and conflicting-source handling |
+| `evaluation/day16_guardrail_cases.jsonl` | Day 16 guardrail test cases |
+| `evaluation/day16_guardrail_eval.py` | Adversarial and benign guardrail evaluation |
+| `evaluation/run_adversarial_baseline.py` | Automated adversarial behavior classification |
+| `evaluation/results/day16_guardrail_20260929_132220_256797.json` | Final Day 16 metric report |
+
+---
+
+## Day 16 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| Unsupported answers are blocked or converted to abstention | PASS |
+| Invalid citations and malformed outputs are not returned | PASS |
+| False accept and false reject counts are reported | PASS |
+| Guardrails pass adversarial tests without breaking the happy path | PASS |
+
+---
+
+## Day 16 Final Outcome
+
+Final guardrail evaluation:
+
+```text
+Adversarial cases       : 10
+Correctly contained     : 10
+False accepts           : 0
+Benign cases            : 5
+Correctly allowed       : 5
+False rejects           : 0
+```
+
+Final evidence:
+
+```text
+evaluation/results/day16_guardrail_20260929_132220_256797.json
+```
+
+**DAY 16 COMPLETED**
