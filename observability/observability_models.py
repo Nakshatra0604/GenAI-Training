@@ -57,6 +57,41 @@ class RequestLog(Base):
         nullable=True
     )
 
+    audio_filename: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True
+    )
+
+    audio_type: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True
+    )
+
+    audio_size_bytes: Mapped[int | None] = mapped_column(
+        Integer,
+        nullable=True
+    )
+
+    transcript: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True
+    )
+
+    stt_latency_ms: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    rag_latency_ms: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    failure_stage: Mapped[str | None] = mapped_column(
+        String,
+        nullable=True
+    )
+
     retrieved_sources: Mapped[list["RetrievedSource"]] = relationship(
         back_populates="request",
         cascade="all, delete-orphan"

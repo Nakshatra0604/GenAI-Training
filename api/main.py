@@ -57,6 +57,7 @@ async def http_exception_handler(
     error_code_map = {
         400: "INVALID_DOCUMENT",
         404: "DOCUMENT_NOT_FOUND",
+        422: "AUDIO_VALIDATION_ERROR",
         500: "INTERNAL_ERROR",
     }
 
@@ -65,11 +66,24 @@ async def http_exception_handler(
         "INTERNAL_ERROR"
     )
 
+    message = exc.detail
+
+    if (
+        exc.status_code == 422
+        and isinstance(exc.detail, dict)
+        and exc.detail.get("error_code")
+    ):
+        error_code = exc.detail["error_code"]
+        message = exc.detail.get(
+            "message",
+            "Audio request validation failed."
+        )
+
     return JSONResponse(
         status_code=exc.status_code,
         content={
             "error_code": error_code,
-            "message": str(exc.detail),
+            "message": str(message),
             "request_id": request.headers.get("X-Request-ID")
         }
     )

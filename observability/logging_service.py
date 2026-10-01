@@ -80,11 +80,26 @@ def update_request_log(
     latency_ms: float,
     outcome: str,
     error_category: str | None = None,
+    audio_filename: str | None = None,
+    audio_type: str | None = None,
+    audio_size_bytes: int | None = None,
+    transcript: str | None = None,
+    stt_latency_ms: float | None = None,
+    rag_latency_ms: float | None = None,
+    failure_stage: str | None = None,
 ) -> RequestLog:
 
     request_log.latency_ms = latency_ms
     request_log.outcome = outcome
     request_log.error_category = error_category
+
+    request_log.audio_filename = audio_filename
+    request_log.audio_type = audio_type
+    request_log.audio_size_bytes = audio_size_bytes
+    request_log.transcript = transcript
+    request_log.stt_latency_ms = stt_latency_ms
+    request_log.rag_latency_ms = rag_latency_ms
+    request_log.failure_stage = failure_stage
 
     db.commit()
     db.refresh(request_log)

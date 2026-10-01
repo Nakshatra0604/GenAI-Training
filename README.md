@@ -18,7 +18,6 @@ The project currently covers Day 5, Day 6, and Day 7 activities.
 # Project Structure
 
 GenAI_Day-5/
-
 │
 ├── raw_documents/                          # Original source documents
 ├── documents/                              # Sanitized document files
@@ -46,15 +45,16 @@ GenAI_Day-5/
 ├── retrieve.py                             # Day 10 retrieval pipeline with reranking
 ├── generate.py                             # Grounded answer generation, evidence checks, and final response validation
 ├── grounded_prompt.py                      # Grounded answer prompt, instruction hierarchy, and conflict handling
-├── answer_model.py                          # Validated answer response model
+├── answer_model.py                         # Validated answer response model
 ├── citation_validator.py                   # Validates answer citations
-├── content_guardrail.py                    # Application-specific content and policy guardrails
+├── content_guardrail.py                   # Application-specific content and policy guardrails
+├── stt.py                                  # Local speech-to-text using faster-whisper
 ├── test_pipeline.py                        # Day 7 integration tests
 │
 ├── baseline_config.yaml                    # Frozen Day 9 baseline configuration
 ├── day9_weak_questions.json                # Five weak retrieval cases
-├── day9_failure_analysis.json             # Day 9 retrieval failure analysis
-├── day9_experiment_matrix.json              # Controlled Day 9 experiment plan
+├── day9_failure_analysis.json              # Day 9 retrieval failure analysis
+├── day9_experiment_matrix.json             # Controlled Day 9 experiment plan
 ├── day9_baseline_metrics.py               # Day 9 baseline metric runner
 ├── day9_baseline_metrics.json              # Day 9 baseline metric results
 │
@@ -65,7 +65,7 @@ GenAI_Day-5/
 ├── day10_query_rewrite_results.json        # Query rewriting results
 ├── reranker.py                             # Cross-encoder reranking component
 ├── day10_reranking_experiment.py           # Cross-encoder reranking experiment
-├── day10_reranking_results.json            # Day 10 reranking results
+├── day10_reranking_results.json            # Cross-encoder reranking results
 ├── day10_regression_test.py                # Full retrieval regression test
 ├── day10_regression_results.json           # Regression test results
 ├── day10_before_after_retrieval_report.md  # Day 10 before-and-after report
@@ -76,38 +76,46 @@ GenAI_Day-5/
 │   ├── routes.py                           # API endpoint definitions and observability flow
 │   ├── models.py                           # Pydantic request, response, and input validation models
 │   ├── dependencies.py                     # Configuration and dependency readiness checks
-│   └── errors.py                           # Custom API/provider error definitions
+│   ├── errors.py                            # Custom API/provider error definitions
+│   └── audio_validation.py                 # Validates uploaded audio type, size, and empty files
 │
 ├── observability/                          # SQL request observability and guardrail logging
 │   ├── __init__.py                         # Observability package initialization
-│   ├── database.py                         # SQLAlchemy database configuration and sessions
-│   ├── observability_models.py             # Request, source, and guardrail decision models
-│   ├── logging_service.py                  # Request, source, and guardrail logging operations
-│   └── init_db.py                          # Creates observability database tables
+│   ├── database.py                          # SQLAlchemy database configuration and sessions
+│   ├── observability_models.py              # Request, source, and guardrail decision models
+│   ├── logging_service.py                   # Request, source, and guardrail logging operations
+│   └── init_db.py                           # Creates observability database tables
 │
 ├── tests/                                  # API test suite
-│   └── test_api.py                         # FastAPI API and error-handling tests
+│   └── test_api.py                          # FastAPI API and error-handling tests
 │
-├── evaluation/                             # Day 13–16 evaluation framework
-│   ├── golden_set.jsonl                    # 25-case golden evaluation dataset
-│   ├── adversarial_set.jsonl               # 10-case Day 15 adversarial test suite
+├── evaluation/                             # Day 13–17 evaluation framework
+│   ├── golden_set.jsonl                     # 25-case golden evaluation dataset
+│   ├── adversarial_set.jsonl                # 10-case Day 15 adversarial test suite
 │   ├── dataset_review.md                   # Manual golden dataset review notes
-│   ├── run_evals.py                        # End-to-end evaluation runner
-│   ├── run_adversarial_baseline.py         # Adversarial test runner and automated behavior checks
-│   ├── day16_guardrail_cases.jsonl         # Day 16 adversarial and benign guardrail cases
-│   ├── day16_guardrail_eval.py             # Day 16 guardrail metrics evaluator
-│   ├── retrieval_grader.py                 # Retrieval quality grader
-│   ├── answer_grader.py                    # Answer quality and citation grader
-│   ├── review_report.py                    # Per-case review and failure report
-│   ├── scorecard.py                         # Evaluation scorecard generator
-│   ├── regression_check.py                 # One-command regression threshold check
-│   └── results/                            # Machine-readable evaluation results
-│       ├── evaluation_run_*.json           # Timestamped evaluation run results
-│       ├── review_report.json              # Per-case evaluation report
-│       ├── scorecard.json                  # Baseline evaluation scorecard
+│   ├── run_evals.py                         # End-to-end evaluation runner
+│   ├── run_adversarial_baseline.py          # Adversarial test runner and automated behavior checks
+│   ├── day16_guardrail_cases.jsonl          # Day 16 adversarial and benign guardrail cases
+│   ├── day16_guardrail_eval.py              # Day 16 guardrail metrics evaluator
+│   ├── day17_voice_tests.jsonl              # Day 17 voice input test cases and results
+│   ├── retrieval_grader.py                  # Retrieval quality grader
+│   ├── answer_grader.py                     # Answer quality and citation grader
+│   ├── review_report.py                     # Per-case review and failure report
+│   ├── scorecard.py                          # Evaluation scorecard generator
+│   ├── regression_check.py                  # One-command regression threshold check
+│   └── results/                             # Machine-readable evaluation results
+│       ├── evaluation_run_*.json            # Timestamped evaluation run results
+│       ├── review_report.json               # Per-case evaluation report
+│       ├── scorecard.json                   # Baseline evaluation scorecard
 │       ├── adversarial_baseline_20260924_133742_695641.json  # Day 15 baseline adversarial report
-│       ├── adversarial_validation.json     # Day 15 post-control validation results
+│       ├── adversarial_validation.json      # Day 15 post-control validation results
 │       └── day16_guardrail_20260929_132220_256797.json       # Final Day 16 guardrail metric report
+│
+├── day17_clear.m4a                         # Clear voice test recording
+├── day17_noise.m4a                         # Background-noise voice test recording
+├── day17_domain.m4a                        # Domain-terminology voice test recording
+├── day17_empty.m4a                         # Silent audio test recording
+├── day17_invalid.txt                       # Unsupported-file validation test
 │
 ├── pytest.ini                              # Pytest configuration
 ├── observability.db                        # Local SQLite observability database
@@ -117,7 +125,6 @@ GenAI_Day-5/
 ├── .env.example                            # Example environment configuration
 ├── .gitignore                              # Git ignore rules for secrets, environments, and cache
 └── README.md                               # Project documentation
-
 -----
 
 # Day 05 — Prepare Documents, Chunks, and Retrieval Metadata
@@ -4521,3 +4528,542 @@ evaluation/results/day16_guardrail_20260929_132220_256797.json
 ```
 
 **DAY 16 COMPLETED**
+
+# DAY 17 — Integrate Speech-to-Text with the Existing RAG API
+
+## Practical Goal
+
+Extend the existing RAG application to accept voice input through a dedicated API endpoint, convert speech to text using local speech recognition, and pass the resulting transcript through the existing grounded RAG pipeline.
+
+The objective of Day 17 was to:
+
+- Add audio input validation
+- Support approved audio formats with a 10 MB size limit
+- Integrate local speech-to-text using faster-whisper
+- Connect the transcript to the existing RAG question-answering pipeline
+- Preserve grounded answers and existing citation behavior
+- Measure STT and RAG latency separately
+- Log voice request metadata and processing stages
+- Handle silent, unsupported, and invalid audio safely
+- Validate clear, noisy, and domain-specific voice inputs
+- Preserve the existing text-based RAG workflow
+
+---
+
+## Day 17 Implementation
+
+### 1. Add Audio Validation
+
+A dedicated audio validation module was added:
+
+```text
+api/audio_validation.py
+```
+
+The API supports the following audio formats:
+
+| Format | Supported |
+|---|---|
+| `.m4a` | Yes |
+| `.wav` | Yes |
+| `.mp3` | Yes |
+| `.ogg` | Yes |
+
+The maximum allowed audio size is:
+
+```text
+10 MB
+```
+
+Validation checks include:
+
+- Empty filename
+- Empty audio file
+- Unsupported file extension
+- Audio files exceeding the 10 MB limit
+
+Invalid audio requests are rejected before speech-to-text or RAG processing.
+
+---
+
+### 2. Add Local Speech-to-Text
+
+Speech-to-text was implemented in `stt.py`.
+
+The application uses:
+
+```text
+faster-whisper
+```
+
+The configured local model is:
+
+```text
+small.en
+```
+
+The current configuration uses:
+
+| Setting | Value |
+|---|---|
+| Device | CPU |
+| Compute type | int8 |
+| Language | English |
+
+The transcription function returns:
+
+```json
+{
+  "transcript": "...",
+  "language": "en"
+}
+```
+
+Voice processing therefore does not require a separate external speech-to-text API.
+
+---
+
+### 3. Add the Voice API Endpoint
+
+A dedicated endpoint was added:
+
+```text
+POST /voice/ask
+```
+
+The endpoint accepts an audio file using multipart form data.
+
+Example:
+
+```bash
+curl.exe -X POST "http://127.0.0.1:8000/voice/ask" -F "file=@day17_clear.m4a"
+```
+
+The endpoint performs the following workflow:
+
+```text
+Audio Upload
+      ↓
+Audio Validation
+      ↓
+Temporary Audio File
+      ↓
+Speech-to-Text
+      ↓
+Transcript
+      ↓
+Existing RAG Pipeline
+      ↓
+Grounded Answer
+      ↓
+Response + Latency Information
+```
+
+The voice endpoint reuses the existing `answer_question()` function rather than creating a separate RAG implementation.
+
+---
+
+### 4. Connect Voice Input to the Existing RAG Pipeline
+
+The transcribed question is passed directly to the existing RAG pipeline:
+
+```python
+response = answer_question(
+    transcript,
+    None,
+    None
+)
+```
+
+This preserves the existing:
+
+- Retrieval workflow
+- Reranking
+- Evidence checks
+- Grounded generation
+- Citation validation
+- Abstention behavior
+- Output guardrails
+
+Voice input therefore acts as another input interface to the existing RAG system rather than creating a separate knowledge-answering pipeline.
+
+---
+
+### 5. Add Voice Request Observability
+
+The existing `request_logs` table was extended to capture voice-specific information.
+
+The additional fields include:
+
+| Field | Purpose |
+|---|---|
+| `audio_filename` | Uploaded audio filename |
+| `audio_type` | Audio file extension |
+| `audio_size_bytes` | Uploaded audio size |
+| `transcript` | Generated speech transcript |
+| `stt_latency_ms` | Speech-to-text processing time |
+| `rag_latency_ms` | RAG processing time |
+| `failure_stage` | Stage at which processing failed |
+
+The existing `latency_ms` continues to record total request latency.
+
+The voice request therefore provides separate visibility into:
+
+```text
+Audio Validation
+      ↓
+STT Latency
+      ↓
+RAG Latency
+      ↓
+Total Latency
+```
+
+---
+
+### 6. Log Audio Validation Failures
+
+Voice request logging was extended so that validation failures are also recorded.
+
+For example, an unsupported audio file produces:
+
+```text
+outcome        : error
+error_category : UNSUPPORTED_AUDIO_TYPE
+failure_stage  : audio_validation
+```
+
+A validation failure is therefore visible in the observability database even though STT and RAG processing are never started.
+
+---
+
+### 7. Handle Speech Recognition Failures Safely
+
+Silent audio is handled separately from unsupported files.
+
+When speech-to-text produces an empty transcript, the API returns:
+
+```json
+{
+  "error_code": "EMPTY_TRANSCRIPT",
+  "message": "No speech could be detected in the audio."
+}
+```
+
+The request is rejected before entering the RAG pipeline.
+
+Voice activity detection was enabled in `stt.py` to reduce incorrect transcription of silent audio.
+
+---
+
+### 8. Improve Voice Error Responses
+
+The HTTP exception handling in `api/main.py` was updated so that voice-specific validation errors expose their specific error code.
+
+For example:
+
+```text
+UNSUPPORTED_AUDIO_TYPE
+EMPTY_AUDIO
+AUDIO_TOO_LARGE
+EMPTY_TRANSCRIPT
+```
+
+This provides clearer API responses while preserving the existing centralized error-handling approach.
+
+---
+
+### Day 17 Voice Test Suite
+
+A dedicated voice test record was created:
+
+```text
+evaluation/day17_voice_tests.jsonl
+```
+
+The test suite contains five representative scenarios:
+
+| Case | Scenario | Expected Behavior |
+|---|---|---|
+| VOICE-001 | Clear audio | Correct transcription and grounded answer |
+| VOICE-002 | Background noise | Correct transcription despite mild noise |
+| VOICE-003 | Domain terms | Correct transcription of technical terminology |
+| VOICE-004 | Silent audio | Reject without invoking RAG |
+| VOICE-005 | Unsupported file | Reject before STT and RAG |
+
+---
+
+## Day 17 Validation Results
+
+### 1. Clear Audio
+
+Test file:
+
+```text
+day17_clear.m4a
+```
+
+Transcript:
+
+> What are the requirements for elevated access to production systems?
+
+Result:
+
+```text
+status     : answered
+language   : en
+STT        : successful
+RAG        : successful
+```
+
+The response retrieved relevant security documents including:
+
+```text
+DOC-014
+DOC-011
+```
+
+The answer remained grounded in the existing document context.
+
+---
+
+### 2. Background Noise
+
+Test file:
+
+```text
+day17_noise.m4a
+```
+
+Transcript:
+
+> What is the process for reporting a security incident?
+
+Result:
+
+```text
+status     : answered
+language   : en
+STT        : successful
+RAG        : successful
+```
+
+The transcript remained correct despite mild background noise and the answer was grounded in:
+
+```text
+DOC-012
+```
+
+---
+
+### 3. Domain-Specific Terminology
+
+Test file:
+
+```text
+day17_domain.m4a
+```
+
+Transcript:
+
+> What is the process for requesting software that is not available in the standard IT catalog?
+
+Result:
+
+```text
+status     : answered
+language   : en
+STT        : successful
+RAG        : successful
+```
+
+The domain-specific terminology was transcribed correctly and relevant IT documents were retrieved.
+
+---
+
+### 4. Silent Audio
+
+Test file:
+
+```text
+day17_empty.m4a
+```
+
+Result:
+
+```text
+error_code: EMPTY_TRANSCRIPT
+```
+
+The speech-to-text layer returned an empty transcript and the request was rejected before entering the RAG pipeline.
+
+Result:
+
+```text
+VOICE-004 : PASS
+```
+
+---
+
+### 5. Unsupported File Type
+
+Test file:
+
+```text
+day17_invalid.txt
+```
+
+Result:
+
+```text
+error_code: UNSUPPORTED_AUDIO_TYPE
+```
+
+The request was rejected during audio validation.
+
+Result:
+
+```text
+VOICE-005 : PASS
+```
+
+---
+
+## Day 17 Observability Verification
+
+A successful voice request was verified in the observability database.
+
+The recorded request contained:
+
+```text
+audio_filename   : day17_clear.m4a
+audio_type       : .m4a
+audio_size_bytes : 236500
+transcript       : What are the requirements for elevated access to production systems?
+stt_latency_ms   : 7014.23
+rag_latency_ms   : 20366.58
+latency_ms       : 27829.78
+outcome          : answered
+failure_stage    : None
+```
+
+A validation failure was also verified:
+
+```text
+audio_filename  : day17_invalid.txt
+audio_type      : .txt
+outcome         : error
+error_category  : UNSUPPORTED_AUDIO_TYPE
+failure_stage   : audio_validation
+```
+
+This confirms that both successful and failed voice requests are observable.
+
+---
+
+## Day 17 Voice Evaluation Summary
+
+```text
+Voice test cases       : 5
+Clear audio            : PASS
+Background noise       : PASS
+Domain terminology     : PASS
+Silent audio handling  : PASS
+Unsupported file       : PASS
+```
+
+The final voice test suite confirms that the voice interface supports both successful processing and safe failure behavior.
+
+---
+
+## Day 17 Key Artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `stt.py` | Local speech-to-text using faster-whisper |
+| `api/audio_validation.py` | Audio type, size, and empty-file validation |
+| `api/routes.py` | Voice API endpoint and voice processing workflow |
+| `api/main.py` | Centralized voice validation error handling |
+| `observability/observability_models.py` | Voice request observability fields |
+| `observability/logging_service.py` | Voice request logging |
+| `evaluation/day17_voice_tests.jsonl` | Day 17 voice test cases and results |
+| `day17_clear.m4a` | Clear audio test recording |
+| `day17_noise.m4a` | Background-noise test recording |
+| `day17_domain.m4a` | Domain-terminology test recording |
+| `day17_empty.m4a` | Silent audio test recording |
+| `day17_invalid.txt` | Unsupported-file validation test |
+| `requirements.txt` | Day 17 speech-to-text and multipart dependencies |
+
+---
+
+## Day 17 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| Supported audio formats are validated | PASS |
+| 10 MB audio size limit is enforced | PASS |
+| Local speech-to-text is integrated | PASS |
+| Voice input reaches the existing RAG pipeline | PASS |
+| Grounded answer behavior is preserved | PASS |
+| STT and RAG latency are measured separately | PASS |
+| Voice request metadata is logged | PASS |
+| Validation failures are logged | PASS |
+| Silent audio is handled safely | PASS |
+| Unsupported audio files are rejected safely | PASS |
+| Clear audio processing works | PASS |
+| Background-noise processing works | PASS |
+| Domain-specific terminology is handled | PASS |
+
+---
+
+## Day 17 Evaluation Workflow
+
+```text
+Audio Upload
+      ↓
+Audio Validation
+      ↓
+Speech-to-Text
+      ↓
+Transcript Validation
+      ↓
+Existing RAG Retrieval
+      ↓
+Grounded Answer Generation
+      ↓
+Output Guardrails
+      ↓
+Voice Request Observability
+      ↓
+Validation Evidence
+```
+
+The Day 17 implementation adds a voice interface while preserving the existing grounded RAG architecture and observability framework.
+
+---
+
+## Day 17 Final Outcome
+
+Day 17 successfully integrated speech input into the existing RAG application.
+
+The project now contains:
+
+- Audio upload validation
+- Support for `.m4a`, `.wav`, `.mp3`, and `.ogg`
+- 10 MB audio size enforcement
+- Local faster-whisper speech-to-text
+- Voice-to-text-to-RAG processing
+- Grounded voice answers using the existing RAG pipeline
+- Separate STT and RAG latency measurements
+- Voice request observability
+- Audio validation failure logging
+- Silent-audio detection
+- Safe handling of unsupported audio files
+- Clear audio validation
+- Background-noise validation
+- Domain-terminology validation
+- Dedicated Day 17 voice test evidence
+
+The Day 17 implementation extends the existing RAG application without creating a separate retrieval or generation pipeline.
+
+**DAY 17 COMPLETED**
