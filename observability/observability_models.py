@@ -87,6 +87,21 @@ class RequestLog(Base):
         nullable=True
     )
 
+    retrieval_latency_ms: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    generation_latency_ms: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    tts_latency_ms: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
     failure_stage: Mapped[str | None] = mapped_column(
         String,
         nullable=True

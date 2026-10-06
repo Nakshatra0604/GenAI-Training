@@ -1,4 +1,5 @@
 import os
+import time
 
 from dotenv import load_dotenv
 from openai import OpenAI
@@ -253,7 +254,8 @@ def validate_final_response(
 def answer_question(
     question: str,
     category: str | None = None,
-    max_distance: float | None = None
+    max_distance: float | None = None,
+    timing: dict | None = None
 ) -> AnswerResponse:
     """
     Run the complete grounded RAG question-answering pipeline.
@@ -262,7 +264,14 @@ def answer_question(
     content policy -> retrieval -> reranking ->
     evidence check -> grounded prompt -> generation ->
     citation validation -> final response validation.
+
+    Optional timing output records:
+    - retrieval_latency_ms
+    - generation_latency_ms
     """
+
+    if timing is None:
+        timing = {}
 
     # Step 0: Check content and policy rules.
     policy_result = check_content_policy(
@@ -277,11 +286,18 @@ def answer_question(
     # retrieve.py performs:
     # vector search -> 5 candidates
     # -> cross-encoder reranking -> final top 3
+
+    retrieval_started = time.perf_counter()
+
     results = retrieve(
         question=question,
         category=category,
         max_distance=max_distance
     )
+
+    timing["retrieval_latency_ms"] = (
+        time.perf_counter() - retrieval_started
+    ) * 1000
 
     # Step 2: Check whether the retrieved
     # results contain sufficient evidence.
@@ -310,9 +326,15 @@ def answer_question(
     )
 
     # Step 6: Generate answer.
+    generation_started = time.perf_counter()
+
     answer = generate_answer(
         prompt
     )
+
+    timing["generation_latency_ms"] = (
+        time.perf_counter() - generation_started
+    ) * 1000
 
     # Step 7: Validate citations.
     citation_result = validate_citations(
@@ -372,8 +394,11 @@ if __name__ == "__main__":
 
     else:
 
+        timing = {}
+
         response = answer_question(
-            question
+            question,
+            timing=timing
         )
 
         print("\nFinal Answer Response")
@@ -383,4 +408,31 @@ if __name__ == "__main__":
             response.model_dump_json(
                 indent=2
             )
+        )
+
+        print("\nLatency")
+        print("=" * 60)
+
+        print(
+            "Retrieval latency:",
+            round(
+                timing.get(
+                    "retrieval_latency_ms",
+                    0
+                ),
+                2
+            ),
+            "ms"
+        )
+
+        print(
+            "Generation latency:",
+            round(
+                timing.get(
+                    "generation_latency_ms",
+                    0
+                ),
+                2
+            ),
+            "ms"
         )

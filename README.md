@@ -15,8 +15,6 @@ The project currently covers Day 5, Day 6, and Day 7 activities.
 
 ---
 
-# Project Structure
-
 GenAI_Day-5/
 │
 ├── raw_documents/                          # Original source documents
@@ -45,22 +43,30 @@ GenAI_Day-5/
 ├── retrieve.py                             # Day 10 retrieval pipeline with reranking
 ├── generate.py                             # Grounded answer generation, evidence checks, and final response validation
 ├── grounded_prompt.py                      # Grounded answer prompt, instruction hierarchy, and conflict handling
-├── answer_model.py                         # Validated answer response model
+├── answer_model.py                          # Validated answer response model
 ├── citation_validator.py                   # Validates answer citations
-├── content_guardrail.py                   # Application-specific content and policy guardrails
+├── content_guardrail.py                    # Application-specific content and policy guardrails
 ├── stt.py                                  # Local speech-to-text using faster-whisper
+├── tts.py                                  # Local text-to-speech using Piper
 ├── test_pipeline.py                        # Day 7 integration tests
+│
+├── models/
+│   └── piper/                              # Local Piper TTS voice model
+│       ├── en_US-lessac-medium.onnx
+│       └── en_US-lessac-medium.onnx.json
+│
+├── generated_audio/                        # Generated synthetic voice responses
 │
 ├── baseline_config.yaml                    # Frozen Day 9 baseline configuration
 ├── day9_weak_questions.json                # Five weak retrieval cases
 ├── day9_failure_analysis.json              # Day 9 retrieval failure analysis
 ├── day9_experiment_matrix.json             # Controlled Day 9 experiment plan
-├── day9_baseline_metrics.py               # Day 9 baseline metric runner
+├── day9_baseline_metrics.py                # Day 9 baseline metric runner
 ├── day9_baseline_metrics.json              # Day 9 baseline metric results
 │
 ├── query_rewriter.py                       # Reusable query rewriting component
 ├── day10_experiments.py                    # Executes planned Day 10 experiments
-├── day10_experiment_results.json           # Day 10 experiment results
+├── day10_experiment_results.json            # Day 10 experiment results
 ├── day10_query_rewrite_experiment.py       # Query rewriting experiment
 ├── day10_query_rewrite_results.json        # Query rewriting results
 ├── reranker.py                             # Cross-encoder reranking component
@@ -74,48 +80,55 @@ GenAI_Day-5/
 ├── api/                                    # FastAPI service layer
 │   ├── main.py                             # FastAPI application entry point and validation guardrails
 │   ├── routes.py                           # API endpoint definitions and observability flow
-│   ├── models.py                           # Pydantic request, response, and input validation models
+│   ├── models.py                            # Pydantic request, response, and input validation models
 │   ├── dependencies.py                     # Configuration and dependency readiness checks
-│   ├── errors.py                            # Custom API/provider error definitions
+│   ├── errors.py                           # Custom API/provider error definitions
 │   └── audio_validation.py                 # Validates uploaded audio type, size, and empty files
 │
 ├── observability/                          # SQL request observability and guardrail logging
 │   ├── __init__.py                         # Observability package initialization
-│   ├── database.py                          # SQLAlchemy database configuration and sessions
-│   ├── observability_models.py              # Request, source, and guardrail decision models
-│   ├── logging_service.py                   # Request, source, and guardrail logging operations
-│   └── init_db.py                           # Creates observability database tables
+│   ├── database.py                         # SQLAlchemy database configuration and sessions
+│   ├── observability_models.py             # Request, source, guardrail, and latency models
+│   ├── logging_service.py                  # Request, source, guardrail, and latency logging operations
+│   └── init_db.py                          # Creates observability database tables
 │
 ├── tests/                                  # API test suite
-│   └── test_api.py                          # FastAPI API and error-handling tests
+│   └── test_api.py                         # FastAPI API and error-handling tests
 │
-├── evaluation/                             # Day 13–17 evaluation framework
-│   ├── golden_set.jsonl                     # 25-case golden evaluation dataset
-│   ├── adversarial_set.jsonl                # 10-case Day 15 adversarial test suite
+├── evaluation/                             # Day 13–18 evaluation framework
+│   ├── golden_set.jsonl                    # 25-case golden evaluation dataset
+│   ├── adversarial_set.jsonl               # 10-case Day 15 adversarial test suite
 │   ├── dataset_review.md                   # Manual golden dataset review notes
-│   ├── run_evals.py                         # End-to-end evaluation runner
-│   ├── run_adversarial_baseline.py          # Adversarial test runner and automated behavior checks
-│   ├── day16_guardrail_cases.jsonl          # Day 16 adversarial and benign guardrail cases
-│   ├── day16_guardrail_eval.py              # Day 16 guardrail metrics evaluator
-│   ├── day17_voice_tests.jsonl              # Day 17 voice input test cases and results
-│   ├── retrieval_grader.py                  # Retrieval quality grader
-│   ├── answer_grader.py                     # Answer quality and citation grader
-│   ├── review_report.py                     # Per-case review and failure report
-│   ├── scorecard.py                          # Evaluation scorecard generator
-│   ├── regression_check.py                  # One-command regression threshold check
-│   └── results/                             # Machine-readable evaluation results
-│       ├── evaluation_run_*.json            # Timestamped evaluation run results
-│       ├── review_report.json               # Per-case evaluation report
-│       ├── scorecard.json                   # Baseline evaluation scorecard
-│       ├── adversarial_baseline_20260924_133742_695641.json  # Day 15 baseline adversarial report
-│       ├── adversarial_validation.json      # Day 15 post-control validation results
-│       └── day16_guardrail_20260929_132220_256797.json       # Final Day 16 guardrail metric report
+│   ├── run_evals.py                        # End-to-end evaluation runner
+│   ├── run_adversarial_baseline.py         # Adversarial test runner and automated behavior checks
+│   ├── day16_guardrail_cases.jsonl         # Day 16 adversarial and benign guardrail cases
+│   ├── day16_guardrail_eval.py             # Day 16 guardrail metrics evaluator
+│   ├── day17_voice_tests.jsonl             # Day 17 voice input test cases and results
+│   ├── day18_voice_evaluation.jsonl        # Day 18 five-case voice evaluation data
+│   ├── retrieval_grader.py                 # Retrieval quality grader
+│   ├── answer_grader.py                    # Answer quality and citation grader
+│   ├── review_report.py                    # Per-case review and failure report
+│   ├── scorecard.py                        # Evaluation scorecard generator
+│   ├── regression_check.py                 # One-command regression threshold check
+│   └── results/                            # Machine-readable and review-friendly evaluation results
+│       ├── evaluation_run_*.json           # Timestamped evaluation run results
+│       ├── review_report.json              # Per-case evaluation report
+│       ├── scorecard.json                  # Baseline evaluation scorecard
+│       ├── adversarial_baseline_20260924_133742_695641.json
+│       ├── adversarial_validation.json
+│       ├── day16_guardrail_20260929_132220_256797.json
+│       └── day18_voice_evaluation_summary.md # Day 18 five-case voice evaluation report
 │
 ├── day17_clear.m4a                         # Clear voice test recording
 ├── day17_noise.m4a                         # Background-noise voice test recording
 ├── day17_domain.m4a                        # Domain-terminology voice test recording
 ├── day17_empty.m4a                         # Silent audio test recording
 ├── day17_invalid.txt                       # Unsupported-file validation test
+│
+├── day18_vc002.m4a                         # Day 18 voice evaluation recording
+├── day18_vc003.m4a                         # Day 18 voice evaluation recording
+├── day18_vc004.m4a                         # Day 18 voice evaluation recording
+├── day18_vc005.m4a                         # Day 18 voice evaluation recording
 │
 ├── pytest.ini                              # Pytest configuration
 ├── observability.db                        # Local SQLite observability database
@@ -5067,3 +5080,673 @@ The project now contains:
 The Day 17 implementation extends the existing RAG application without creating a separate retrieval or generation pipeline.
 
 **DAY 17 COMPLETED**
+
+# DAY 18 — Add Text-to-Speech, Latency Tracking, and Voice Evaluation
+
+## Practical Goal
+
+Extend the existing voice-enabled RAG application to generate speech from validated grounded answers, complete the audio-to-audio RAG flow, track latency across individual processing stages, and evaluate the complete voice workflow.
+
+The objective of Day 18 was to:
+
+- Add local text-to-speech using Piper
+- Generate audio only from validated grounded answers
+- Connect STT, RAG, and TTS using the same request ID
+- Return grounded text and generated audio together
+- Preserve source citations from the existing RAG pipeline
+- Return the validated text answer even when TTS fails
+- Prevent RAG processing when STT produces an empty transcript
+- Measure STT, retrieval, generation, RAG, TTS, and total latency separately
+- Identify the slowest processing stages
+- Evaluate five real voice questions end-to-end
+- Record transcript quality, task completion, citation correctness, latency, and failure stage
+- Clearly identify generated speech as synthetic
+- Preserve the existing text-based RAG workflow
+
+---
+
+## Day 18 Implementation
+
+### 1. Add Local Text-to-Speech
+
+Text-to-speech was implemented in `tts.py`.
+
+The application uses:
+
+```text
+Piper
+```
+
+The configured local voice model is:
+
+```text
+en_US-lessac-medium
+```
+
+The model is stored under:
+
+```text
+models/piper/
+```
+
+The TTS output format is:
+
+```text
+WAV
+```
+
+The generated voice is explicitly identified as synthetic.
+
+The TTS function validates that the input text is non-empty and generates audio only after the grounded answer has been validated.
+
+The TTS implementation therefore does not generate speech directly from an unvalidated user request or unvalidated model output.
+
+---
+
+### 2. Generate Audio from the Grounded Answer
+
+The existing `/voice/ask` workflow was extended so that a successful grounded answer is passed to the TTS layer.
+
+The workflow is:
+
+```text
+Audio Upload
+      ↓
+Audio Validation
+      ↓
+Speech-to-Text
+      ↓
+Transcript
+      ↓
+Existing RAG Pipeline
+      ↓
+Validated Grounded Answer
+      ↓
+Text-to-Speech
+      ↓
+Generated WAV Audio
+      ↓
+Response + Sources + Latency
+```
+
+The generated audio is associated with the same request ID used for the voice request.
+
+Generated audio can be retrieved using:
+
+```text
+GET /voice/audio/{request_id}
+```
+
+The response identifies the generated voice as synthetic.
+
+---
+
+### 3. Complete Audio-to-Audio RAG Flow
+
+The Day 18 voice flow connects all existing components into a single request.
+
+The complete processing path is:
+
+```text
+Audio Input
+      ↓
+Audio Validation
+      ↓
+Speech-to-Text
+      ↓
+Transcript Validation
+      ↓
+RAG Retrieval
+      ↓
+Reranking
+      ↓
+Evidence Validation
+      ↓
+Grounded Answer Generation
+      ↓
+Final Response Validation
+      ↓
+Text-to-Speech
+      ↓
+Text Answer + Sources + Audio
+```
+
+The voice endpoint continues to reuse the existing RAG implementation.
+
+This preserves the existing:
+
+- Retrieval workflow
+- Reranking
+- Evidence checks
+- Grounded generation
+- Citation validation
+- Abstention behavior
+- Output guardrails
+
+Voice input therefore remains another interface to the existing grounded RAG system rather than creating a separate retrieval or generation pipeline.
+
+---
+
+### 4. Add TTS Failure Recovery
+
+TTS was implemented as a non-blocking final stage of the voice workflow.
+
+If TTS succeeds, the API returns:
+
+```text
+tts_status : generated
+audio      : generated WAV reference
+synthetic  : true
+```
+
+If TTS fails, the validated text response is still returned.
+
+The response retains:
+
+- Transcript
+- Grounded answer
+- Source citations
+- RAG result
+- Request ID
+
+The audio reference is returned as unavailable and the failure stage is recorded as:
+
+```text
+failure_stage : tts
+```
+
+This prevents a speech-generation failure from discarding an otherwise valid grounded answer.
+
+---
+
+### 5. Add Detailed Voice Latency Tracking
+
+The existing voice observability was extended to record individual processing stages.
+
+The additional latency fields include:
+
+| Field | Purpose |
+|---|---|
+| `stt_latency_ms` | Speech-to-text processing time |
+| `retrieval_latency_ms` | Retrieval and reranking processing time |
+| `generation_latency_ms` | Grounded answer generation time |
+| `rag_latency_ms` | Total RAG processing time |
+| `tts_latency_ms` | Text-to-speech processing time |
+| `latency_ms` | Total request latency |
+
+The voice request therefore provides visibility into:
+
+```text
+Audio Input
+      ↓
+STT Latency
+      ↓
+Retrieval Latency
+      ↓
+Generation Latency
+      ↓
+RAG Latency
+      ↓
+TTS Latency
+      ↓
+Total Latency
+```
+
+The latency values are stored in the observability database using the same request ID.
+
+---
+
+### 6. Validate STT Failure Recovery
+
+The existing empty-transcript protection was verified again during Day 18.
+
+A silent audio request produced:
+
+```json
+{
+  "error_code": "EMPTY_TRANSCRIPT",
+  "message": "No speech could be detected in the audio."
+}
+```
+
+The request was rejected before entering the RAG pipeline.
+
+This confirms that an empty or unreliable transcript is not passed to retrieval or answer generation.
+
+---
+
+### 7. Validate TTS Failure Recovery
+
+TTS failure recovery was tested by temporarily making the Piper voice model unavailable.
+
+The voice request still returned:
+
+```text
+status      : answered
+tts_status  : failed
+audio       : null
+```
+
+The grounded text answer and source citations remained available.
+
+This confirms that the text response is preserved when speech synthesis fails.
+
+The Piper model was then restored successfully.
+
+---
+
+### Day 18 Voice Evaluation
+
+A dedicated five-case voice evaluation was created:
+
+```text
+evaluation/day18_voice_evaluation.jsonl
+```
+
+A review-friendly summary was also created:
+
+```text
+evaluation/results/day18_voice_evaluation_summary.md
+```
+
+The evaluation records:
+
+- Transcript quality
+- Task completion
+- Citation correctness
+- STT latency
+- Retrieval latency
+- Generation latency
+- RAG latency
+- TTS latency
+- Total latency
+- Failure stage
+- TTS generation status
+- Synthetic voice status
+
+---
+
+## Day 18 Validation Results
+
+### 1. Elevated Production Access
+
+Test file:
+
+```text
+day17_clear.m4a
+```
+
+Question:
+
+> What are the requirements for elevated access to production systems?
+
+Result:
+
+```text
+status          : answered
+transcript      : exact
+task completion : completed
+citations       : correct
+STT             : 9.73 s
+Retrieval       : 16.37 s
+Generation      : 2.51 s
+TTS             : 12.35 s
+Total           : 41.76 s
+```
+
+The answer retained the relevant security sources including:
+
+```text
+DOC-014
+DOC-011
+```
+
+The response was grounded in the existing document context and a synthetic audio response was generated successfully.
+
+---
+
+### 2. Security Incident Reporting
+
+Test file:
+
+```text
+day18_vc002.m4a
+```
+
+Question:
+
+> What should an employee do if they suspect a security incident?
+
+Result:
+
+```text
+status          : answered
+transcript      : exact
+task completion : completed
+citations       : correct
+STT             : 66.57 s
+Retrieval       : 47.74 s
+Generation      : 2.55 s
+TTS             : 43.52 s
+Total           : 163.73 s
+```
+
+The answer was grounded in:
+
+```text
+DOC-024
+DOC-015
+DOC-012
+```
+
+The generated response was also converted to synthetic speech successfully.
+
+---
+
+### 3. Compromised Account
+
+Test file:
+
+```text
+day18_vc003.m4a
+```
+
+Question:
+
+> What should an employee do if their account is suspected to be compromised?
+
+Result:
+
+```text
+status          : answered
+transcript      : exact
+task completion : completed
+citations       : correct
+STT             : 8.31 s
+Retrieval       : 6.54 s
+Generation      : 2.53 s
+TTS             : 8.76 s
+Total           : 26.45 s
+```
+
+The answer was grounded in:
+
+```text
+DOC-015
+DOC-007
+DOC-012
+```
+
+The response retained the existing grounded-answer and citation behavior.
+
+---
+
+### 4. Third-Party Vendor Security
+
+Test file:
+
+```text
+day18_vc004.m4a
+```
+
+Question:
+
+> What security requirements should be followed when a third-party vendor has access to company systems?
+
+Result:
+
+```text
+status          : answered
+transcript      : exact
+task completion : completed
+citations       : correct
+STT             : 4.14 s
+Retrieval       : 2.29 s
+Generation      : 2.44 s
+TTS             : 8.00 s
+Total           : 17.25 s
+```
+
+The answer was grounded in:
+
+```text
+DOC-011
+DOC-026
+```
+
+The response also explicitly avoided inventing additional technical requirements that were not present in the retrieved context.
+
+---
+
+### 5. Planned Leave Request
+
+Test file:
+
+```text
+day18_vc005.m4a
+```
+
+Question:
+
+> How far in advance should planned leave requests be submitted?
+
+Result:
+
+```text
+status          : answered
+transcript      : minor STT error
+task completion : completed
+citations       : correct
+STT             : 36.72 s
+Retrieval       : 103.87 s
+Generation      : 4.23 s
+TTS             : 24.12 s
+Total           : 170.25 s
+```
+
+The actual transcript contained a minor speech-recognition error:
+
+> How far in advance should plant the leaves request be submitted?
+
+Despite the transcription error, the RAG pipeline retrieved the relevant leave policy:
+
+```text
+DOC-002
+```
+
+The answer correctly stated that planned leave requests should be submitted at least five business days in advance.
+
+This demonstrates that the voice pipeline can still complete the task when the STT result contains a minor recognition error.
+
+---
+
+## Day 18 Voice Evaluation Summary
+
+```text
+Voice test cases        : 5
+Task completion          : 5/5
+Citation correctness     : 5/5
+TTS generation           : 5/5
+Exact transcripts        : 4/5
+Minor STT error          : 1/5
+Failed evaluation cases  : 0/5
+```
+
+The five-case evaluation confirms that the complete voice RAG workflow can produce grounded answers with matching source citations and synthetic audio responses.
+
+---
+
+## Day 18 Latency Analysis
+
+The recorded latency varied significantly between voice requests.
+
+The generation stage remained comparatively stable:
+
+```text
+Generation range: approximately 2.44–4.23 seconds
+```
+
+The largest observed delays occurred in STT, retrieval, and TTS.
+
+The highest observed retrieval latency was:
+
+```text
+VC-005 : 103.87 seconds
+```
+
+The highest observed STT latency was:
+
+```text
+VC-002 : 66.57 seconds
+```
+
+The highest observed TTS latency was:
+
+```text
+VC-002 : 43.52 seconds
+```
+
+The highest total latency was:
+
+```text
+VC-005 : 170.25 seconds
+```
+
+A practical improvement is to profile and optimize retrieval first because VC-005 showed a particularly high retrieval latency.
+
+TTS can also be optimized by keeping the Piper voice model loaded instead of loading the model for every request.
+
+---
+
+## Day 18 Observability Verification
+
+A successful voice request was verified with separate latency values for the major processing stages.
+
+The recorded request contains:
+
+```text
+request_id             : f7b3bf3e-2193-49f1-bd67-e1f703e2951e
+stt_latency_ms         : 9731.00
+retrieval_latency_ms   : 16371.50
+generation_latency_ms  : 2513.75
+rag_latency_ms         : 18958.90
+tts_latency_ms         : 12350.22
+latency_ms             : 41757.43
+outcome                : answered
+failure_stage          : None
+```
+
+This confirms that the voice request now provides stage-level latency visibility in addition to the existing total request latency.
+
+---
+
+## Day 18 Key Artifacts
+
+| Artifact | Purpose |
+|---|---|
+| `tts.py` | Local text-to-speech using Piper |
+| `stt.py` | Local speech-to-text using faster-whisper |
+| `api/routes.py` | Complete voice-to-RAG-to-TTS workflow |
+| `api/audio_validation.py` | Audio type, size, and empty-file validation |
+| `observability/observability_models.py` | Voice and latency observability fields |
+| `observability/logging_service.py` | Voice and latency logging |
+| `models/piper/` | Local Piper synthetic voice model |
+| `evaluation/day18_voice_evaluation.jsonl` | Five-case Day 18 voice evaluation data |
+| `evaluation/results/day18_voice_evaluation_summary.md` | Day 18 voice evaluation summary |
+| `day18_vc002.m4a` | Security incident voice evaluation |
+| `day18_vc003.m4a` | Compromised account voice evaluation |
+| `day18_vc004.m4a` | Third-party vendor security voice evaluation |
+| `day18_vc005.m4a` | Planned leave request voice evaluation |
+| `generated_audio/` | Generated synthetic voice responses |
+| `requirements.txt` | Python dependencies including voice processing dependencies |
+
+---
+
+## Day 18 Completion Gate
+
+| Requirement | Result |
+|---|---|
+| Local text-to-speech is integrated | PASS |
+| Grounded answers are converted to audio | PASS |
+| End-to-end audio-to-audio RAG flow works | PASS |
+| Same request ID is used across voice processing | PASS |
+| Text answer remains available when TTS fails | PASS |
+| STT failure prevents RAG processing | PASS |
+| STT latency is recorded | PASS |
+| Retrieval latency is recorded | PASS |
+| Generation latency is recorded | PASS |
+| TTS latency is recorded | PASS |
+| Total latency is recorded | PASS |
+| Five voice evaluation cases are completed | PASS |
+| Voice transcripts are evaluated | PASS |
+| Task completion is evaluated | PASS |
+| Citation correctness is evaluated | PASS |
+| Synthetic voice is clearly identified | PASS |
+| Voice evaluation results are documented | PASS |
+
+---
+
+## Day 18 Evaluation Workflow
+
+```text
+Audio Upload
+      ↓
+Audio Validation
+      ↓
+Speech-to-Text
+      ↓
+Transcript Validation
+      ↓
+Existing RAG Retrieval
+      ↓
+Reranking
+      ↓
+Evidence Validation
+      ↓
+Grounded Answer Generation
+      ↓
+Final Response Validation
+      ↓
+Text-to-Speech
+      ↓
+Audio Response
+      ↓
+Voice Request Observability
+      ↓
+Latency and Evaluation Evidence
+```
+
+The Day 18 implementation extends the existing voice interface with speech output while preserving the grounded RAG architecture, source citations, validation controls, and observability framework.
+
+---
+
+## Day 18 Final Outcome
+
+Day 18 successfully extended the existing voice-enabled RAG application with local text-to-speech and complete audio-to-audio processing.
+
+The project now contains:
+
+- Local Piper text-to-speech
+- Synthetic WAV voice responses
+- Audio-to-STT-to-RAG-to-TTS processing
+- Grounded text answers with source citations
+- TTS failure recovery
+- STT failure protection
+- Separate STT latency measurement
+- Retrieval latency measurement
+- Generation latency measurement
+- RAG latency measurement
+- TTS latency measurement
+- Total request latency measurement
+- Five-case voice evaluation
+- Transcript quality evaluation
+- Task completion evaluation
+- Citation correctness evaluation
+- Voice evaluation report
+- Synthetic voice disclosure
+- Stage-level latency observability
+- Practical latency optimization findings
+
+The Day 18 implementation adds speech output to the existing voice RAG interface without creating a separate retrieval or generation pipeline.
+
+**DAY 18 COMPLETED**

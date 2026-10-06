@@ -12,10 +12,9 @@ def create_request_log(
     request_id: str,
     endpoint: str,
     started_at: datetime,
-    model_version: str | None,
-    prompt_version: str | None,
-) -> RequestLog:
-
+    model_version: str | None = None,
+    prompt_version: str | None = None,
+):
     request_log = RequestLog(
         request_id=request_id,
         endpoint=endpoint,
@@ -37,10 +36,8 @@ def create_retrieved_source_logs(
     request_id: str,
     sources: list[str],
     scores: list[float],
-) -> None:
-
+):
     for source_id, score in zip(sources, scores):
-
         source_log = RetrievedSource(
             request_id=request_id,
             source_id=source_id,
@@ -58,8 +55,7 @@ def create_guardrail_decision(
     control: str,
     outcome: str,
     reason_code: str,
-) -> GuardrailDecision:
-
+):
     guardrail_decision = GuardrailDecision(
         request_id=request_id,
         control=control,
@@ -87,8 +83,10 @@ def update_request_log(
     stt_latency_ms: float | None = None,
     rag_latency_ms: float | None = None,
     failure_stage: str | None = None,
-) -> RequestLog:
-
+    retrieval_latency_ms: float | None = None,
+    generation_latency_ms: float | None = None,
+    tts_latency_ms: float | None = None,
+):
     request_log.latency_ms = latency_ms
     request_log.outcome = outcome
     request_log.error_category = error_category
@@ -97,8 +95,13 @@ def update_request_log(
     request_log.audio_type = audio_type
     request_log.audio_size_bytes = audio_size_bytes
     request_log.transcript = transcript
+
     request_log.stt_latency_ms = stt_latency_ms
     request_log.rag_latency_ms = rag_latency_ms
+    request_log.retrieval_latency_ms = retrieval_latency_ms
+    request_log.generation_latency_ms = generation_latency_ms
+    request_log.tts_latency_ms = tts_latency_ms
+
     request_log.failure_stage = failure_stage
 
     db.commit()

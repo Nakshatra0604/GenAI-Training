@@ -9,3 +9,4 @@ pytest
 requests
 faster-whisper
 python-multipart
+piper-tts

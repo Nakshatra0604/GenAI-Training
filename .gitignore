@@ -3,3 +3,6 @@
 __pycache__/
 *.pyc
 observability.db
+
+models/piper/
+generated_audio/
